@@ -1,17 +1,157 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="robots" content="noindex">
-    <meta name="description" content="This is the online version of Mario Santos curriculum.">
-    <link rel="icon" href="./img/icons/favicon.ico" type="image/x-icon">
-    <link rel="icon" href="./img/icons/favicon-16x16.png" type="image/png" sizes="16x16">
-    <link rel="icon" href="./img/icons/favicon-32x32.png" type="image/png" sizes="32x32">
-    <title>Mario Santos</title>
-</head>
-<body>
-    Hello, World!
-</body>
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="robots" content="noindex">
+        <meta name="description" content="This is the online version of Mario Santos curriculum.">
+        <link rel="icon" href="./img/icons/favicon.ico" type="image/x-icon">
+        <link rel="icon" href="./img/icons/favicon-16x16.png" type="image/png" sizes="16x16">
+        <link rel="icon" href="./img/icons/favicon-32x32.png" type="image/png" sizes="32x32">
+        <title>Mario Santos</title>
+    </head>
+
+    <body>
+        <a id="top"></a>
+        <div id="toolbar">
+            <a href="./index.html">Home</a> |
+            <a href="">Projects</a> |
+            <a href="">Contact</a>
+        </div>
+        <div id="header" class="card">
+            <div id="banner">
+                <!-- TODO: Replace the svg with an nice background -->
+                <!-- TODO: Move style to css file -->
+                <svg style="width: 100%; height: 100px" xmlns="http://www.w3.org/2000/svg">
+                    <rect width="100%" height="100%" fill="gray" />
+                </svg>
+            </div>
+            <!-- TODO: Move style to css file -->
+            <div class="my-picture" style="margin-top:-70px; margin-left: 10px;">
+                <!-- TODO: Replace the svg with my photo -->
+                <svg width="100" height="100">
+                    <circle cx="50" cy="50" r="45" fill="gray" stroke="#ffffff" stroke-width="5px" />
+                    <text x="50%" y="50%" alignment-baseline="central" text-anchor="middle" fill="#fff">MS</text>
+                </svg>
+            </div>
+            <div id="info">
+                <h1 class="my-name">Mario Santos</h1>
+                <p class="my-role">Software Engineer</p>
+                <p class="my-location">Berlin, Germany</p>
+            </div>
+        </div>
+        <div id="about" class="card">
+            <h2 class="card-title">About</h2>
+            <details>
+                <summary>
+                    short-description-here
+                </summary>
+                <ul>
+                    <li>add-more-information-here</li>
+                </ul>
+            </details>
+            <div class="top-skills">
+                <ul>
+                    <li>a-skill</li>
+                    <li>a-skill</li>
+                </ul>
+            </div>
+        </div>
+        <div id="experience" class="card">
+            <h2 class="card-title">Experiences</h2>
+            <table>
+                <tbody>
+                    <tr>
+                        <td>
+                            <!-- TODO: Replace the svg with a company image -->
+                            <svg style="width: 70px;" xmlns="http://www.w3.org/2000/svg">
+                                <circle cx="30" cy="30" r="25" fill="none" stroke="#221C34" stroke-width="5px" />
+                            </svg>
+                        </td>
+                        <td>
+                            <h3 class="role-title">role-title-here</h3>
+                            <h4 class="company-name">company-name-here</h4>
+                            <p class="company-period">company-period-here</p>
+                            <p class="company-location">company-location-here</p>
+                            <hr>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div id="education" class="card">
+            <h2 class="card-title">Education</h2>
+            <table>
+                <tbody>
+                    <tr>
+                        <td>
+                            <!-- TODO: Replace the svg with an education institution image -->
+                            <svg style="width: 70px;" xmlns="http://www.w3.org/2000/svg">
+                                <rect x="10" y="50" width="50" height="50" fill="none" stroke="#221C34" stroke-width="5px" />
+                            </svg>
+                        </td>
+                        <td>
+                            <h3 class="education-title">role-title-here</h3>
+                            <h4 class="education-instituion-name">company-name-here</h4>
+                            <p class="education-period">company-duration-here</p>
+                            <hr>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div id="skills" class="card">
+            <h2 class="card-title">Skills</h2>
+            <div class="skills-tools-technologies">
+                <h3>Tools & Technologies</h3>
+                <ul>
+                    <li>a-skill</li>
+                </ul>
+            </div>
+            <div class="skills-interpersonal">
+                <h3>Interpersonal Skills</h3>
+                <ul>
+                    <li>a-skill</li>
+                </ul>
+            </div>
+            <div class="skills-industry">
+                <h3>Industry Knowledge</h3>
+                <ul>
+                    <li>a-skill</li>
+                </ul>
+            </div>
+        </div>
+        <div id="accomplishments" class="card">
+            <h2 class="card-title">Accomplishments</h2>
+            <table>
+                <tbody>
+                    <tr>
+                        <td>
+                            <p>X</p><!-- TODO: Replace with the number of items -->
+                        </td>
+                        <td>
+                            <h3 class="accomplishments-title">accomplishments-title-here</h3>
+                            <details>
+                                <summary>
+                                    accomplishments-splited-by-pipe
+                                </summary>
+                                <ul>
+                                    <li>add-more-information-here</li>
+                                </ul>
+                            </details>
+                            <hr>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div id="interests" class="card">
+            <h2 class="card-title">Interests</h2>
+            <ul>
+                <li>a-item</li>
+            </ul>
+        </div>
+        <a href="#top">Top</a>
+    </body>
 </html>
