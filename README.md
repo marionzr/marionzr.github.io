@@ -1,2 +1,2 @@
 # marionzr.github.io
-This my personal github page
+This is the online version of Mario Santos curriculum.
