@@ -11,13 +11,15 @@
         <link rel="icon" href="./img/icons/favicon-32x32.png" type="image/png" sizes="32x32">
         <title>Mario Santos</title>
     </head>
-
     <body>
         <a id="top"></a>
         <div id="toolbar">
-            <a href="./index.html">Home</a> |
-            <a href="">Projects</a> |
-            <a href="">Contact</a>
+            <a href="./index.html">Home</a>
+            <a href="#about">About</a>
+            <a href="#experience">Experience</a>
+            <a href="#skills">Skills</a>
+            <a href="#accomplishments">Accomplishments</a>
+            <a href="#interests">Interests</a>
         </div>
         <div id="header" class="card">
             <div id="banner">
@@ -27,13 +29,8 @@
                     <rect width="100%" height="100%" fill="gray" />
                 </svg>
             </div>
-            <!-- TODO: Move style to css file -->
-            <div class="my-picture" style="margin-top:-70px; margin-left: 10px;">
-                <!-- TODO: Replace the svg with my photo -->
-                <svg width="100" height="100">
-                    <circle cx="50" cy="50" r="45" fill="gray" stroke="#ffffff" stroke-width="5px" />
-                    <text x="50%" y="50%" alignment-baseline="central" text-anchor="middle" fill="#fff">MS</text>
-                </svg>
+            <div class="my-picture">
+                <img src="./img/me_v1.jpg" alt="Mario Santos" class="avatar">
             </div>
             <div id="info">
                 <h1 class="my-name">Mario Santos</h1>
@@ -45,22 +42,33 @@
             <h2 class="card-title">About</h2>
             <details>
                 <summary>
-                    short-description-here
+                    Experienced Software Engineer with a demonstrated history of working in the information technology andservices industry.<br>
+                    Strong skills in .NET, Java, Typescript and Mobile ecosystems, agile methodologies and system analysis.
                 </summary>
                 <ul>
-                    <li>add-more-information-here</li>
+                    <li>Experience with C#.NET, ASP.NET MVC, ASP.NET Core, Windows Forms, Windows Mobile.</li>
+                    <li>Experience with Java, Apache Camel, OSGi</li>
+                    <li>Experience with Typescript, Node.Js, and the JavaScript ecosystem.</li>
+                    <li>Experience integration patterns and frameworks to build high performance, highly scalable and multi-threaded applications.</li>
+                    <li>Experience with enterprise mobile applications, including solutions for energy utilities, health, and business.</li>
+                    <li>Experience with test designing, software quality assurance, interface usability.</li>
+                    <li>Highly motivated, diligent, with good communication skills, and desire to work in challenging environments.</li>
                 </ul>
             </details>
             <div class="top-skills">
                 <ul>
-                    <li>a-skill</li>
-                    <li>a-skill</li>
+                    <li>👨‍👧‍👧 Team leadership</li>
+                    <li>📈 Agile methodologies</li>
+                    <li>🧡 C# .NET</li>
+                    <li>☕ Java</li>
+                    <li>🧪 TypeScript</li>
                 </ul>
             </div>
         </div>
         <div id="experience" class="card">
             <h2 class="card-title">Experiences</h2>
             <table>
+
                 <tbody>
                     <tr>
                         <td>
@@ -70,11 +78,148 @@
                             </svg>
                         </td>
                         <td>
-                            <h3 class="role-title">role-title-here</h3>
-                            <h4 class="company-name">company-name-here</h4>
-                            <p class="company-period">company-period-here</p>
-                            <p class="company-location">company-location-here</p>
-                            <hr>
+                            <h3 class="role-title">Team Lead - Backend Developer</h3>
+                            <h4 class="company-name">Solytic</h4>
+                            <p class="company-period">Mar 2020 - Present</p>
+                            <p class="company-location">Berlin, Germany</p>
+                        </td>
+                        <td>
+                            <ul>
+                                <li>Azure Cloud</li>
+                                <li>C# .NET Core</li>
+                                <li>GraphQL</li>
+                                <li>Vue.js</li>
+                                <li>Typescript</li>
+                                <li>Azure DevOps</li>
+                                <li>JIRA</li>
+                            </ul>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <!-- TODO: Replace the svg with a company image -->
+                            <svg style="width: 70px;" xmlns="http://www.w3.org/2000/svg">
+                                <circle cx="30" cy="30" r="25" fill="none" stroke="#221C34" stroke-width="5px" />
+                            </svg>
+                        </td>
+                        <td>
+                            <h3 class="role-title">Project Lead - Backend Developer</h3>
+                            <h4 class="company-name">bLive</h4>
+                            <p class="company-period">Apr 2019 - Mar 2020</p>
+                            <p class="company-location">Belo Horizonte, Brazil</p>
+                        </td>
+                        <td>
+                            <ul>
+                                <li>Azure Cloud</li>
+                                <li>C# .NET Core</li>
+                                <li>Java Spring Boot</li>
+                                <li>REST</li>
+                                <li>Cordova</li>
+                                <li>Typescript</li>
+                                <li>Bitbucket</li>
+                                <li>JIRA</li>
+                            </ul>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <!-- TODO: Replace the svg with a company image -->
+                            <svg style="width: 70px;" xmlns="http://www.w3.org/2000/svg">
+                                <circle cx="30" cy="30" r="25" fill="none" stroke="#221C34" stroke-width="5px" />
+                            </svg>
+                        </td>
+                        <td>
+                            <h3 class="role-title">Software Engineer (BSS/OCS) - Backend Developer</h3>
+                            <h4 class="company-name">FITec (///Ericsson)</h4>
+                            <p class="company-period">May 2018 - Apr 2019</p>
+                            <p class="company-location">Belo Horizonte, Brazil</p>
+                        </td>
+                        <td>
+                            <ul>
+                                <li>On-premises Cloud</li>
+                                <li>Java 8 with OSGi</li>
+                                <li>REST</li>
+                                <li>Camunda BPM Flow</li>
+                                <li>Typescript</li>
+                                <li>Gerrit</li>
+                                <li>Open Project</li>
+                            </ul>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <!-- TODO: Replace the svg with a company image -->
+                            <svg style="width: 70px;" xmlns="http://www.w3.org/2000/svg">
+                                <circle cx="30" cy="30" r="25" fill="none" stroke="#221C34" stroke-width="5px" />
+                            </svg>
+                        </td>
+                        <td>
+                            <h3 class="role-title">Mobile Software Architect/Backend Developer</h3>
+                            <h4 class="company-name">Axxiom Soluções Tecnológicas (CEMIG & Light)</h4>
+                            <p class="company-period">Aug 2010 - May 2018</p>
+                            <p class="company-location">Belo Horizonte, Brazil</p>
+                        </td>
+                        <td>
+                            <ul>
+                                <li>On-premises Cloud</li>
+                                <li>C# CF.NET 3.5</li>
+                                <li>Java 4-8</li>
+                                <li>Android/Windows Mobile 5-6x</li>
+                                <li>Apache Camel</li>
+                                <li>DB2 Everyplace</li>
+                                <li>Informix</li>
+                                <li>DB2</li>
+                                <li>Typescript</li>
+                                <li>JIRA</li>
+                                <li>Stash</li>
+                                <li>EPM MS Project</li>
+                            </ul>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <!-- TODO: Replace the svg with a company image -->
+                            <svg style="width: 70px;" xmlns="http://www.w3.org/2000/svg">
+                                <circle cx="30" cy="30" r="25" fill="none" stroke="#221C34" stroke-width="5px" />
+                            </svg>
+                        </td>
+                        <td>
+                            <h3 class="role-title">Senior Consultant</h3>
+                            <h4 class="company-name">JDSU - Finisar</h4>
+                            <p class="company-period">Dec 2010 - May 2011</p>
+                            <p class="company-location">Sunnyvale - CA, United States (Remote)</p>
+                        </td>
+                        <td>
+                            <ul>
+                                <li>C# .NET 3.5-4x</li>
+                                <li>Windows Forms</li>
+                                <li>Embedded software</li>
+                                <li>Perforce</li>
+                            </ul>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <!-- TODO: Replace the svg with a company image -->
+                            <svg style="width: 70px;" xmlns="http://www.w3.org/2000/svg">
+                                <circle cx="30" cy="30" r="25" fill="none" stroke="#221C34" stroke-width="5px" />
+                            </svg>
+                        </td>
+                        <td>
+                            <h3 class="role-title">Software Developer</h3>
+                            <h4 class="company-name">InCode Software</h4>
+                            <p class="company-period">Mar 2007 - Jul 2010</p>
+                            <p class="company-location">Belo Horizonte, Brazil</p>
+                        </td>
+                        <td>
+                            <ul>
+                                <li>C# .NET 3.5-4x</li>
+                                <li>C/C++</li>
+                                <li>Windows Forms</li>
+                                <li>Embedded software</li>
+                                <li>Perforce</li>
+                                <li>Borland ALM</li>
+                            </ul>
                         </td>
                     </tr>
                 </tbody>
@@ -92,9 +237,40 @@
                             </svg>
                         </td>
                         <td>
-                            <h3 class="education-title">role-title-here</h3>
-                            <h4 class="education-instituion-name">company-name-here</h4>
-                            <p class="education-period">company-duration-here</p>
+                            <h3 class="education-degree">Postgraduated</h3>
+                            <h4 class="education-field-of-study">Software Engineering</h4>
+                            <h4 class="education-instituion-name">Pontifícia Universidade Católica de Minas Gerais</h4>
+                            <p class="education-period">2009 – 2010</p>
+                            <hr>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <!-- TODO: Replace the svg with an education institution image -->
+                            <svg style="width: 70px;" xmlns="http://www.w3.org/2000/svg">
+                                <rect x="10" y="50" width="50" height="50" fill="none" stroke="#221C34" stroke-width="5px" />
+                            </svg>
+                        </td>
+                        <td>
+                            <h3 class="education-degree">Master of Business Administration (M.B.A.)</h3>
+                            <h4 class="education-field-of-study">Strategic Business Management</h4>
+                            <h4 class="education-instituion-name">Pontifícia Universidade Católica de Minas Gerais</h4>
+                            <p class="education-period">2011 – 2013</p>
+                            <hr>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <!-- TODO: Replace the svg with an education institution image -->
+                            <svg style="width: 70px;" xmlns="http://www.w3.org/2000/svg">
+                                <rect x="10" y="50" width="50" height="50" fill="none" stroke="#221C34" stroke-width="5px" />
+                            </svg>
+                        </td>
+                        <td>
+                            <h3 class="education-degree">Bachelor's degree</h3>
+                            <h4 class="education-field-of-study">Computer Science</h4>
+                            <h4 class="education-instituion-name">Centro Universitário de Belo Horizonte</h4>
+                            <p class="education-period">2002 – 2007</p>
                             <hr>
                         </td>
                     </tr>
@@ -106,19 +282,45 @@
             <div class="skills-tools-technologies">
                 <h3>Tools & Technologies</h3>
                 <ul>
-                    <li>a-skill</li>
+                    <li>.NET</li>
+                    <li>C#</li>
+                    <li>Java</li>
+                    <li>JavaScript</li>
+                    <li>TypeScript</li>
+                    <li>ASP.NET MVC</li>
+                    <li>ASP.NET Core</li>
+                    <li>GraphQL</li>
+                    <li>REST APIs</li>
+                    <li>SQL Server</li>
+                    <li>Informix</li>
+                    <li>DB2</li>
+                    <li>MySQL</li>
+                    <li>Vue.Js</li>
+                    <li>Android</li>
+                    <li>Windows Mobile 6x</li>
+                    <li>BPMN</li>
+                    <li>Camunda Flow</li>
+                    <li>Apache Camel</li>
+                    <li>OSGi</li>
                 </ul>
             </div>
             <div class="skills-interpersonal">
                 <h3>Interpersonal Skills</h3>
                 <ul>
-                    <li>a-skill</li>
+                    <li>Team Leadership</li>
+                    <li>Technical Leadership</li>
+                    <li>Mentoring</li>
+                    <li>Conflict Management</li>
+                    <li>Technical Recruiting</li>
                 </ul>
             </div>
             <div class="skills-industry">
                 <h3>Industry Knowledge</h3>
                 <ul>
-                    <li>a-skill</li>
+                    <li>Energy (Water, Gas, Solar)</li>
+                    <li>Pharmaceutical (Intraocular lenses)</li>
+                    <li>Telecommunication (BSS/OCS)</li>
+                    <li>Logistic (Yard Management, Freight, RFID)</li>
                 </ul>
             </div>
         </div>
@@ -128,19 +330,79 @@
                 <tbody>
                     <tr>
                         <td>
-                            <p>X</p><!-- TODO: Replace with the number of items -->
+                            <p>2</p>
                         </td>
                         <td>
-                            <h3 class="accomplishments-title">accomplishments-title-here</h3>
+                            <h3 class="accomplishments-title">Courses</h3>
                             <details>
                                 <summary>
-                                    accomplishments-splited-by-pipe
+                                    ASP.NET Core 2.0 ◾ Alura
                                 </summary>
                                 <ul>
-                                    <li>add-more-information-here</li>
+                                    <li>
+                                        <a href="https://mva.microsoft.com/RewardEvidence.aspx/?key=Pm7MKi6djMVhIq-_nSzNaQ2" target="_blank">
+                                            ASP.NET Core 2.0</a>
+                                    </li>
+                                    <li>
+                                        <a href="https://cursos.alura.com.br/user/ssannttoss/fullCertificate/95266da9313a7ff77098ebbaa0a7772e"
+                                           target="_blank">Alura</a>
+                                    </li>
                                 </ul>
                             </details>
                             <hr>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <p>2</p>
+                        </td>
+                        <td>
+                            <h3 class="accomplishments-title">Personal projects</h3>
+                            <details>
+                                <summary>
+                                    NZR.Toolbox ◾ NZR.Orm
+                                </summary>
+                                <ul>
+                                    <li>
+                                        <p>NZR.Toolbox</p>
+                                        <p>A collection of utility classes and extension methods that allow developers to have a social life.</p>
+                                        <a href="https://github.com/marionzr/Nzr.Toolbox" target="_blank">See project</a>
+                                    </li>
+                                    <li>
+                                        <p>NZR.Orm</p>
+                                        <p>Fast, simple, convention-based (but configurable) and extensible Micro-Orm</p>
+                                        <a href="https://github.com/marionzr/Nzr.Orm" target="_blank">See project</a>
+                                    </li>
+                                </ul>
+                            </details>
+                            <hr>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <p>3</p>
+                        </td>
+                        <td>
+                            <h3 class="accomplishments-title">Languages</h3>
+                            <details>
+                                <summary>
+                                    English ◾ Portuguese ◾ Spanish
+                                </summary>
+                                <ul>
+                                    <li>
+                                        <p>English</p>
+                                        <p>Professional working proficiency</p>
+                                    </li>
+                                    <li>
+                                        <p>Portuguese</p>
+                                        <p>Native or bilingual proficiency</p>
+                                    </li>
+                                    <li>
+                                        <p>Spanish</p>
+                                        <p>Elementary proficiency</p>
+                                    </li>
+                                </ul>
+                            </details>
                         </td>
                     </tr>
                 </tbody>
@@ -149,9 +411,20 @@
         <div id="interests" class="card">
             <h2 class="card-title">Interests</h2>
             <ul>
-                <li>a-item</li>
+                <li>Microsoft</li>
+                <li>Oracle</li>
+                <li>Renewable Energy</li>
+                <li>Azure</li>
+                <li>AWS</li>
+                <li>Google</li>
+                <li>Team Leadership</li>
+                <li>Languages</li>
+                <li>AI</li>
+                <li>Machine Learning</li>
             </ul>
         </div>
-        <a href="#top">Top</a>
+        <footer>
+            <a href="#top">Top</a>
+        </footer>
     </body>
 </html>
