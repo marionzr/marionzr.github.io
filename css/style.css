@@ -1,5 +1,274 @@
 /* tags */
+html {
+  font-size: 12px;
+  font-family: Helvetica, Arial, sans-serif;
+}
+
+body {
+  margin: auto;
+  width: 60%;
+  background: linear-gradient(180deg, lightgray 0%, #b9b9b9 51%, #979696 75%);
+}
+
+footer {
+  margin: 0.5rem;
+  margin-bottom: 800px;
+  text-align: right;
+}
+
+:target {
+  display: block;
+  position: relative;
+  top: -5rem;
+  visibility: hidden;
+}
+
+a {
+  text-decoration: none;
+}
+
+div a:link {
+  display: inline-block;
+  padding: 0.5rem;
+}
+
+div a:hover,
+div a:active {
+  background-color: lightgray;
+  color: white;
+}
+
+div a:visited {
+  text-decoration: none;
+  color: black;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p {
+  margin-top: 0.5rem;
+  margin-bottom: 0.05rem;
+}
+
+h1 {
+  font-size: 2.5rem;
+}
+
+h2 {
+  font-size: 1.5rem;
+}
+
+h3 {
+  font-size: 1.1rem;
+}
+
+summary {
+  margin-top: 0.5rem;
+}
+
+table {
+  /* Removes the cell spacing via CSS */
+  border-spacing: 0;
+  /* Optional - if you don't want to have double border where cells touch */
+  border-collapse: collapse;
+  width: 100%;
+  table-layout: fixed;
+}
+
+table td {
+  vertical-align: text-top;
+}
 
 /* classes */
 
+.card {
+  scroll-behavior: smooth;
+  background-color: white;
+  border-radius: 1rem;
+  padding: 1.5rem;
+  margin-top: 0.75rem;
+  margin-top: 0.75rem;
+}
+
+.labels ul {
+  padding: 0;
+}
+
+.labels li {
+  border-radius: 0.5rem;
+  display: inline-block;
+  padding: 0.5rem;
+  background-color: dodgerblue;
+  margin: 0.25rem;
+  color: white;
+}
+
+.labels li:hover {
+  opacity: 0.9;
+  -webkit-transition: font-size 0.5s ease;
+  -moz-transition: font-size 0.5s ease;
+  -o-transition: font-size 0.5s ease;
+  transition: font-size 0.5s ease;
+  font-size: 1.3em;
+  background-color: royalblue;
+}
+
+.accomplishments-counter {
+  color: dodgerblue;
+  font-size: 2.5rem;
+}
+
 /* ids */
+#my-name {
+  font-size: 3rem;
+}
+
+#my-role,
+#my-location {
+  font-size: 1.5rem;
+}
+
+#toolbar {
+  display: inline;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  padding: 1rem;
+  background-color: white;
+  text-align: center;
+  border-bottom: 1px solid gray;
+}
+
+#header {
+  margin-top: 150px;
+  background: linear-gradient(
+    141deg,
+    rgb(93, 190, 255) 0%,
+    rgb(55, 171, 248) 51%,
+    rgb(2, 113, 187) 75%
+  );
+}
+
+#my-picture {
+  float: left;
+  margin-top: -90px;
+  margin-left: 10px;
+}
+
+#my-picture img {
+  border-radius: 100%;
+  border-width: 5px;
+  border-style: solid;
+  border-color: lightgray;
+  height: 150px;
+  width: 150px;
+}
+
+#info {
+  margin-left: 200px;
+  padding-bottom: 1rem;
+}
+
+#top-skills {
+  float: right;
+  margin-top: -11rem;
+  margin-right: 2rem;
+  padding-bottom: 1rem;
+  font-size: 1.3rem;
+  color: white;
+}
+#top-skills li {
+  list-style: none;
+  padding: 0.05rem;
+}
+
+/* experience */
+#experience table td {
+  padding-bottom: 1rem;
+}
+#experience table td:first-child {
+  vertical-align: middle;
+  width: 80px;
+}
+
+#experience table td:first-child + td {
+  width: 40%;
+  border-bottom: 1px solid #eeebeb;
+}
+
+#experience table td:first-child + td + td {
+  width: auto;
+  border-bottom: 1px solid #eeebeb;
+}
+
+#experience table tr:last-child {
+  /* Hides the border of the last cells*/
+  border-bottom: 2px solid white;
+}
+
+/* education */
+#education table td {
+  padding-bottom: 1rem;
+}
+
+#education table td:first-child {
+  vertical-align: middle;
+  width: 80px;
+  padding-left: 1rem;
+  margin-bottom: 2rem;
+}
+
+#education table td:first-child + td {
+  width: 100%;
+  border-bottom: 1px solid #eeebeb;
+}
+
+#education table tr:last-child {
+  /* Hides the border of the last cells*/
+  border-bottom: 2px solid white;
+}
+
+/* accomplishments */
+#accomplishments table td:first-child {
+  text-align: center;
+  vertical-align: top;
+  width: 50px;
+  font-size: 2.5rem;
+  padding-top: 0;
+  padding-bottom: 0;
+}
+
+#accomplishments table td {
+  vertical-align: middle;
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+}
+
+#accomplishments table td:first-child + td {
+  width: 100%;
+  border-bottom: 1px solid #eeebeb;
+}
+
+#accomplishments table tr:last-child {
+  /* Hides the border of the last cells*/
+  border-bottom: 2px solid white;
+}
+
+#accomplishments summary {
+  font-size: 1.1rem;
+  font-weight: bold;
+}
+
+#accomplishments ul a {
+  padding-left: 0;
+  color: royalblue;
+}
+#accomplishments ul a:hover,
+a:active {
+  padding: 0.5rem;
+}

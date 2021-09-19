@@ -9,35 +9,40 @@
         <link rel="icon" href="./img/icons/favicon.ico" type="image/x-icon">
         <link rel="icon" href="./img/icons/favicon-16x16.png" type="image/png" sizes="16x16">
         <link rel="icon" href="./img/icons/favicon-32x32.png" type="image/png" sizes="32x32">
+        <link rel="stylesheet" href="./css/style.css">
         <title>Mario Santos</title>
     </head>
     <body>
         <a id="top"></a>
         <div id="toolbar">
             <a href="./index.html">Home</a>
-            <a href="#about">About</a>
-            <a href="#experience">Experience</a>
-            <a href="#skills">Skills</a>
-            <a href="#accomplishments">Accomplishments</a>
-            <a href="#interests">Interests</a>
+            <a href="#anchor-about">About</a>
+            <a href="#anchor-experience">Experience</a>
+            <a href="#anchor-education">Education</a>
+            <a href="#anchor-skills">Skills</a>
+            <a href="#anchor-accomplishments">Accomplishments</a>
+            <a href="#anchor-interests">Interests</a>
         </div>
         <div id="header" class="card">
-            <div id="banner">
-                <!-- TODO: Replace the svg with an nice background -->
-                <!-- TODO: Move style to css file -->
-                <svg style="width: 100%; height: 100px" xmlns="http://www.w3.org/2000/svg">
-                    <rect width="100%" height="100%" fill="gray" />
-                </svg>
-            </div>
-            <div class="my-picture">
-                <img src="./img/me_v1.jpg" alt="Mario Santos" class="avatar">
+            <div id="my-picture">
+                <img src="./img/me_v1.jpg" alt="Mario Santos">
             </div>
             <div id="info">
-                <h1 class="my-name">Mario Santos</h1>
-                <p class="my-role">Software Engineer</p>
-                <p class="my-location">Berlin, Germany</p>
+                <h1 id="my-name">Mario Santos</h1>
+                <p id="my-role">Software Engineer</p>
+                <p id="my-location">Berlin, Germany</p>
+            </div>
+            <div id="top-skills">
+                <ul>
+                    <li>👨‍👧‍👧 Team leadership</li>
+                    <li>🧡 C# .NET & Java</li>
+                    <li>🧪 JavaScript & TypeScript</li>
+                    <li>💪🏾 Backend</li>
+                    <li>🤷🏾‍♂️ Frontend</li>
+                </ul>
             </div>
         </div>
+        <a id="anchor-about"></a>
         <div id="about" class="card">
             <h2 class="card-title">About</h2>
             <details>
@@ -55,26 +60,17 @@
                     <li>Highly motivated, diligent, with good communication skills, and desire to work in challenging environments.</li>
                 </ul>
             </details>
-            <div class="top-skills">
-                <ul>
-                    <li>👨‍👧‍👧 Team leadership</li>
-                    <li>📈 Agile methodologies</li>
-                    <li>🧡 C# .NET</li>
-                    <li>☕ Java</li>
-                    <li>🧪 TypeScript</li>
-                </ul>
-            </div>
         </div>
-        <div id="experience" class="card">
+        <a id="anchor-experience"></a>
+        <div id="experience" class="card labels">
             <h2 class="card-title">Experiences</h2>
             <table>
-
                 <tbody>
                     <tr>
                         <td>
                             <!-- TODO: Replace the svg with a company image -->
-                            <svg style="width: 70px;" xmlns="http://www.w3.org/2000/svg">
-                                <circle cx="30" cy="30" r="25" fill="none" stroke="#221C34" stroke-width="5px" />
+                            <svg style="width: 60px; height: 60px" xmlns="http://www.w3.org/2000/svg">
+                                <circle cx="30" cy="30" r="25" fill="none" stroke="purple" stroke-width="5px" />
                             </svg>
                         </td>
                         <td>
@@ -98,8 +94,8 @@
                     <tr>
                         <td>
                             <!-- TODO: Replace the svg with a company image -->
-                            <svg style="width: 70px;" xmlns="http://www.w3.org/2000/svg">
-                                <circle cx="30" cy="30" r="25" fill="none" stroke="#221C34" stroke-width="5px" />
+                            <svg style="width: 60px; height: 60px" xmlns="http://www.w3.org/2000/svg">
+                                <circle cx="30" cy="30" r="25" fill="none" stroke="orange" stroke-width="5px" />
                             </svg>
                         </td>
                         <td>
@@ -124,8 +120,8 @@
                     <tr>
                         <td>
                             <!-- TODO: Replace the svg with a company image -->
-                            <svg style="width: 70px;" xmlns="http://www.w3.org/2000/svg">
-                                <circle cx="30" cy="30" r="25" fill="none" stroke="#221C34" stroke-width="5px" />
+                            <svg style="width: 60px; height: 60px" xmlns="http://www.w3.org/2000/svg">
+                                <circle cx="30" cy="30" r="25" fill="none" stroke="blue" stroke-width="5px" />
                             </svg>
                         </td>
                         <td>
@@ -136,7 +132,7 @@
                         </td>
                         <td>
                             <ul>
-                                <li>On-premises Cloud</li>
+                                <li>On-premises Infrastructure</li>
                                 <li>Java 8 with OSGi</li>
                                 <li>REST</li>
                                 <li>Camunda BPM Flow</li>
@@ -149,8 +145,8 @@
                     <tr>
                         <td>
                             <!-- TODO: Replace the svg with a company image -->
-                            <svg style="width: 70px;" xmlns="http://www.w3.org/2000/svg">
-                                <circle cx="30" cy="30" r="25" fill="none" stroke="#221C34" stroke-width="5px" />
+                            <svg style="width: 60px; height: 60px" xmlns="http://www.w3.org/2000/svg">
+                                <circle cx="30" cy="30" r="25" fill="none" stroke="green" stroke-width="5px" />
                             </svg>
                         </td>
                         <td>
@@ -161,7 +157,7 @@
                         </td>
                         <td>
                             <ul>
-                                <li>On-premises Cloud</li>
+                                <li>On-premises Infrastructure</li>
                                 <li>C# CF.NET 3.5</li>
                                 <li>Java 4-8</li>
                                 <li>Android/Windows Mobile 5-6x</li>
@@ -179,8 +175,8 @@
                     <tr>
                         <td>
                             <!-- TODO: Replace the svg with a company image -->
-                            <svg style="width: 70px;" xmlns="http://www.w3.org/2000/svg">
-                                <circle cx="30" cy="30" r="25" fill="none" stroke="#221C34" stroke-width="5px" />
+                            <svg style="width: 60px; height: 60px" xmlns="http://www.w3.org/2000/svg">
+                                <circle cx="30" cy="30" r="25" fill="none" stroke="gray" stroke-width="5px" />
                             </svg>
                         </td>
                         <td>
@@ -201,7 +197,7 @@
                     <tr>
                         <td>
                             <!-- TODO: Replace the svg with a company image -->
-                            <svg style="width: 70px;" xmlns="http://www.w3.org/2000/svg">
+                            <svg style="width: 60px; height: 60px" xmlns="http://www.w3.org/2000/svg">
                                 <circle cx="30" cy="30" r="25" fill="none" stroke="#221C34" stroke-width="5px" />
                             </svg>
                         </td>
@@ -225,6 +221,7 @@
                 </tbody>
             </table>
         </div>
+        <a id="anchor-education"></a>
         <div id="education" class="card">
             <h2 class="card-title">Education</h2>
             <table>
@@ -232,8 +229,8 @@
                     <tr>
                         <td>
                             <!-- TODO: Replace the svg with an education institution image -->
-                            <svg style="width: 70px;" xmlns="http://www.w3.org/2000/svg">
-                                <rect x="10" y="50" width="50" height="50" fill="none" stroke="#221C34" stroke-width="5px" />
+                            <svg style="width: 50px; height: 50px" xmlns="http://www.w3.org/2000/svg">
+                                <rect x="0" y="0" width="50" height="50" fill="none" stroke="blue" stroke-width="5px" />
                             </svg>
                         </td>
                         <td>
@@ -241,14 +238,13 @@
                             <h4 class="education-field-of-study">Software Engineering</h4>
                             <h4 class="education-instituion-name">Pontifícia Universidade Católica de Minas Gerais</h4>
                             <p class="education-period">2009 – 2010</p>
-                            <hr>
                         </td>
                     </tr>
                     <tr>
                         <td>
                             <!-- TODO: Replace the svg with an education institution image -->
-                            <svg style="width: 70px;" xmlns="http://www.w3.org/2000/svg">
-                                <rect x="10" y="50" width="50" height="50" fill="none" stroke="#221C34" stroke-width="5px" />
+                            <svg style="width: 50px; height: 50px" xmlns="http://www.w3.org/2000/svg">
+                                <rect x="0" y="0" width="50" height="50" fill="none" stroke="gold" stroke-width="5px" />
                             </svg>
                         </td>
                         <td>
@@ -256,14 +252,13 @@
                             <h4 class="education-field-of-study">Strategic Business Management</h4>
                             <h4 class="education-instituion-name">Pontifícia Universidade Católica de Minas Gerais</h4>
                             <p class="education-period">2011 – 2013</p>
-                            <hr>
                         </td>
                     </tr>
                     <tr>
                         <td>
                             <!-- TODO: Replace the svg with an education institution image -->
-                            <svg style="width: 70px;" xmlns="http://www.w3.org/2000/svg">
-                                <rect x="10" y="50" width="50" height="50" fill="none" stroke="#221C34" stroke-width="5px" />
+                            <svg style="width: 50px; height: 50px" xmlns="http://www.w3.org/2000/svg">
+                                <rect x="0" y="0" width="50" height="50" fill="none" stroke="red" stroke-width="5px" />
                             </svg>
                         </td>
                         <td>
@@ -271,13 +266,13 @@
                             <h4 class="education-field-of-study">Computer Science</h4>
                             <h4 class="education-instituion-name">Centro Universitário de Belo Horizonte</h4>
                             <p class="education-period">2002 – 2007</p>
-                            <hr>
                         </td>
                     </tr>
                 </tbody>
             </table>
         </div>
-        <div id="skills" class="card">
+        <a id="anchor-skills"></a>
+        <div id="skills" class="card labels">
             <h2 class="card-title">Skills</h2>
             <div class="skills-tools-technologies">
                 <h3>Tools & Technologies</h3>
@@ -324,19 +319,19 @@
                 </ul>
             </div>
         </div>
+        <a id="anchor-accomplishments"></a>
         <div id="accomplishments" class="card">
             <h2 class="card-title">Accomplishments</h2>
             <table>
                 <tbody>
                     <tr>
                         <td>
-                            <p>2</p>
+                            <p class="accomplishments-counter">2</p>
                         </td>
                         <td>
-                            <h3 class="accomplishments-title">Courses</h3>
                             <details>
                                 <summary>
-                                    ASP.NET Core 2.0 ◾ Alura
+                                    Courses
                                 </summary>
                                 <ul>
                                     <li>
@@ -349,18 +344,16 @@
                                     </li>
                                 </ul>
                             </details>
-                            <hr>
                         </td>
                     </tr>
                     <tr>
                         <td>
-                            <p>2</p>
+                            <p class="accomplishments-counter">2</p>
                         </td>
                         <td>
-                            <h3 class="accomplishments-title">Personal projects</h3>
                             <details>
                                 <summary>
-                                    NZR.Toolbox ◾ NZR.Orm
+                                    Personal projects
                                 </summary>
                                 <ul>
                                     <li>
@@ -375,18 +368,16 @@
                                     </li>
                                 </ul>
                             </details>
-                            <hr>
                         </td>
                     </tr>
                     <tr>
                         <td>
-                            <p>3</p>
+                            <p class="accomplishments-counter">3</p>
                         </td>
                         <td>
-                            <h3 class="accomplishments-title">Languages</h3>
                             <details>
                                 <summary>
-                                    English ◾ Portuguese ◾ Spanish
+                                    Languages
                                 </summary>
                                 <ul>
                                     <li>
@@ -408,7 +399,8 @@
                 </tbody>
             </table>
         </div>
-        <div id="interests" class="card">
+        <a id="anchor-interests"></a>
+        <div id="interests" class="card labels">
             <h2 class="card-title">Interests</h2>
             <ul>
                 <li>Microsoft</li>
@@ -421,10 +413,20 @@
                 <li>Languages</li>
                 <li>AI</li>
                 <li>Machine Learning</li>
+                <li>IOT</li>
+                <li>Mentoring</li>
+                <li>.NET Core</li>
+                <li>C++</li>
+                <li>Java</li>
+                <li>Vue.js</li>
+                <li>React</li>
+                <li>Backend Development</li>
+                <li>Frontend Development</li>
+
             </ul>
         </div>
         <footer>
-            <a href="#top">Top</a>
+            <a href="#top">🏠</a>
         </footer>
     </body>
 </html>
