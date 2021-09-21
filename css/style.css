@@ -84,6 +84,34 @@ table td {
 }
 
 /* classes */
+.see-more:link {
+  margin-top: 1rem;
+  margin-right: 15rem;
+  display: inline;
+  float: right;
+  color: blue;
+}
+
+.see-more:active,
+.see-more:hover {
+  background-color: white;
+}
+
+.see-more:target {
+  display: none;
+}
+
+.see-more:target ~ .summary {
+  max-height: 100%;
+  width: 100%;
+}
+
+.summary {
+  transition: max-height 0.005s ease;
+  max-height: 3rem;
+  overflow: hidden;
+  width: auto;
+}
 
 .card {
   scroll-behavior: smooth;
