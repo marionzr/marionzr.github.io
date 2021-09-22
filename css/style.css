@@ -6,6 +6,7 @@ html {
 
 body {
   margin: auto;
+  min-width: 800px;
   width: 60%;
   background: linear-gradient(180deg, lightgray 0%, #b9b9b9 51%, #979696 75%);
 }
@@ -25,6 +26,7 @@ footer {
 
 a {
   text-decoration: none;
+  color: royalblue;
 }
 
 div a:link {
@@ -40,7 +42,7 @@ div a:active {
 
 div a:visited {
   text-decoration: none;
-  color: black;
+  color: royalblue;
 }
 
 h1,
@@ -84,17 +86,22 @@ table td {
 }
 
 /* classes */
+.see-more:visited {
+  color: black;
+}
+
 .see-more:link {
   margin-top: 1rem;
   margin-right: 15rem;
   display: inline;
   float: right;
-  color: blue;
+  color: black;
 }
 
 .see-more:active,
 .see-more:hover {
   background-color: white;
+  color: black;
 }
 
 .see-more:target {
@@ -170,10 +177,11 @@ table td {
   background-color: white;
   text-align: center;
   border-bottom: 1px solid gray;
+  font-weight: bold;
 }
 
 #header {
-  margin-top: 150px;
+  margin-top: 115px;
   background: linear-gradient(
     141deg,
     rgb(93, 190, 255) 0%,
@@ -184,7 +192,7 @@ table td {
 
 #my-picture {
   float: left;
-  margin-top: -90px;
+  margin-top: -70px;
   margin-left: 10px;
 }
 
@@ -249,6 +257,17 @@ table td {
 
   border-style: solid;
   border-color: lightgray;
+}
+
+#experience tr img,
+#education tr img {
+  animation: spin 1s normal;
+}
+
+@keyframes spin {
+  100% {
+    transform: rotateZ(360deg);
+  }
 }
 
 /* education */
