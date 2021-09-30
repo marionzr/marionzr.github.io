@@ -1,6 +1,6 @@
 /* tags */
 html {
-  font-size: 12px;
+  font-size: 13px;
   font-family: Helvetica, Arial, sans-serif;
 }
 
@@ -27,6 +27,10 @@ footer {
 a {
   text-decoration: none;
   color: royalblue;
+}
+
+a:active {
+  padding: 0.5rem;
 }
 
 div a:link {
@@ -85,6 +89,10 @@ table td {
   vertical-align: text-top;
 }
 
+img:hover {
+  opacity: 0.9;
+}
+
 /* classes */
 .see-more:visited {
   color: black;
@@ -92,7 +100,7 @@ table td {
 
 .see-more:link {
   margin-top: 1rem;
-  margin-right: 15rem;
+  margin-right: 10rem;
   display: inline;
   float: right;
   color: black;
@@ -180,6 +188,25 @@ table td {
   font-weight: bold;
 }
 
+#toolbar div {
+  float: right;
+  display: table;
+  clear: both;
+  margin-right: 1.5rem;
+  padding: 0;
+}
+
+#toolbar .smn a,
+#toolbar .smn a:hover,
+#toolbar .smn a:active {
+  padding: 0;
+  margin-left: 1rem;
+  background-color: unset;
+}
+#toolbar .smn img {
+  height: 24px;
+}
+
 #header {
   margin-top: 115px;
   background: linear-gradient(
@@ -203,6 +230,11 @@ table td {
   border-color: lightgray;
   height: 150px;
   width: 150px;
+}
+
+#my-picture img:hover {
+  opacity: 1;
+  border-color: #dbdbdb;
 }
 
 #info {
@@ -337,7 +369,6 @@ table td {
   padding-left: 0;
   color: royalblue;
 }
-#accomplishments ul a:hover,
-a:active {
+#accomplishments ul a:hover {
   padding: 0.5rem;
 }
