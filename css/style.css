@@ -167,13 +167,18 @@ img:hover {
 
 /* ids */
 #my-name {
-  font-size: 3rem;
+  margin-top: -1.5rem;
+  margin-left: 2rem;
+  font-size: 3.5rem;
+  text-shadow: 2px 2px 4px rgba(19, 17, 17, 0.5);
 }
 
 #my-role,
 #my-location {
-  font-size: 1.3rem;
-  color: white;
+  margin-left: 2rem;
+  font-size: 1.4rem;
+  color: black;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
 }
 
 #toolbar {
@@ -219,7 +224,8 @@ img:hover {
       rgb(2, 113, 187) 75%
     );
   background-size: cover;
-  background-blend-mode: overlay; /* Blends the gradient and image */
+  background-blend-mode: overlay;
+  background-position: center 0.1rem;
 }
 
 
