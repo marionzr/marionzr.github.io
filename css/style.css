@@ -99,7 +99,7 @@ img:hover {
 }
 
 .see-more:link {
-  margin-top: 1rem;
+  margin-top: 4rem;
   margin-right: 10rem;
   display: inline;
   float: right;
@@ -123,7 +123,7 @@ img:hover {
 
 .summary {
   transition: max-height 0.005s ease;
-  max-height: 3rem;
+  max-height: 6rem;
   overflow: hidden;
   width: auto;
 }
@@ -172,7 +172,8 @@ img:hover {
 
 #my-role,
 #my-location {
-  font-size: 1.5rem;
+  font-size: 1.3rem;
+  color: white;
 }
 
 #toolbar {
@@ -209,13 +210,18 @@ img:hover {
 
 #header {
   margin-top: 115px;
-  background: linear-gradient(
-    141deg,
-    rgb(93, 190, 255) 0%,
-    rgb(55, 171, 248) 51%,
-    rgb(2, 113, 187) 75%
-  );
+  background:
+    url('https://media.licdn.com/dms/image/v2/D4E16AQE4H-5o8F-w6w/profile-displaybackgroundimage-shrink_350_1400/profile-displaybackgroundimage-shrink_350_1400/0/1733091724298?e=1739404800&v=beta&t=CuughDUoa-_IVoeY48tQCdJgFJUBQrHBy9WeKJe8NwU') no-repeat center center,
+    linear-gradient(
+      141deg,
+      rgb(93, 190, 255) 0%,
+      rgb(55, 171, 248) 51%,
+      rgb(2, 113, 187) 75%
+    );
+  background-size: cover;
+  background-blend-mode: overlay; /* Blends the gradient and image */
 }
+
 
 #my-picture {
   float: left;
@@ -238,7 +244,8 @@ img:hover {
 }
 
 #info {
-  margin-left: 200px;
+  margin-top: 3rem;
+  margin-left: 240px;
   padding-bottom: 1rem;
 }
 
