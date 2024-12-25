@@ -21,6 +21,7 @@
     <link rel="stylesheet" href="css/footer.css">
     <link rel="stylesheet" href="css/index.css">
     <link rel="stylesheet" href="css/github-projects-carousel.css">
+    <link rel="stylesheet" href="css/recent-articles-grid.css">
 </head>
 
 <body>
@@ -33,6 +34,14 @@
     <main id="main">
         <div id="main-container">
             <section id="main-container-left-column">
+                <section id="recent-articles">
+                    <h1><a id="articles-link" href="./articles.html"><i class="far fa-newspaper fa-lg"></i> Articles</a></h1>
+                    <div id="recent-articles-grid-container">
+                        <div id="recent-articles-grid">
+                            <!-- Articles will be inserted here -->
+                        </div>
+                    </div>
+                </section>
                 <section id="gh-projects">
                     <h1><a href="https://www.github.com/marionzr" target="_blank"><i class="fab fa-github fa-lg"></i> GitHub</a> <a href="https://www.nuget.org/profiles/marionzr" target="_blank"><img id="nzr-logo" src="./assets/icons/nzr.png" alt="nzr" class="img-no-hide">NUGET</a></h1>
                     <p>I actively contribute to the community by sharing prototypes and production-ready libraries on GitHub, using this as an opportunity for continuous learning and improvement. Below are some of the public projects I've created.</p>
@@ -128,6 +137,10 @@
     <script src="js/header.js" ></script>
     <script src="js/footer.js" ></script>
     <script src="js/github-projects-carousel.js" ></script>
+    <script src="js/sources.js" ></script>
+    <script src="js/sources.local.js" onerror="console.info('☝️ You can ignore this error – no test data was found, so real data will be used instead.')"></script>
+    <script src="js/recent-articles-grid.js"></script>
+
     <script type="application/ld+json">
     {
         "@context": "https://schema.org",

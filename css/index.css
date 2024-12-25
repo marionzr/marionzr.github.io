@@ -27,6 +27,15 @@
     flex-direction: column;
 }
 
+#recent-articles {
+    margin-bottom: 1.5rem;
+}
+
+#recent-articles h2 {
+    margin-top: 0;
+    padding: 0;
+}
+
 /* ===== Right column ====================================================== */
 
 #main-container-right-column {

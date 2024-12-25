@@ -3,14 +3,15 @@
     const app = {};
     globalThis.app = app;
 
-    const version = '1.0.1';
+    const VERSION = '1.0.1';
+    const USERNAME = 'marionzr';
     const versionKey = "nzr";
 
     function onError(error, errorMessage) {
         console.error(`🐞 ${errorMessage}`, error);
     }
 
-    // ===== Tools ===============================================================
+    // ===== Tools ============================================================
 
     function safeParseInt(value) {
         try {
@@ -22,23 +23,21 @@
         }
     }
 
-    // ===== Storage =============================================================
+    // ===== Storage ==========================================================
 
     function setItem(key, value, versionSpecific = true) {
-        const storageKey = versionSpecific ? `${version}_${key}` : key;
+        const storageKey = versionSpecific ? `${VERSION}_${key}` : key;
         localStorage.setItem(storageKey, value);
     }
 
-
-
     function getItem(key, versionSpecific = true) {
-        const storageKey = versionSpecific ? `${version}_${key}` : key;
+        const storageKey = versionSpecific ? `${VERSION}_${key}` : key;
         const data = localStorage.getItem(storageKey);
 
         return data;
     }
 
-    // ==== Initialization ========================================================
+    // ==== Initialization ====================================================
 
     async function init() {
         try {
@@ -65,7 +64,7 @@
 
     document.addEventListener('DOMContentLoaded', init);
 
-    // ===== Events ===============================================================
+    // ===== Events ===========================================================
 
     const Events = Object.freeze({
         InitStarted: `${init.name}Started`,
@@ -79,4 +78,6 @@
     app.setItem = setItem;
     app.getItem = getItem;
     app.safeParseInt = safeParseInt;
+    app.VERSION = VERSION;
+    app.USERNAME = USERNAME;
 })();

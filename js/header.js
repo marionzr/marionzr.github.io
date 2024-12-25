@@ -254,28 +254,31 @@
         const height = image.height || image.offsetHeight;
         const computedStyle = window.getComputedStyle(image);
 
-        // Create placeholder
-        const placeholder = document.createElement('div');
-        placeholder.className = 'img-placeholder';
-        placeholder.innerHTML = 'Image hidden for eco-friendly printing 🍃.<br/>Toggle read mode in the toolbar to show image <i class="far fa-file-alt"></i>';
-
-        // Match image dimensions if available
-        if (width && height) {
-            placeholder.style.width = '100%';
-            placeholder.style.height = '40px';
-        }
-
         // Store original styles and replace image
         image.setAttribute('data-original-style', JSON.stringify({
             display: computedStyle.display,
         }));
 
-        image.parentNode.insertBefore(placeholder, image);
-        image.style.display = 'none';
+        if (!image.classList.contains('img-no-placeholder')) {
+            // Create placeholder
+            const placeholder = document.createElement('div');
+            placeholder.className = 'img-placeholder';
+            placeholder.innerHTML = 'Image hidden for eco-friendly printing 🍃.<br/>Toggle read mode in the toolbar to show image <i class="far fa-file-alt"></i>';
 
-        // Store reference to placeholder
-        image.setAttribute('data-placeholder-id', `placeholder-${Date.now()}`);
-        placeholder.id = image.getAttribute('data-placeholder-id');
+            // Match image dimensions if available
+            if (width && height) {
+                placeholder.style.width = '100%';
+                placeholder.style.height = '40px';
+            }
+
+            image.parentNode.insertBefore(placeholder, image);
+
+            // Store reference to placeholder
+            image.setAttribute('data-placeholder-id', `placeholder-${Date.now()}`);
+            placeholder.id = image.getAttribute('data-placeholder-id');
+        }
+
+        image.style.display = 'none';
     }
 
     function showImage(image) {
