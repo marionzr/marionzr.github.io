@@ -35,7 +35,6 @@
                 image.classList.add('img-no-placeholder')
 
                 let imageSrc = article.image.replace(/^..\//, './');
-                console.log(imageSrc);
                 image.src = imageSrc;
 
                 image.alt = article.title;

@@ -77,7 +77,6 @@
         // Start parsing the rows (skip header)
         for (let i = 1; i < rows.length; i++) {
             const row = rows[i].trim();
-            console.log(row);
 
             if (row === "") {
                 continue;
