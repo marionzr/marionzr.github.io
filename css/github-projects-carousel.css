@@ -1,0 +1,176 @@
+#gh-projects-carousel {
+    position: relative;
+    margin-bottom: 1rem;
+}
+
+/* Main carousel structure */
+#gh-projects-carousel-wrapper {
+    display: flex;
+}
+
+#gh-projects-carousel-wrapper ul {
+    padding: 0;
+    margin: 0;
+}
+
+/* Left panel - Project names */
+#gh-projects-carousel-nav {
+    flex: 0 0 30%;
+    border-right: 1px solid var(--border-color);
+    overflow-y: auto;
+    padding-right: 1rem;
+}
+
+#gh-projects-carousel-project-list {
+    list-style: none;
+}
+
+.gh-projects-carousel-project-item {
+    margin: 0.5rem 0;
+}
+
+.gh-projects-carousel-project-select-btn {
+    width: 100%;
+    padding: 0.5rem;
+    text-align: left;
+    background: none;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    color: var(--text-color);
+}
+
+.gh-projects-carousel-project-select-btn:hover {
+    background: var(--text-color);
+    color: var(--bg-color);
+}
+
+.gh-projects-carousel-project-select-btn.active {
+    background: var(--link-color);
+    color: var(--button-color);
+    font-weight: bolder;
+}
+
+/* Right panel - Project details */
+#gh-projects-carousel-content {
+    flex: 1;
+    overflow: hidden;
+}
+
+.gh-projects-carousel-project-card {
+    padding-left: 1rem;
+}
+
+.gh-projects-carousel-project-card h2 {
+    margin: 0;
+}
+
+.gh-projects-carousel-project-title {
+    margin-bottom: 0.5rem !important;
+}
+
+.gh-projects-carousel-project-link {
+    color: var(--link-color);
+    text-decoration: none;
+    font-size: large;
+}
+
+.gh-projects-carousel-project-link:hover {
+    text-decoration: none;
+}
+
+.gh-projects-carousel-project-description {
+    margin: 0;
+    margin-bottom: 1rem;
+    color: var(--text-color);
+}
+
+.gh-projects-carousel-project-badges {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+}
+
+.gh-projects-carousel-project-badges img {
+    height: 20px;
+    padding: 1px;
+    margin-top: 0.25rem;
+    margin-right: 0.25rem;
+}
+
+.gh-projects-carousel-nuget-pages-title {
+    font-weight: bold;
+    margin: 0;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+}
+
+.gh-projects-carousel-nuget-package-info {
+    margin-left: 1rem;
+    display: block;
+    flex-direction: column;
+}
+
+.gh-projects-carousel-nuget-package-name {
+    font-size: medium;
+    display: block;
+    margin-bottom: 0.25rem;
+}
+
+/* Mobile dots navigation */
+#gh-projects-carousel-dots {
+    display: none;
+    justify-content: center;
+    gap: 0.5rem;
+    margin-top: 1rem;
+}
+
+.gh-projects-carousel-dot {
+    width: 8px;
+    height: 7px;
+    margin-left: 0.25rem;
+    margin-right: 0.25rem;
+    border: solid;
+    border-color: var(--border-color);
+    border-width: 1px;
+    background: var(--button-bg);
+    cursor: pointer;
+    padding: 0.35rem;
+    padding-left: 0.75rem;
+}
+
+.gh-projects-carousel-dot.active {
+    background: #1976d2;
+}
+
+/* Mobile responsive styles */
+@media screen and (max-width: 760px) {
+    #gh-projects-carousel-nav {
+        display: none;
+    }
+
+    #gh-projects-carousel-wrapper {
+        margin: 0;
+    }
+
+    #gh-projects-carousel-content {
+        width: 100%;
+    }
+
+    .gh-projects-carousel-project-card {
+        margin: 1rem 0;
+        margin-bottom: 1rem;
+    }
+
+    #gh-projects-carousel-dots {
+        display: flex;
+    }
+
+    .gh-projects-carousel-project-title {
+        font-size: 1.25rem;
+    }
+
+    .gh-projects-carousel-project-badges {
+        justify-content: flex-start;
+    }
+}

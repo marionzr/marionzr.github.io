@@ -233,7 +233,7 @@
             const images = container.getElementsByTagName('img');
 
             for (const image of images) {
-                if (image.class === 'avatar') {
+                if (image.classList.contains('avatar') || image.classList.contains('img-no-hide')) {
                     continue;
                 }
 

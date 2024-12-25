@@ -19,6 +19,8 @@
     <link rel="stylesheet" href="css/app.css">
     <link rel="stylesheet" href="css/header.css">
     <link rel="stylesheet" href="css/footer.css">
+    <link rel="stylesheet" href="css/index.css">
+    <link rel="stylesheet" href="css/github-projects-carousel.css">
 </head>
 
 <body>
@@ -29,7 +31,91 @@
     </header>
 
     <main id="main">
+        <div id="main-container">
+            <section id="main-container-left-column">
+                <section id="gh-projects">
+                    <h1><a href="https://www.github.com/marionzr" target="_blank"><i class="fab fa-github fa-lg"></i> GitHub</a> <a href="https://www.nuget.org/profiles/marionzr" target="_blank"><img id="nzr-logo" src="./assets/icons/nzr.png" alt="nzr" class="img-no-hide">NUGET</a></h1>
+                    <p>I actively contribute to the community by sharing prototypes and production-ready libraries on GitHub, using this as an opportunity for continuous learning and improvement. Below are some of the public projects I've created.</p>
+                    <div id="gh-projects-carousel">
+                        <div id="gh-projects-carousel-dots"> <!-- Mobile dots navigation -->
+                        </div>
+                        <div id="gh-projects-carousel-wrapper">
+                            <div id="gh-projects-carousel-nav"> <!-- Left panel - Project names -->
+                                <ul id="gh-projects-carousel-project-list">
+                                </ul>
+                            </div>
 
+                            <div id="gh-projects-carousel-content"> <!-- Right panel - Project details -->
+                                <div id="gh-projects-carousel-project-details">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </section>
+            <section id="main-container-right-column">
+                <h1><a href="https://linkedin.com/in/marionzr" target="_blank"><i class="fab fa-linkedin fa-lg"></i> </a><a href="https://linkedin.com/in/marionzr" class="social-media-icon-link-text" target="_blank">About me</a></h1>
+                <div>
+                    <p>Hi, I'm Mario, a software developer specializing in high-performance solutions with .NET and Azure. I focus on building scalable systems with a DevOps mindset, driving efficiency through automation and continuous improvement.</p>
+                    <div class="#main-container-right-column-tech-stack">
+                        <p>The most relevant tech stack I have worked with recently:</p>
+                        <p>
+                        <ul>
+                            <li>
+                                <strong>.NET / ASP.NET / C#</strong>
+                                <ul>
+                                    <li>REST and GraphQL (HotChocolate) APIs</li>
+                                    <li>Background Services</li>
+                                    <li>ASP.NET Health Checks, Open Telemetry</li>
+                                    <li>OAuth2, OpenID, Identity Framework</li>
+                                    <li>EF Core (Filters, TPT, TPH, TPC etc.), LINQ</li>
+                                </ul>
+                            </li>
+
+                            <li>
+                                <strong>Cloud:</strong>
+                                <ul>
+                                    <li>Kubernetes, Azure AKS, VMs</li>
+                                    <li>Azure Functions (Triggers & Scheduling)</li>
+                                    <li>Blob Storage, File Share, Redis</li>
+                                    <li>SQL Server, MySQL, SQLite</li>
+                                    <li>Service Bus, RabbitMQ, Event Hub</li>
+                                    <li>Key Vault, App Configuration</li>
+                                    <li>Application Insights, Telemetry</li>
+                                    <li>Azure Front Door (CDN)</li>
+                                    <li>Mailgun, Stripe, PowerBI Embedded</li>
+                                </ul>
+                            </li>
+
+                            <li>
+                                <strong>DevOps</strong>
+                                <ul>
+                                    <li>CI/CD Pipelines: Azure DevOps and GitHub Actions</li>
+                                    <li>
+                                        Automation:
+                                        <br/>- Build and test code and docker images
+                                        <br/>- Integration with SonarQube
+                                        <br/>- Integration with dependabot
+                                    </li>
+                                    <li>IaC: Terraform, Powershell</li>
+                                </ul>
+                            </li>
+
+                            <li>
+                                <strong>Testing Frameworks</strong>
+                                <ul>
+                                    <li>xUnit, NUnit</li>
+                                    <li>FluentAssertions, Snapshooter</li>
+                                    <li>NSubstitute, Moq</li>
+                                    <li>Bogus</li>
+                                </ul>
+                            </li>
+                        </ul>
+                        </p>
+                    </div>
+                </div>
+            </section>
+        </div>
     </main>
 
     <footer id="footer">
@@ -41,6 +127,7 @@
     <script src="js/app.js" ></script>
     <script src="js/header.js" ></script>
     <script src="js/footer.js" ></script>
+    <script src="js/github-projects-carousel.js" ></script>
     <script type="application/ld+json">
     {
         "@context": "https://schema.org",
