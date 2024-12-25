@@ -1,0 +1,42 @@
+#!/bin/sh
+
+# Pre-commit checklist script
+# This hook ensures the developer confirms critical steps before proceeding with a commit.
+
+# ANSI color codes
+RED="\033[1;31m"
+GREEN="\033[1;32m"
+RESET="\033[0m"  # Reset color to default
+
+echo "Pre-commit checklist:"
+
+# Assign stdin to the keyboard to allow interactive input during hook execution
+exec < /dev/tty
+
+# Function to display a checklist question in green lime and require confirmation
+ask_confirmation() {
+    question=$1  # The question to display
+    echo -n "$(echo -e "${GREEN}$question [y/n]:${RESET} ")"  # Display the question without a new line
+    while true; do
+        # Read a single character without pressing Enter
+        read -n 1 response
+        echo  # Move to the next line after input
+        case $response in
+            [Yy] ) break;;  # If 'y' or 'Y', proceed to the next question
+            [Nn] )
+                echo -e "Commit aborted. Please review the checklist item ${RED}\"$question\"${RESET}."
+                exit 1;;
+            * ) echo -n "$(echo -e "${GREEN}Please answer with 'y' or 'n':${RESET} ")" ;;
+        esac
+    done
+}
+
+ask_confirmation "1. Are the changes tested in different browsers?"
+ask_confirmation "2. Are the changes well-documented?"
+
+# Close stdin after use
+exec <&-
+
+# If all questions are confirmed, allow the commit
+echo "Checklist completed. Proceeding with the commit."
+exit 0
