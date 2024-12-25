@@ -27,15 +27,6 @@
     flex-direction: column;
 }
 
-#recent-articles {
-    margin-bottom: 1.5rem;
-}
-
-#recent-articles h2 {
-    margin-top: 0;
-    padding: 0;
-}
-
 /* ===== Right column ====================================================== */
 
 #main-container-right-column {
@@ -64,25 +55,40 @@
     margin-left: 1rem;
 }
 
-#main-container-right-column ul li {
+right-column ul li {
     margin-left: -0.25rem;
     font-size: medium;
     line-height: 1.5rem;
 }
 
-#main-container-right-column-tech-stack {
+.tech-stack {
     border-width: 1px !important;
     border-top: solid;
     border-color: var(--border-color);
 }
 
+#gh-projects #nzr-logo {
+    vertical-align: middle;
+    padding: 0;
+    margin: 0;
+    margin-right: 0.25rem;
+}
+
 
 @media (max-width: 768px) {
-    #main-container {
+    .container {
         flex-direction: column;
     }
 
-    #main-container-right-column {
+    .github-metrics {
+        flex-direction: column;
+    }
+
+    #language-stats {
+        margin-left: 0;
+    }
+
+    .right-column {
         flex: 2;
         text-align: justify;
         border: none;

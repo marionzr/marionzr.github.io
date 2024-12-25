@@ -66,7 +66,7 @@
         return csvContent;
     }
 
-    async function getArticlesMetaDataAsync() {
+    async function getArticlesMetadataAsync() {
 
         const csvContent = await getArticleMetadataCsvAsync();
         const rows = csvContent
@@ -115,5 +115,5 @@
         }
     }
 
-    sources.getArticlesMetaDataAsync = getArticlesMetaDataAsync;
+    sources.getArticlesMetaDataAsync = getArticlesMetadataAsync;
 })();

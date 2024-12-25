@@ -24,6 +24,16 @@
         }
     }
 
+    function formatDate(date) {
+        try {
+            const options = { year: 'numeric', month: 'short', day: 'numeric' };
+            return date.toLocaleDateString('en-US', options);
+        } catch (error) {
+            onError(error, 'Failed to format date.');
+            throw error;
+        }
+    }
+
     // ===== Storage ==========================================================
 
     function setItem(key, value, versionSpecific = true) {
@@ -85,7 +95,7 @@
 
     // ==== Initialization ====================================================
 
-    async function init() {
+    function init() {
         try {
             console.log(`
 
@@ -126,6 +136,7 @@
     app.setItem = setItem;
     app.getItem = getItem;
     app.safeParseInt = safeParseInt;
+    app.formatDate = formatDate;
     app.VERSION = VERSION;
     app.USERNAME = USERNAME;
 })();

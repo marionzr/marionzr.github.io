@@ -226,7 +226,7 @@
 
     // ===== Initialization =======================================================
 
-    async function init() {
+    function init() {
         try {
             loadProjects();
             setupEventListeners();

@@ -51,7 +51,7 @@
         }
     };
 
-    const init = async () => {
+    const initAsync = async () => {
 
         try {
             const gridContainer = document.getElementById('recent-articles-grid');
@@ -91,5 +91,5 @@
         }
     };
 
-    document.addEventListener('DOMContentLoaded', init);
+    document.addEventListener('DOMContentLoaded', async () => await initAsync());
 })();

@@ -158,7 +158,7 @@
 
     let fontSize = FONT_SIZES.DEFAULT;
 
-    async function initFontSize() {
+    function initFontSize() {
         try {
             const increaseFontButton = document.getElementById('header-right-increase-font');
             const decreaseFontButton = document.getElementById('header-right-decrease-font');
@@ -195,7 +195,7 @@
 
     // ===== Reading Mode =====================================================
 
-    async function initReadingMode() {
+    function initReadingMode() {
         try {
             const readingModeToggle = document.querySelector('#header-right-reading-mode i');
             const savedReadingMode = app.getItem('reading-mode');
