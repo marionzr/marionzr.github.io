@@ -1,5 +1,10 @@
 (function () { // IIFE
 
+    const URLS = {
+        LINKEDIN: 'https://www.linkedin.com/in/marionzr',
+        GITHUB: 'https://www.github.com/marionzr',
+    };
+
     const app = globalThis.app;
     const header = globalThis.header;
 
@@ -138,6 +143,20 @@
         }
     }
 
+    function addLetsConnectBlock() {
+        const html = `<h2>Let's Connect! 🫱🏼‍🫲🏽</h2>
+            <p>Curious to know more about me? Feel free to reach out on <a href="${URLS.LINKEDIN}"  target="_blank">LinkedIn!</a></p>
+            <p>If you find something useful here, don't keep it to yourself - like, share, comment, and interact.
+            Together, we can tackle challenges, one line of code at a time.</p>
+            <p>Thanks for stopping by - and happy coding! 😉</p>
+            <p>
+            <a href="${URLS.LINKEDIN}"  target="_blank">${URLS.LINKEDIN}</a><br/>
+            <a href="${URLS.GITHUB}"  target="_blank">${URLS.GITHUB}</a></p>`;
+
+        const letsConnect = document.querySelector('lets-connect');
+        letsConnect.innerHTML = html;
+    }
+
     function initReadingMode() {
         const currentContentMode = document.documentElement.getAttribute('reading-mode');
         header.showHideImages(currentContentMode === 'text-only');
@@ -148,6 +167,7 @@
         await loadCreatedAtDateTime();
         initPageWidthControl();
         initReadingMode();
+        addLetsConnectBlock();
     }
 
     document.addEventListener('DOMContentLoaded', () => init());
