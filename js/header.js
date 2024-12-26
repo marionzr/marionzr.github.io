@@ -5,7 +5,7 @@
     const URLS = {
         LINKEDIN: 'https://www.linkedin.com/in/marionzr',
         GITHUB: 'https://www.github.com/marionzr',
-        AVATAR: 'https://res.cloudinary.com/dmntlbbdt/image/upload/c_scale,w_150/v1739445768/qilf5bbo6k8vhwjva2st',
+        AVATAR: 'https://avatars.githubusercontent.com/u/47438990?v=4',
     };
 
     const FONT_SIZES = {
@@ -132,6 +132,12 @@
             themeIcon.className = currentTheme === 'dark' ? 'fas fa-moon' : 'fas fa-sun';
 
             themeToggle.addEventListener('click', toggleTheme);
+
+            window.dispatchEvent(new CustomEvent('themeChanged', {
+                detail: {
+                    theme: currentTheme
+                }
+            }));
         } catch (error) {
             app.onError(error, 'Failed to initialize theme mode.');
             throw error;
@@ -148,6 +154,11 @@
             themeIcon.className = newTheme === 'dark' ? 'fas fa-moon' : 'fas fa-sun';
 
             app.setItem('theme', newTheme);
+            window.dispatchEvent(new CustomEvent('themeChanged', {
+                detail: {
+                    theme: newTheme
+                }
+            }));
         } catch (error) {
             app.onError(error, 'Failed to toggle dark mode.');
             throw error;
@@ -249,6 +260,10 @@
     }
 
     function hideImage(image) {
+        if (image.getAttribute('src') === '') {
+            return;
+        }
+
         // Store original dimensions and styles
         const width = image.width || image.offsetWidth;
         const height = image.height || image.offsetHeight;
@@ -306,14 +321,15 @@
 
     // ============================================================================
 
-    // ===== Extensions ===========================================================
-    function getHomeLink() {
-        return './index.html';
-    }
-
-    function getArticlesLink() {
-        return './articles.html';
-    }
-
     document.addEventListener('DOMContentLoaded', init);
 })();
+
+// ===== Extensions ===========================================================
+
+function getHomeLink() {
+    return './index.html';
+}
+
+function getArticlesLink() {
+    return './articles.html';
+}

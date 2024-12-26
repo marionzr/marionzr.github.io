@@ -15,3 +15,7 @@
 
     document.addEventListener('DOMContentLoaded', init);
 })();
+
+function getHomeLink() {
+    return '';
+}

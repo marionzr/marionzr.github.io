@@ -1,0 +1,17 @@
+.tag-container {
+    display: flex;
+    gap: 4px;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.tag-container-tag {
+    display: inline-block;
+    background-color: var(--code-text);
+    color: var(--code-bg);
+    font-size: small;
+    margin: 2px;
+    padding: 4px 6px;
+    border-radius: 4px;
+}

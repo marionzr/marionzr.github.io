@@ -17,9 +17,8 @@
 
             const dateTime = article.date ?
                 `<date-time class="recent-articles-grid-article-date">${app.formatDate(new Date(article.created_at))}</date-time>` : '';
-
             content.innerHTML = `
-                <a href="${article.href}">
+                <a href="${article.filename}">
                 <div>
                     <h2 class="recent-articles-grid-article-title">${article.title}</h2>
                     <p class="recent-articles-grid-article-subtitle">${article.subtitle}</p>
@@ -73,7 +72,7 @@
                 title: " Previous articles " + '<i class="far fa-newspaper fa-lg"></i>',
                 subtitle: "I'm turning my ideas into bite-sized articles – stay tuned for more!<p>In the meantime, check out my previous posts.</p>",
                 date: null,
-                href: "./articles.html"
+                filename: "./articles.html"
             });
 
             if (previousArticlesCard) {

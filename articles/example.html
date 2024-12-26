@@ -1,0 +1,609 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scaffolding: Create a .NET solution like a pro | marionzr</title>
+    <meta name="description" content="Thoughts on software development, including .NET, Azure, DevOps, and ASP.NET. Sharing lessons learned from building software, leading teams, and tackling everyday challenges.">
+    <meta name="author" content="marionzr">
+    <meta name="robots" content="index, follow">
+    <meta property="og:title" content="Mario - Coding, !Coffee, and Content: Not Another Average Dev Blog">
+    <meta property="og:description" content="Thoughts on software development, including .NET, Azure, DevOps, and ASP.NET. Sharing lessons learned from building software, leading teams, and tackling everyday challenges.">
+    <meta property="og:image" content="https://marionzr.github.io/assets/img/avatar.jpg">
+    <meta property="og:url" content="https://marionzr.github.io">
+    <link rel="icon" href="../assets/icons/favicon.ico" type="image/x-icon">
+    <link rel="canonical" href="https://marionzr.github.io">
+
+    <link id="prism-light" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" disabled />
+    <link id="prism-dark" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-okaidia.min.css" rel="stylesheet" enabled />
+
+    <link rel="stylesheet" href="../css/app.css">
+    <link rel="stylesheet" href="../css/header.css">
+    <link rel="stylesheet" href="../css/footer.css">
+    <link rel="stylesheet" href="../css/article.css">
+    <link rel="stylesheet" href="../css/article-tag-container.css">
+    <link rel="stylesheet" href="../css/article-markdown.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+</head>
+
+<body>
+    <banner id="banner-top"></banner>
+    <header id="header">
+        <div id="header-left"></div>
+        <div id="header-middle"></div>
+        <div id="header-right"></div>
+    </header>
+
+    <main id="main">
+        <banner id="banner-main"></banner>
+        <article id="article">
+            <article-header>
+                <img id="article-header-img" src="https://d2q9lphzn5ioni.cloudfront.net/uploads/uploads_img/ai-generated-technology-52.webp" alt="">
+                <h1 id="article-header-title">Scaffolding: Create a .NET solution like a pro</h1>
+                <h2 id="article-header-subtitle">Streamlining .NET Development with Proper Project Structure and Automation</h2>
+                <div id="article-header-info">
+                    <div id="article-header-info-row">
+                        <div id="article-header-info-left-column">
+                            <div id="article-header-info-matadata">
+                                <img id="article-header-info-matadata-avatar" class="avatar" src="https://avatars.githubusercontent.com/u/47438990?v=4" alt="marionzr's avatar"></a>
+                                <div class="info">
+                                    <p id="article-header-info-matadata-author"><a href="https://www.github.com/marionzr">by marionzr</a> | <date-time></date-time></p>
+                                    <p id="article-header-info-matadata-reading-time">
+                                        <i class="far fa-clock"></i> <span id="article-header-info-matadata-reading-time-eta"></span> read (<span id="article-header-info-matadata-reading-time-words"></span> words)
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="article-header-info-right-column">
+                            <article-tags>.NET Architecture Development DevOps ACME</article-tags>
+                        </div>
+                    </div>
+                </div>
+
+            </article-header>
+            <md-block>
+                A well-structured solution helps with maintainability and collaboration.
+                In this article, I'll walk you through the process of initializing and structuring a .NET solution for the Nzr.Acme.
+                I'll cover creating projects, adding them to the solution, configuring dependencies, and setting up project-wide settings like documentation generation and warnings as errors.
+
+                Stick with me — things are about to get interesting!
+
+                This is the second article in the "DevOps Days" series for the Acme project. If you missed the previous one check the related content at the end of this page.
+
+                ---
+
+                ## What will be covered in this article:
+
+                - How I initialize the solution and projects
+                - How I configure project dependencies
+                - How (and why) I enforce zero warning tolerance and enable XML documentation.
+                - The must-have .NET NuGet packages.
+                - How I cleaned the template code generated by .NET
+
+                Here's the best part *Spoiler alert*: almost all these steps are automated through a script you can easily run! Before diving in, take a moment to read through the content to understand exactly what the script does. This way, you can easily customize it to fit your needs!
+
+                ---
+
+                ![Example](https://d2q9lphzn5ioni.cloudfront.net/uploads/uploads_img/ai-generated-technology-80.webp)
+
+                <div class="img-medium">
+
+                ![Example](https://d2q9lphzn5ioni.cloudfront.net/uploads/uploads_img/ai-generated-technology-80.webp)
+
+                </div>
+
+                <div class="img-small">
+
+                ![Example](https://d2q9lphzn5ioni.cloudfront.net/uploads/uploads_img/ai-generated-technology-80.webp)
+
+                </div>
+
+                <div class="img-x-small">
+
+                ![Example](https://d2q9lphzn5ioni.cloudfront.net/uploads/uploads_img/ai-generated-technology-80.webp)
+
+                </div>
+
+
+                <div class="img-xx-small mobile-img-xx-small">
+
+                ![Solution Explorer - ACME project](../assets/icons/nzr.png)
+
+                </div>
+
+                <div class="img-do-not-scale">
+
+                ![Solution Explorer - ACME project](../assets/icons/nzr.png)
+
+                </div>
+
+                ## Foundation
+
+                The solution follows the [Traditional "N-Layer" architecture applications](https://learn.microsoft.com/en-us/dotnet/architecture/modern-web-apps-azure/common-web-application-architectures#traditional-n-layer-architecture-applications) — because some things never go out of style!
+
+                In this architecture, users make requests through the API layer, which interacts only with the Domain layer. The Domain layer, in turn, can call the Model layer for data access requests. The API layer shouldn't make any requests to the Model layer directly, nor should it interact with persistence directly through other means. Likewise, the Domain layer should only interact with persistence by going through the Model layer. This ensures that each layer maintains its own well-defined responsibility.
+
+                This design improves reusability. Keeping the Domain project independent allows me to reuse it in non-API projects. For example, a Service Bus message consumer or a background cron-based service can utilize the same business logic as the API, ensuring consistency while enabling different ways of triggering domain actions beyond HTTP requests.
+
+                Another key advantage of this separation is improved testability. Structuring the code this way allows me to write tests in a more efficient and isolated manner. Once the Domain project is thoroughly tested, I can focus on testing the API layer without needing to retest business logic. This means I only need to write tests for API-specific behavior, such as request handling, authentication, and response formatting. In theory, as long as the API layer follows the contract defined by the Domain layer, changes at the API level won't break lower layers—though the opposite is definitely not true.
+
+                ## Step 1: Initializing the Solution and Projects
+
+                To start, we'll create the solution and projects using the following structure:
+
+                ```text
+                Acme
+                ├── src
+                │   ├── Acme.Core
+                │   ├── Acme.Model
+                │   ├── Acme.Domain
+                │   ├── Acme.Api.REST
+                │   ├── Acme.Api.GraphQL
+                │   └── Acme.Auth
+                └── test
+                    ├── Acme.Testing
+                    ├── Acme.Core.Tests
+                    ├── Acme.Model.Tests
+                    ├── Acme.Domain.Tests
+                    ├── Acme.Api.REST.Tests
+                    ├── Acme.Api.GraphQL.Tests
+                    └── Acme.Auth.Tests
+                ```
+
+                - **Acme.Core** will act like a framework, containing code that can be reused by all other projects. The same will be the Acme.Testing, but for testing projects only.
+                - **Acme.Model** will hold entities, models,  and persistence infrastructure (e.g. DbContext, Repositories, UnitOfWork).
+                - **Acme.Domain** will hold the business logic.
+                - **Acme.Api.REST** and Acme.Api.GraphQL will have almost the same features and I will use them to showcase the differences between REST and GraphQL.
+                - **Acme.Auth** will hold the authentication (and authorization). Initially, this will also be a REST API, but I’m exploring alternatives like AWS Cognito and Keycloak, so this might change.
+
+                Before I begin, to ensure your code stays properly formatted when making changes and saving, please copy the following .editorconfig file to the root directory of your project. If you're using Visual Studio, I also recommend checking out this article first: [Must-Have Visual Studio Extensions for 2025](must-have-visual-studio-extensions.html) for an optimal development setup.
+
+                ### Script for Initialization
+
+                Here are the commands that automate the initialization process:
+
+                ```BASH
+                #!/bin/bash
+
+                # Create an empty Solution file
+                dotnet new sln -n Acme
+
+                # Create and add core projects
+                dotnet new classlib -o src/Acme.Core
+                dotnet sln add src/Acme.Core
+                dotnet new classlib -o src/Acme.Model
+                dotnet sln add src/Acme.Model
+                dotnet new classlib -o src/Acme.Domain
+                dotnet sln add src/Acme.Domain
+                dotnet new webapi -o src/Acme.Api.REST
+                dotnet sln add src/Acme.Api.REST
+                dotnet new webapi -o src/Acme.Api.GraphQL
+                dotnet sln add src/Acme.Api.GraphQL
+                dotnet new webapi -o src/Acme.Auth
+                dotnet sln add src/Acme.Auth
+
+                # Create and add test projects
+                dotnet new xunit -o test/Acme.Testing
+                dotnet sln add test/Acme.Testing
+                dotnet new xunit -o test/Acme.Core.Tests
+                dotnet sln add test/Acme.Core.Tests
+                dotnet new xunit -o test/Acme.Model.Tests
+                dotnet sln add test/Acme.Model.Tests
+                dotnet new xunit -o test/Acme.Domain.Tests
+                dotnet sln add test/Acme.Domain.Tests
+                dotnet new xunit -o test/Acme.Api.REST.Tests
+                dotnet sln add test/Acme.Api.REST.Tests
+                dotnet new xunit -o test/Acme.Api.GraphQL.Tests
+                dotnet sln add test/Acme.Api.GraphQL.Tests
+                dotnet new xunit -o test/Acme.Auth.Tests
+                dotnet sln add test/Acme.Auth.Tests
+
+                # Check the build and test
+                dotnet build -v q
+                dotnet test -v q
+                ```
+
+                This script initializes the solution and adds all necessary projects, ensuring they're correctly included in the solution.
+
+                ## Step 2: Configuring Project Dependencies
+
+                Next, set up references between projects to ensure proper communication and data flow. Here's how:
+
+                - Adding reference to Acme.Core
+
+                ```bash
+                #!/bin/bash
+
+                # main projects
+                dotnet add src/Acme.Model reference src/Acme.Core
+                dotnet add src/Acme.Domain reference src/Acme.Core
+                dotnet add src/Acme.Api.REST reference src/Acme.Core
+                dotnet add src/Acme.Api.GraphQL reference src/Acme.Core
+                dotnet add src/Acme.Auth reference src/Acme.Core
+                # test projects
+                dotnet add test/Acme.Core.Tests reference src/Acme.Core
+                ```
+
+                - Adding reference to Acme.Model
+
+                ```bash
+                #!/bin/bash
+
+                # main projects
+                dotnet add src/Acme.Domain reference src/Acme.Model
+                # test projects
+                dotnet add test/Acme.Model.Tests reference src/Acme.Model
+                ```
+
+                - Adding reference to Acme.Domain
+
+                ```bash
+                #!/bin/bash
+
+                # main projects
+                dotnet add src/Acme.Api.GraphQL reference src/Acme.Domain
+                dotnet add src/Acme.Api.REST reference src/Acme.Domain
+                dotnet add src/Acme.Auth reference src/Acme.Domain
+                # test projects
+                dotnet add test/Acme.Domain.Tests reference src/Acme.Domain
+                ```
+
+                - Adding reference to Acme.Api* projects
+
+                As these projects are the top layer, only test projects needs to reference them.
+
+                ```bash
+                #!/bin/bash
+
+                # test projects
+                dotnet add test/Acme.Api.GraphQL.Tests reference src/Acme.Api.GraphQL
+                dotnet add test/Acme.Api.REST.Tests reference src/Acme.Api.REST
+                dotnet add test/Acme.Auth.Tests reference src/Acme.Auth
+                ```
+
+                - Adding reference to Acme.Testing
+
+                ```bash
+                #!/bin/bash
+
+                # test projects
+                dotnet add test/Acme.Core.Tests reference test/Acme.Testing
+                dotnet add test/Acme.Model.Tests reference test/Acme.Testing
+                dotnet add test/Acme.Domain.Tests reference test/Acme.Testing
+                dotnet add test/Acme.Api.GraphQL.Tests reference test/Acme.Testing
+                dotnet add test/Acme.Api.REST.Tests reference test/Acme.Testing
+                dotnet add test/Acme.Auth.Tests reference test/Acme.Testing
+                ```
+
+                ## Enforcing Zero Warning Tolerance and Enabling XML documentation
+
+                **Why do this?**
+
+                Warnings can lead to unnoticed bugs, and XML documentation helps maintain clear communication between developers. Let's enforce these configurations. The documentation will later be used to generate API documentation automatically, streamlining development processes. The efforts spent on maintaining code quality now will translate into time savings during API documentation generation in the future (I hope you care about it).
+
+                The following settings are added to each project's .csproj file:
+
+                ```xml
+                &lt;PropertyGroup&gt;
+                    &lt;TreatWarningsAsErrors&gt;true&lt;/TreatWarningsAsErrors&gt;
+                    &lt;GenerateDocumentationFile&gt;true&lt;/GenerateDocumentationFile&gt;
+                &lt;/PropertyGroup&gt;
+                ```
+
+                After applying it, we need to remove the auto-generated empty classes, otherwise build will fail.
+
+                And, of course, I have a script for this step:
+
+                ```bash
+                #!/bin/bash
+
+                # Zero warning tolerance and documentation
+                # Optional, but I highly recommend to keep
+
+                # Define root folders
+                srcFolder="src"
+                testFolder="test"
+
+                # Generate documentation file setting (to be added inside specific PropertyGroup)
+                generateDocumentationContent="    &lt;GenerateDocumentationFile&gt;true&lt;/GenerateDocumentationFile&gt;"
+
+                # PropertyGroup settings to add to all .csproj files
+                insertContent='
+                &lt;PropertyGroup Condition="'\''$(Configuration)|$(Platform)'\''=='\''Release|AnyCPU'\''"&gt;
+                    &lt;TreatWarningsAsErrors&gt;True&lt;/TreatWarningsAsErrors&gt;
+                &lt;/PropertyGroup&gt;
+                &lt;PropertyGroup Condition="'\''$(Configuration)|$(Platform)'\''=='\''Debug|AnyCPU'\''"&gt;
+                    &lt;TreatWarningsAsErrors&gt;True&lt;/TreatWarningsAsErrors&gt;
+                &lt;/PropertyGroup&gt;'
+
+                # Function to check if setting exists
+                contains_setting() {
+                    local file_content="$1"
+                    local setting="$2"
+                    echo "$file_content" | grep -q -F "$setting"
+                }
+
+                # Process all .csproj files in src folder
+                echo -e "${GREEN}Processing src project files...${RESET}"
+                find "$srcFolder" -type f -name "*.csproj" | while read -r csprojPath; do
+                    content=$(cat "$csprojPath")
+
+                    # Add GenerateDocumentationFile only to PropertyGroup with &lt;ImplicitUsings&gt;enable&lt;/ImplicitUsings&gt;
+                    if ! contains_setting "$content" "GenerateDocumentationFile"; then
+                        sed -i '/&lt;ImplicitUsings&gt;enable&lt;\/ImplicitUsings&gt;/a\'"$generateDocumentationContent" "$csprojPath"
+                        echo -e "${GREEN}Added GenerateDocumentationFile inside PropertyGroup with ImplicitUsings for: $csprojPath${RESET}"
+                    else
+                        echo -e "${RED}Skipped GenerateDocumentationFile (ImplicitUsings not found) in: $csprojPath${RESET}"
+                    fi
+
+                    # Check and add TreatWarningsAsErrors
+                    if ! contains_setting "$content" "TreatWarningsAsErrors"; then
+                        # Add PropertyGroup settings after any closing PropertyGroup tag
+                        printf "%s\n" "$insertContent" | sed -i "/&lt;\/PropertyGroup&gt;/r /dev/stdin" "$csprojPath"
+                        echo -e "${GREEN}Added TreatWarningsAsErrors to: $csprojPath${RESET}"
+                    else
+                        echo -e "${RED}Skipped TreatWarningsAsErrors in: $csprojPath${RESET}"
+                    fi
+                done
+
+                # Process all .csproj files in test folder (skip GenerateDocumentationFile)
+                echo -e "${GREEN}Processing test project files...${RESET}"
+                find "$testFolder" -type f -name "*.csproj" | while read -r csprojPath; do
+                    content=$(cat "$csprojPath")
+
+                    # Check and add TreatWarningsAsErrors
+                    if ! contains_setting "$content" "TreatWarningsAsErrors"; then
+                        printf "%s\n" "$insertContent" | sed -i "/&lt;\/PropertyGroup&gt;/r /dev/stdin" "$csprojPath"
+                        echo -e "${GREEN}Added TreatWarningsAsErrors to: $csprojPath${RESET}"
+                    else
+                        echo -e "${RED}Skipped TreatWarningsAsErrors in: $csprojPath${RESET}"
+                    fi
+                done
+
+                # Remove auto-generated empty classes, otherwise build will fail
+                echo -e "${GREEN}Removing auto-generated files...${RESET}"
+                find src -name "Class1.cs" -delete
+                find test -name "UnitTest1.cs" -delete
+                ```
+
+                ## Step 4: Adding the must-have .NET Nuget packages
+
+                The analyzer NuGet packages help us detect problems at build time, and since the projects are configured to consider warnings as errors, they won't be ignored (as we developers usually do).
+
+                - IDisposableAnalyzers and Microsoft.VisualStudio.Threading.Analyzers are focused on helping with resource management and threading safety in your code.
+
+                - SonarAnalyzer.CSharp is a comprehensive static code analyzer to improve the quality and security of your codebase.
+
+                - FluentAssertions.Analyzers, NSubstitute.Analyzers.CSharp and xunit.analyzers help improve the readability, effectiveness, and correctness of tests.
+
+                The other Nuget packages in the Acme.Testing are personal preference. I'm adding them now as I'm sure I will use them later.
+
+                - Bogus generates fake data for testing, like names, addresses, and dates.
+                - NSubstitute simplifies mocking in unit tests.
+                - FluentAssertions makes test assertions more readable and expressive.
+                - As alternative, you could use AutoFixture, Moq and Shouldly.
+
+                ### Remove duplicated dependencies on test projects
+
+                All test projects will reference Acme.Testing, which will serve as the core library for test projects. This library will include the essential dependencies (xUnit, runner, Coverlet) by default. The only package that must still be maintained is Microsoft.NET.Test.Sdk, as it is necessary for the tests to run, as outlined in the log message:
+
+                ```text
+                The following test container was not found: '…\nzr.acme\test\Acme.Model.Tests\bin\Debug\net9.0\Acme.Model.Tests.dll'. This can be resolved by one or more of the following steps:
+                1. The test container does not exist on disk and the corresponding project might need to be built successfully.
+                2. For .NET Core based test projects, please ensure that a nuget package reference to "Microsoft.NET.Test.SDK" exists and that it uses the latest stable version. 👈👈👈
+                3. For .NET based test projects, the project might be marked as a non-test project through an msbuild property, "IsTestProject". Please consider clearing it or set "&lt;IsTestProject&gt;true&lt;/IsTestProject&gt;" in a "&lt;PropertyGroup&gt;" in the test project.
+                ```
+
+                So the following references could be removed from all test projects except `Acme.Testing`:
+
+                ```xml
+                &lt;PackageReference Include="coverlet.collector" Version="6.0.2" /&gt;
+                &lt;PackageReference Include="xunit" Version="2.9.2" /&gt;
+                &lt;PackageReference Include="xunit.runner.visualstudio" Version="2.8.2" /&gt;
+                ```
+
+                And of course, I have a script:
+
+                ```bash
+                #!/bin/bash
+
+                # List of projects
+                projects=(
+                "test/Acme.Core.Tests"
+                "test/Acme.Model.Tests"
+                "test/Acme.Domain.Tests"
+                "test/Acme.Api.GraphQL.Tests"
+                "test/Acme.Api.REST.Tests"
+                "test/Acme.Auth.Tests"
+                )
+
+                # List of packages to remove
+                packages=(
+                "coverlet.collector"
+                "xunit.runner.visualstudio"
+                "xunit"
+                )
+
+                # Loop through each project
+                for project in "${projects[@]}"; do
+                echo "Removing packages from $project"
+
+                # Loop through each package to remove
+                for package in "${packages[@]}"; do
+                    echo "  Removing $package from $project"
+                    dotnet remove "$project" package "$package"
+                done
+                done
+
+                echo "Packages removed successfully from all projects."
+                ```
+
+                ## Step 5: Cleaning up the code
+
+                Now it is time to open Visual Studio and what is still left. With SonarLint installed and the project configured to treat warnings as errors, I need to address them.
+
+
+                For a clean start, on `GraphQL`, `REST` and `Auth` projects, I replaced the  template API endpointWeatherForecast with a simple "Status" endpoint. Then, I also adjusted the `.http` file. This is temporary and will be enhanced later with a proper health check. I also removed the WeatherForecast remaining code.
+
+                ```csharp
+                app.MapGet("/", () =&gt;
+                {
+                    return new
+                    {
+                        message = "REST API",
+                        currentTime = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"),
+                        status = "Service is up and running"
+                    };
+                })
+                .WithName("Status");
+                ```
+
+                and fix the error [S6966](https://rules.sonarsource.com/csharp/rspec-6966/) by using the async method
+
+                ```charp
+                await app.RunAsync();
+                ```
+
+                I ran each web API project and send the request using the .http file.
+
+
+                Here is what the project looks like:
+
+                ---
+
+                ## Automating as much as possible
+
+                Feeling overwhelmed by the manual steps? No worries - I've got you covered. If cloning and rebranding this project isn't your thing, you can simply use the handy script located at [`/scripts/new-acme.sh`](https://github.com/marionzr/nzr.acme/blob/main/scripts/new-acme.sh) in this repository. Run it from the root of the folder of your project and it will take care of steps 1 to 4 for you effortlessly.
+
+                ## Bonus
+
+
+                You start the 3 web API project and then needs to scroll up to the console to confirm which one is producing the logs…
+                How about adding a nice logo on each so we can easily identify them?
+
+                Using Asciiart.eu/text-to-ascii-art I created a embedded resource and I simply print it when the app starts.
+
+                Here is the header
+
+                ```xml
+                &lt;ItemGroup&gt;
+                &lt;EmbeddedResource Include="header"&gt;
+                    &lt;CopyToOutputDirectory&gt;PreserveNewest&lt;/CopyToOutputDirectory&gt;
+                &lt;/EmbeddedResource&gt;
+                &lt;/ItemGroup&gt;
+                ```
+
+
+                Here is the LogoPrinter...
+
+                ```csharp
+                namespace Acme.Core.ProgramUtils;
+
+                public static class LogoPrinter
+                {
+                    public static async Task PrintAsync&lt;T&gt;(string headerResourceName = "header")
+                    {
+                        var assembly = typeof(T).Assembly;
+                        using var stream = assembly.GetManifestResourceStream($"{assembly.GetName().Name}.{headerResourceName}")!;
+                        using var reader = new StreamReader(stream);
+                        var result = await reader.ReadToEndAsync();
+                        Console.WriteLine(result);
+                    }
+                }
+                ```
+
+                ... and here the Program.cs using it
+
+                ```csharp
+                await LogoPrinter.PrintAsync&lt;Program&gt;();
+                ```
+
+                ---
+
+                ## Final Thoughts 💡
+
+                With these steps, I've initialized a clean and organized .NET solution for Nzr.Acme.
+
+                This structure promotes clarity, maintainability, and collaboration for all team members.
+
+                In the next article will explain how I created a simple "build and test" pipeline with GitHub actions to validate pull requests against the main branch.
+
+                ## Resources
+
+                The changes mentioned in this article can be found in the repository marionzr/nzr.acme, more specifically in this commit: [e14f037](https://github.com/marionzr/nzr.acme/commit/e14f0379d72b1d8bc58dfaea9cbb75e4dfad1de2#diff-ca9a565906f9e9bc409643f933d470fa44eaba3f21854c0fa2062da70392d2c4)
+
+                If you find this project useful, consider giving it a ⭐️ on marionzr/nzr.acme and following along as I share more updates. Feedback and contributions are always welcome.
+            </md-block>
+        </article>
+        <related-content></related-content>
+        <lets-connect></lets-connect>
+    </main>
+
+    <banner id="banner-bottom"></banner>
+    <footer id="footer">
+        <div id="footer-left"></div>
+        <div id="footer-middle"></div>
+        <div id="footer-right"></div>
+    </footer>
+
+    <!-- Load core libraries first -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/reading-time/2.0.0/readingTime.min.js"></script>
+
+    <!-- Load Prism.js and its components before md-block -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-csharp.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-bash.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-yaml.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-docker.min.js"></script>
+
+    <!-- Load md-block after Prism -->
+    <script src="https://md-block.verou.me/md-block.js" type="module"></script>
+
+    <!-- Load your application scripts last -->
+    <script src="../js/app.js"></script>
+    <script src="../js/header.js"></script>
+    <script src="../js/footer.js"></script>
+    <script src="../js/sources.js"></script>
+    <script src="../js/sources.local.js" onerror="console.info('☝️ You can ignore this error – no test data was found, so real data will be used instead.')"></script>
+    <script src="../js/article.js"></script>
+    <script src="../js/article-tag-container.js"></script>
+    <script src="../js/article-markdown.js"></script>
+
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "Person",
+        "name": "Mario (marionzr)",
+        "url": "https://marionzr.github.io",
+        "sameAs": [
+        "https://github.com/marionzr",
+        "https://linkedin.com/in/marionzr"
+        ],
+        "jobTitle": "Software Developer & Tech Leader",
+        "knowsAbout": ["C#", ".NET", "Azure DevOps", "Docker", "Kubernetes", "ASP.NET", "Team Leadership", "Hiring Process"]
+    }
+    </script>
+
+    <content style="display: none;">
+.NET Features:
+ASP.NET Core, Blazor, Entity Framework Core, .NET MAUI, Minimal APIs, Native AOT, gRPC, SignalR, System.Text.Json, C# Interop, ML.NET, .NET CLI, Roslyn Compiler, .NET GC, .NET Runtime, .NET SDK, Hot Reload, Source Generators, Nullable Reference Types, Span<T>, Records, Dependency Injection, Task Parallel Library, System.Threading.Channels, System.IO.Pipelines, .NET Aspire, Orleans, .NET Performance Improvements, WebAssembly (WASM), OpenTelemetry in .NETC# Features:
+LINQ, async/await, Records, Pattern Matching, Nullable Reference Types, Top-level Statements, Init-only Setters, Global Using Directives, Implicit Usings, File-scoped Namespaces, Target-typed New Expressions, Primary Constructors, Ref Structs, Default Interface Methods, Local Functions, Static Local Functions, Deconstruction, Tuples, Switch Expressions, Covariant Returns, String Interpolation, Span<T>, Unsafe Code, Function Pointers, Source Generators, Dynamic Types, Expression-bodied Members, Indexes and Ranges, Required Members, Collection ExpressionsAzure Features:
+Azure Functions, Azure App Service, Azure Kubernetes Service (AKS), Azure DevOps, Azure Blob Storage, Azure SQL Database, Azure Cosmos DB, Azure Event Grid, Azure Service Bus, Azure Logic Apps, Azure API Management, Azure Virtual Machines, Azure Load Balancer, Azure Front Door, Azure CDN, Azure Cognitive Services, Azure OpenAI Service, Azure AI Search, Azure Monitor, Azure Application Insights, Azure Sentinel, Azure Bastion, Azure Firewall, Azure AD B2C, Azure Key Vault, Azure Policy, Azure Private Link, Azure Data Factory, Azure Synapse Analytics, Azure PurviewDevOps Features:
+CI/CD Pipelines, GitHub Actions, Azure DevOps Pipelines, Terraform, Ansible, Kubernetes Helm, Docker Compose, GitOps, Infrastructure as Code (IaC), Secrets Management, Feature Flags, Canary Releases, Blue-Green Deployments, Rolling Updates, Chaos Engineering, Automated Testing, Load Testing, Shift-Left Security, Security as Code, Trunk-Based Development, Branch Policies, Code Reviews, Self-hosted Agents, Multi-stage Pipelines, YAML Pipelines, Artifact Management, Release Gates, Observability, Service Mesh, SRE PracticesDocker Features:
+Containerization, Multi-stage Builds, Docker Compose, Docker Swarm, Dockerfile, BuildKit, Docker Volumes, Docker Networks, Docker Secrets, Docker Configs, Overlay Networks, Container Orchestration, Health Checks, Namespaces and Cgroups, Image Layer Caching, Docker Logs, Docker Registry, Podman Compatibility, Containerd Integration, Docker Security Scanning, Rootless Mode, Buildx, Multi-platform Builds, GPU Support, Docker PluginsKubernetes Features:
+Pods, Deployments, ReplicaSets, StatefulSets, DaemonSets, ConfigMaps, Secrets, Persistent Volumes, Persistent Volume Claims, Horizontal Pod Autoscaler, Vertical Pod Autoscaler, Cluster Autoscaler, Node Affinity, Taints and Tolerations, Service Mesh, Ingress, Network Policies, Helm Charts, Operators, Custom Resource Definitions (CRDs), Role-based Access Control (RBAC), Namespaces, API Aggregation, Sidecar Containers, Pod Disruption Budgets, Init Containers, Multi-cluster Management, Service Discovery, Kubernetes Dashboard, CSI Drivers, Kubernetes Federation
+    </content>
+</body>
+
+</html>
+<!--
+.NET Features:
+ASP.NET Core, Blazor, Entity Framework Core, .NET MAUI, Minimal APIs, Native AOT, gRPC, SignalR, System.Text.Json, C# Interop, ML.NET, .NET CLI, Roslyn Compiler, .NET GC, .NET Runtime, .NET SDK, Hot Reload, Source Generators, Nullable Reference Types, Span<T>, Records, Dependency Injection, Task Parallel Library, System.Threading.Channels, System.IO.Pipelines, .NET Aspire, Orleans, .NET Performance Improvements, WebAssembly (WASM), OpenTelemetry in .NETC# Features:
+LINQ, async/await, Records, Pattern Matching, Nullable Reference Types, Top-level Statements, Init-only Setters, Global Using Directives, Implicit Usings, File-scoped Namespaces, Target-typed New Expressions, Primary Constructors, Ref Structs, Default Interface Methods, Local Functions, Static Local Functions, Deconstruction, Tuples, Switch Expressions, Covariant Returns, String Interpolation, Span<T>, Unsafe Code, Function Pointers, Source Generators, Dynamic Types, Expression-bodied Members, Indexes and Ranges, Required Members, Collection ExpressionsAzure Features:
+Azure Functions, Azure App Service, Azure Kubernetes Service (AKS), Azure DevOps, Azure Blob Storage, Azure SQL Database, Azure Cosmos DB, Azure Event Grid, Azure Service Bus, Azure Logic Apps, Azure API Management, Azure Virtual Machines, Azure Load Balancer, Azure Front Door, Azure CDN, Azure Cognitive Services, Azure OpenAI Service, Azure AI Search, Azure Monitor, Azure Application Insights, Azure Sentinel, Azure Bastion, Azure Firewall, Azure AD B2C, Azure Key Vault, Azure Policy, Azure Private Link, Azure Data Factory, Azure Synapse Analytics, Azure PurviewDevOps Features:
+CI/CD Pipelines, GitHub Actions, Azure DevOps Pipelines, Terraform, Ansible, Kubernetes Helm, Docker Compose, GitOps, Infrastructure as Code (IaC), Secrets Management, Feature Flags, Canary Releases, Blue-Green Deployments, Rolling Updates, Chaos Engineering, Automated Testing, Load Testing, Shift-Left Security, Security as Code, Trunk-Based Development, Branch Policies, Code Reviews, Self-hosted Agents, Multi-stage Pipelines, YAML Pipelines, Artifact Management, Release Gates, Observability, Service Mesh, SRE PracticesDocker Features:
+Containerization, Multi-stage Builds, Docker Compose, Docker Swarm, Dockerfile, BuildKit, Docker Volumes, Docker Networks, Docker Secrets, Docker Configs, Overlay Networks, Container Orchestration, Health Checks, Namespaces and Cgroups, Image Layer Caching, Docker Logs, Docker Registry, Podman Compatibility, Containerd Integration, Docker Security Scanning, Rootless Mode, Buildx, Multi-platform Builds, GPU Support, Docker PluginsKubernetes Features:
+Pods, Deployments, ReplicaSets, StatefulSets, DaemonSets, ConfigMaps, Secrets, Persistent Volumes, Persistent Volume Claims, Horizontal Pod Autoscaler, Vertical Pod Autoscaler, Cluster Autoscaler, Node Affinity, Taints and Tolerations, Service Mesh, Ingress, Network Policies, Helm Charts, Operators, Custom Resource Definitions (CRDs), Role-based Access Control (RBAC), Namespaces, API Aggregation, Sidecar Containers, Pod Disruption Budgets, Init Containers, Multi-cluster Management, Service Discovery, Kubernetes Dashboard, CSI Drivers, Kubernetes Federation
+-->

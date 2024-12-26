@@ -14,7 +14,17 @@ This website was created as a fun side project to share technical content. The c
 
 The site uses the following external libraries:
 
-. . .
+### Content Processing
+
+- **md-block**: Renders Markdown content in the browser
+
+### UI Enhancements
+
+- **Prism (1.29.0)**: Markdow code syntax highlighting with support for:
+  - C#
+  - Bash
+  - YAML
+  - XML Documentation
 
 ## Architecture
 

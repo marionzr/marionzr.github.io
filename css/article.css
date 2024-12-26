@@ -1,0 +1,89 @@
+#main {
+    width: 55%;
+}
+
+.main-collapsed {
+    width: 55% !important;
+}
+
+.main-expanded {
+    width: 90% !important;
+}
+
+article h1,
+h2 {
+    text-transform: capitalize;
+    margin-bottom: 1.5rem;
+}
+
+#article-header-img {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    height: auto;
+    width: 100%;
+    margin-top: 0.25rem;
+    animation: fadeIn 1s ease-in-out;
+}
+
+#article-header-title {
+    font-size: xx-large;
+    margin-bottom: 1.25rem;
+}
+
+#article-header-subtitle {
+    font-size: large;
+    color: var(--text-color-secondary);
+}
+
+#article-header-info {
+    width: 100%;
+    box-sizing: border-box;
+}
+
+#article-header-info-row {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+#article-header-info-left-column {
+    flex: 1;
+}
+
+#article-header-info-right-column {
+    flex: 2;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+}
+
+#article-header-info-matadata {
+    display: flex;
+    align-items: center;
+}
+
+#article-header-info-matadata-author,
+#article-header-info-matadata-reading-time {
+    margin: 0;
+    margin-bottom: 0.25rem;
+    font-size: small;
+}
+
+#article-header-info-matadata-avatar {
+    animation: slideInFromLeft 0.5s ease-in-out;
+    width: 40px;
+    height: auto;
+    border-radius: 30px;
+    margin-right: 0.5rem;
+}
+
+@media (max-width: 768px) {
+    main {
+        width: 90% !important;
+    }
+
+    #article-header-info-right-column {
+        margin-top: 0.5rem;
+
+    }
+}
