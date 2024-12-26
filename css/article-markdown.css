@@ -95,6 +95,51 @@ md-block a {
     text-decoration: none;
 }
 
+md-block .md-block-code-block-container pre {
+    margin: 0;
+    padding: 1rem;
+}
+
+md-block .md-block-code-block-container {
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    overflow: hidden;
+    margin-top: 0.5rem;
+}
+
+md-block .md-block-code-block-container-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.5rem;
+    background-color: var(--bg-color);
+    border-bottom: 1px solid var(--border-color)
+}
+
+md-block .md-block-code-block-language-label {
+    font-size: 0.9em;
+    color: var(--text-color);
+    text-transform: lowercase;
+}
+
+md-block .md-block-code-block-container-copy-button span {
+    margin-left: 0.25rem;
+}
+
+md-block .md-block-code-block-container-copy-button {
+    display: flex;
+    align-items: center;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    color: var(--text-color-secondary);
+    font-size: 0.9em;
+}
+
+md-block .md-block-code-block-container-copy-button:hover {
+    color: var(--text-color);
+}
+
 @media (max-width: 768px) {
     md-block .img-medium:not(.mobile-img-medium) {
         max-width: 100%;

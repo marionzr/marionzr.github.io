@@ -5,13 +5,6 @@
         try {
             const mdBlock = document.querySelector('md-block');
 
-            // Configure marked options to disable deprecated features
-            mdBlock.markedOptions = {
-                mangle: false,         // Disable mangling
-                headerIds: false,      // Disable header IDs
-                smartypants: false     // Disable smartypants
-            };
-
             // Enable markdown parsing and syntax highlighting
             mdBlock.setAttribute('markdown', '');
             mdBlock.setAttribute('highlight', '');
@@ -66,7 +59,7 @@
         const mdBlock = document.querySelector('md-block');
         const links = mdBlock.querySelectorAll('a');
 
-        links.forEach(function(link) {
+        links.forEach(function (link) {
             link.setAttribute('target', '_blank');
         });
     }
@@ -87,10 +80,70 @@
         });
     }
 
+    function addCodeBlockCopyButton() {
+        const codeBlocks = document.querySelectorAll('pre > code');
+
+        codeBlocks.forEach(codeBlock => {
+            const pre = codeBlock.parentElement;
+
+            const container = document.createElement('div');
+            container.className = 'md-block-code-block-container';
+
+            const header = document.createElement('div');
+            header.className = 'md-block-code-block-container-header';
+
+            // Extract language from class
+            const languageMatch = pre.className.match(/language-(\w+)/);
+            const language = languageMatch ? languageMatch[1] : 'text';
+
+            const languageLabel = document.createElement('span');
+            languageLabel.className = 'md-block-code-block-language-label';
+            languageLabel.textContent = language;
+
+            const copyButton = document.createElement('button');
+            copyButton.className = 'md-block-code-block-container-copy-button';
+            copyButton.innerHTML = '<i class="far fa-copy"></i><span>Copy</span>';
+
+            copyButton.addEventListener('click', async () => copyContent(copyButton, codeBlock.textContent));
+
+            // Remove language class from pre since it's now in header
+            pre.className = pre.className.replace(/language-\w+/, '').trim();
+
+            header.appendChild(languageLabel);
+            header.appendChild(copyButton);
+
+            // Replace pre with container and move elements
+            pre.parentNode.replaceChild(container, pre);
+            container.appendChild(header);
+            container.appendChild(pre);
+        });
+    }
+
+    async function copyContent(copyButton, textToCopy) {
+        try {
+            await navigator.clipboard.writeText(textToCopy);
+
+            // Store original button content
+            const originalContent = copyButton.innerHTML;
+
+            // Update button to show copied state
+            copyButton.innerHTML = '<i class="fas fa-check"></i><span>Copied</span>';
+
+            // Reset after 3 seconds
+            setTimeout(() => {
+                copyButton.innerHTML = originalContent;
+            }, 1500);
+        } catch (err) {
+            nzr.onError(err, 'Failed to copy text');
+        }
+    }
+
+
     async function init() {
         await initMarkdownCodeBlock();
         addImageCaptions();
         configureMarkdownLinksToOpenOnNewTab();
+        addCodeBlockCopyButton();
     }
 
     window.addEventListener('themeChanged', (event) => {
