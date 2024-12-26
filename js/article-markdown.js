@@ -62,6 +62,15 @@
         }
     }
 
+    function configureMarkdownLinksToOpenOnNewTab() {
+        const mdBlock = document.querySelector('md-block');
+        const links = mdBlock.querySelectorAll('a');
+
+        links.forEach(function(link) {
+            link.setAttribute('target', '_blank');
+        });
+    }
+
     function addImageCaptions() {
         const images = document.querySelectorAll('md-block img');
         images.forEach(img => {
@@ -81,6 +90,7 @@
     async function init() {
         await initMarkdownCodeBlock();
         addImageCaptions();
+        configureMarkdownLinksToOpenOnNewTab();
     }
 
     window.addEventListener('themeChanged', (event) => {

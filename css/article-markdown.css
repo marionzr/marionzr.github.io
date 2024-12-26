@@ -90,6 +90,10 @@ md-block .img-caption {
     text-transform: capitalize
 }
 
+md-block a {
+    color: var(--link-color);
+    text-decoration: none;
+}
 
 @media (max-width: 768px) {
     md-block .img-medium:not(.mobile-img-medium) {
