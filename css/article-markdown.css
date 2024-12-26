@@ -1,3 +1,12 @@
+md-block:not([rendered]) {
+    visibility: hidden;
+}
+
+/* Once rendered, make it visible */
+md-block[rendered] {
+    visibility: visible;
+}
+
 md-block hr {
     border: none;
     text-align: center;
@@ -9,7 +18,7 @@ md-block hr::before {
     content: "• • •";
     font-size: x-large;
     letter-spacing: 0.6rem;
-    color: var( --text-color-secondary);
+    color: var(--text-color-secondary);
 }
 
 md-block img {
@@ -70,6 +79,17 @@ md-block .img-do-not-scale img {
     width: initial !important;
     height: auto;
 }
+
+md-block .img-caption {
+    font-size: x-small !important;
+    color: var(--text-color);
+    text-align: center;
+    display: block;
+    margin: 0;
+    margin-top: 0.25rem;
+    text-transform: capitalize
+}
+
 
 @media (max-width: 768px) {
     md-block .img-medium:not(.mobile-img-medium) {

@@ -12,7 +12,6 @@
             }
 
             const articleHeader = document.querySelector('article-header');
-            console.log(articleHeader)
             const articleTitle = articleHeader.querySelector('#article-header-title');
             const trimmedDocumentTitle = documentTitle.replace(suffix, '').trim();
             const title = articleTitle.textContent?.trim();
