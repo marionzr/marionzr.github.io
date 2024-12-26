@@ -138,12 +138,34 @@
         }
     }
 
+    function calculateReadingTime() {
+        try {
+            const mdBlocks = document.querySelectorAll("md-block");
+            const articleHeaderInfoMetadataReadingTimeEta = article.querySelector('#article-header-info-matadata-reading-time-eta');
+            const articleHeaderInfoMetadataReadingTimeWords = article.querySelector('#article-header-info-matadata-reading-time-words');
+
+            let totalWords = 0;
+            let totalTime = 0;
+
+            mdBlocks.forEach(function(mdBlock) {
+                const result = mdReadingTime(mdBlock.textContent);
+                totalTime += app.safeParseInt(result.time); // ETA (time to read)
+                totalWords += result.words;
+            });
+
+            articleHeaderInfoMetadataReadingTimeEta.textContent = totalTime > 1 ? `${totalTime} min` : "Less than 1 min";
+            articleHeaderInfoMetadataReadingTimeWords.textContent = totalWords;
+        } catch (error) {
+            app.onError(error, 'Error in calculateReadingTime');
+        }
+    }
 
     async function init() {
         await initMarkdownCodeBlock();
         addImageCaptions();
         configureMarkdownLinksToOpenOnNewTab();
         addCodeBlockCopyButton();
+        calculateReadingTime();
     }
 
     window.addEventListener('themeChanged', (event) => {
