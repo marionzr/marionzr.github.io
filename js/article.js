@@ -1,6 +1,7 @@
 (function () { // IIFE
 
     const app = globalThis.app;
+    const header = globalThis.header;
 
     function checkMissingInformation() {
         try {
@@ -72,9 +73,81 @@
         }
     }
 
+    function initPageWidthControl() {
+        try {
+            const headerRight = document.getElementById('header-right');
+            const pageExpandToggle = document.createElement('button');
+            pageExpandToggle.id = 'header-right-page-expand-toggle';
+
+            const pageExpandToggleIcon = document.createElement('i');
+            pageExpandToggle.appendChild(pageExpandToggleIcon);
+
+            headerRight.insertBefore(pageExpandToggle, headerRight.lastChild);
+
+            //headerRight.insertAdjacentElement('afterend', pageExpandToggle);
+
+
+            pageExpandToggleIcon.addEventListener('click', togglePageWidth);
+            const mql = window.matchMedia('(max-width: 768px)');
+
+            if (mql.matches) {
+                pageExpandToggleIcon.style.display = 'none';
+                main.className = 'main-expanded';
+            } else {
+                const mainExpanded = app.getItem('main-expanded') === 'true';
+                pageExpandToggleIcon.style.display = '';
+
+                main.className = mainExpanded ? 'main-expanded' : 'main-normal';
+                pageExpandToggleIcon.className = mainExpanded ? 'fa fa-expand' : 'fa fa-compress';
+            }
+
+            const mediaQuery = window.matchMedia('(max-width: 768px)'); // Mobile view
+            mediaQuery.addEventListener('change', handleMediaQueryChange.bind(null, pageExpandToggleIcon));
+        } catch (error) {
+            app.onError(error, 'Error in initializePageWidthControl');
+        }
+    }
+
+    function togglePageWidth() {
+        try {
+            const main = document.querySelector('main');
+            const pageWidthIcon = document.querySelector('#header-right-page-expand-toggle i');
+            const isExpanded = main.className === 'main-expanded';
+
+            pageWidthIcon.className = isExpanded ? 'fa fa-compress' : 'fa fa-expand';
+            main.className = isExpanded ? 'main-normal' : 'main-expanded';
+            app.setItem('main-expanded', !isExpanded);
+        } catch (error) {
+            app.onError(error, 'Error in togglePageWidth');
+        }
+    }
+
+    function handleMediaQueryChange(pageExpandToggleIcon, e) {
+        try {
+            if (e.matches) {
+                pageExpandToggleIcon.style.display = 'none';
+                main.className = 'main-expanded';
+            } else {
+                pageExpandToggleIcon.style.display = '';
+                const mainExpanded = app.getItem('main-expanded') === 'true';
+                main.className = mainExpanded ? 'main-expanded' : 'main-normal';
+                pageExpandToggleIcon.className = mainExpanded ? 'fa fa-expand' : 'fa fa-compress';
+            }
+        } catch (error) {
+            app.onError(error, 'Error in handleMediaQueryChange');
+        }
+    }
+
+    function initReadingMode() {
+        const currentContentMode = document.documentElement.getAttribute('reading-mode');
+        header.showHideImages(currentContentMode === 'text-only');
+    }
+
     async function init() {
         checkMissingInformation();
         await loadCreatedAtDateTime();
+        initPageWidthControl();
+        initReadingMode();
     }
 
     document.addEventListener('DOMContentLoaded', () => init());

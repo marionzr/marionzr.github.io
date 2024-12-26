@@ -14,6 +14,7 @@
   --button-bg: #24292e;
   --button-color: #ffffff;
   --danger: #ed0000;
+  --disabled: lightgray;
 }
 
 :root[data-theme="dark"] {
@@ -32,6 +33,7 @@
   --button-bg: #ffffff;
   --button-color: #24292e;
   --danger: #ed0000;
+  --disabled: lightgray;
 }
 
 html {

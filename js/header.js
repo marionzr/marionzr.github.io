@@ -1,5 +1,8 @@
 (function () { // IIFE
 
+    const header = {};
+    globalThis.header = header;
+
     const app = globalThis.app;
 
     const URLS = {
@@ -73,7 +76,7 @@
 
     // ===== Header scroll behavior ===============================================
 
-    const header = document.querySelector('#header');
+    const headerElement = document.querySelector('#header');
     let lastScroll = 0;
 
     function debounce(func, wait) {
@@ -95,14 +98,14 @@
         try {
             const currentScroll = window.scrollY;
 
-            if (!header) {
+            if (!headerElement) {
                 return;
             }
 
             if (currentScroll > lastScroll && currentScroll > 100) {
-                header.classList.add('hidden');
+                headerElement.classList.add('hidden');
             } else {
-                header.classList.remove('hidden');
+                headerElement.classList.remove('hidden');
             }
 
             lastScroll = currentScroll;
@@ -234,7 +237,7 @@
             app.setItem('reading-mode', newContentMode);
             showHideImages(newContentMode === 'text-only');
         } catch (error) {
-            nzr.onError(error, 'Error in onContentModeClick');
+            app.onError(error, 'Error in onContentModeClick');
         }
     }
 
@@ -260,7 +263,7 @@
     }
 
     function hideImage(image) {
-        if (image.getAttribute('src') === '') {
+        if (image.getAttribute('src') === '' || image.getAttribute('data-placeholder-id') !== null) {
             return;
         }
 
@@ -279,12 +282,6 @@
             const placeholder = document.createElement('div');
             placeholder.className = 'img-placeholder';
             placeholder.innerHTML = 'Image hidden for eco-friendly printing 🍃.<br/>Toggle read mode in the toolbar to show image <i class="far fa-file-alt"></i>';
-
-            // Match image dimensions if available
-            if (width && height) {
-                placeholder.style.width = '100%';
-                placeholder.style.height = '40px';
-            }
 
             image.parentNode.insertBefore(placeholder, image);
 
@@ -322,6 +319,8 @@
     // ============================================================================
 
     document.addEventListener('DOMContentLoaded', init);
+
+    header.showHideImages = showHideImages;
 })();
 
 // ===== Extensions ===========================================================

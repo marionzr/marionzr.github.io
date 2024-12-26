@@ -69,10 +69,15 @@
     vertical-align: middle;
     justify-content: center;
     border: 2px dashed !important;
-    border-color: lightgray;
+    border-color: var(--disabled);
     text-align: center;
-    color: gray;
+    color: var(--disabled);
     padding: 1rem;
+    height: auto;
+    width: 80%;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 0.25rem;
 }
 
 .fa-file-alt {

@@ -134,7 +134,7 @@
                 copyButton.innerHTML = originalContent;
             }, 1500);
         } catch (err) {
-            nzr.onError(err, 'Failed to copy text');
+            app.onError(err, 'Failed to copy text');
         }
     }
 
@@ -160,8 +160,14 @@
         }
     }
 
+    function initReadingMode() {
+        const currentContentMode = document.documentElement.getAttribute('reading-mode');
+        header.showHideImages(currentContentMode === 'text-only');
+    }
+
     async function init() {
         await initMarkdownCodeBlock();
+        initReadingMode();
         addImageCaptions();
         configureMarkdownLinksToOpenOnNewTab();
         addCodeBlockCopyButton();
