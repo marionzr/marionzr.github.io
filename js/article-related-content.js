@@ -13,7 +13,21 @@
                         icon: "related",
                         title: "Must-Have Visual Studio Extensions",
                         href: "must-have-visual-studio-extensions.html",
-
+                    },
+                    {
+                        icon: "next",
+                        title: "Scaffolding: Create a .NET solution like a pro",
+                        href: "scaffolding-initializing-a-dotnet-solution-like-a-pro.html",
+                    }
+                ]
+            },
+            {
+                href: "scaffolding-initializing-a-dotnet-solution-like-a-pro.html",
+                links: [
+                    {
+                        icon: "previous",
+                        title: "Bootstrapping .NET projects",
+                        href: "bootstrapping-dotnet-projects.html",
                     }
                 ]
             }
