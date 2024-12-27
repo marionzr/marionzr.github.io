@@ -98,6 +98,7 @@ md-block a {
 md-block .md-block-code-block-container pre {
     margin: 0;
     padding: 1rem;
+    background-color: var(--code-bg);
 }
 
 md-block .md-block-code-block-container {

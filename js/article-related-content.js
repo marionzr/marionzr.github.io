@@ -7,30 +7,13 @@
     const RELATED_ARTICLES = {
         articleLinks: [
             {
-                href: "demo.html",
+                href: "bootstrapping-dotnet-projects.html",
                 links: [
                     {
                         icon: "related",
-                        title: "My GitHub",
-                        href: "https://github.com/marionzr",
-                        target: "_blank"
-                    },
-                    {
-                        icon: "next",
-                        title: "Example bla bla bla",
-                        href: "example.html",
-                        target: ""
-                    }
-                ]
-            },
-            {
-                href: "example.html",
-                links: [
-                    {
-                        icon: "previous",
-                        title: "demo bla bla bla",
-                        href: "demo.html",
-                        target: ""
+                        title: "Must-Have Visual Studio Extensions",
+                        href: "must-have-visual-studio-extensions.html",
+
                     }
                 ]
             }

@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bootstrapping .NET projects | marionzr</title>
+    <meta name="description" content="Thoughts on software development, including .NET, Azure, DevOps, and ASP.NET. Sharing lessons learned from building software, leading teams, and tackling everyday challenges.">
+    <meta name="author" content="marionzr">
+    <meta name="robots" content="index, follow">
+    <meta property="og:title" content="Mario - Coding, !Coffee, and Content: Not Another Average Dev Blog">
+    <meta property="og:description" content="Thoughts on software development, including .NET, Azure, DevOps, and ASP.NET. Sharing lessons learned from building software, leading teams, and tackling everyday challenges.">
+    <meta property="og:image" content="https://marionzr.github.io/assets/img/avatar.jpg">
+    <meta property="og:url" content="https://marionzr.github.io">
+    <link rel="icon" href="../assets/icons/favicon.ico" type="image/x-icon">
+    <link rel="canonical" href="https://marionzr.github.io">
+
+    <link id="prism-light" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" disabled />
+    <link id="prism-dark" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-okaidia.min.css" rel="stylesheet" enabled />
+
+    <link rel="stylesheet" href="../css/app.css">
+    <link rel="stylesheet" href="../css/header.css">
+    <link rel="stylesheet" href="../css/footer.css">
+    <link rel="stylesheet" href="../css/article.css">
+    <link rel="stylesheet" href="../css/article-tag-container.css">
+    <link rel="stylesheet" href="../css/article-markdown.css">
+    <link rel="stylesheet" href="../css/article-related-content.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+</head>
+
+<body>
+    <banner id="banner-top"></banner>
+    <header id="header">
+        <div id="header-left"></div>
+        <div id="header-middle"></div>
+        <div id="header-right"></div>
+    </header>
+
+    <main id="main">
+        <banner id="banner-main"></banner>
+        <article id="article">
+            <article-header>
+                <img id="article-header-img" src="../assets/articles/bootstrapping-dotnet-projects/8f86ed48-ac79-4f2d-a9bc-69effb506c00.gif" alt="ACME DevOps - Bootstrap">
+                <h1 id="article-header-title">Bootstrapping .NET projects</h1>
+                <h2 id="article-header-subtitle">How I built Nzr.Acme to streamline project setup and accelerate development</h2>
+                <div id="article-header-info">
+                    <div id="article-header-info-row">
+                        <div id="article-header-info-left-column">
+                            <div id="article-header-info-matadata">
+                                <img id="article-header-info-matadata-avatar" class="avatar" src="https://avatars.githubusercontent.com/u/47438990?v=4" alt="marionzr's avatar"></a>
+                                <div class="info">
+                                    <p id="article-header-info-matadata-author"><a href="https://www.github.com/marionzr">by marionzr</a> | <date-time id="article-header-info-matadata-created-at"></date-time></p>
+                                    <p id="article-header-info-matadata-reading-time">
+                                        <i class="far fa-clock"></i> <span id="article-header-info-matadata-reading-time-eta"></span> read (<span id="article-header-info-matadata-reading-time-words"></span> words)
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="article-header-info-right-column">
+                            <article-tags>.NET GitHub Development DevOps ACME</article-tags>
+                        </div>
+                    </div>
+                </div>
+
+            </article-header>
+            <md-block>
+                A solid foundation is essential for building maintainable and scalable applications. Since 2002, I've encountered countless challenges, discovered solutions, and gained valuable insights—both at work and from various sources across the internet.
+
+                **Nzr.Acme** is the culmination of these lessons, structured as a single repository: a bootstrapped .NET backend project that serves as a foundation for small to medium-sized applications, with the flexibility to scale into larger solutions with minimal effort.
+
+                This article is the first in a *seven-part* series covering the "DevOps Days" for the Acme project — a guide to help you build your next .NET application or enhance an existing one:
+
+                1. **Bootstrapping .NET projects**: How I built Nzr.Acme to streamline project setup and accelerate development (*You're here* 📍)
+                2. **Scaffolding .NET solution like a pro**: Streamlining .NET Development with Proper Project Structure and Automation.
+                3. **Build and Test Pipeline**: Ensuring Code Quality with GitHub Actions.
+                4. **Code Analysis**: Integrating SonarCloud for Better Code Quality.
+                5. **Automating Dependency Management**: Using Dependabot
+                6. **Dockerizing your services**: A Step Forward in Our DevOps Journey
+                7. **Container Register**:
+
+                After this "DevOps Days" series, I'll be sharing even more .NET-related content, including:
+
+                - Repositories & UnitOfWork Patterns.
+                - Result Pattern Framework.
+                - EF Core SQL Server second-level caching with REDIS
+                - Message Brokers and Storage
+                - OData vs REST vs GraphQL
+                - HealthChecks
+                - Writing Tests for Layered Applications
+
+                Things will get even more interesting along the way—stay tuned! 🚀
+
+                ---
+
+                Prerequisites:
+
+                I am developing this project using the following tools:
+
+                * Visual Studio Community 2022
+                * All the plugins listed in this [article](./must-have-visual-studio-extensions.html).
+                * Git Bash
+                * Docker Desktop
+
+                ---
+
+                ## Setting up Nzr.Acme
+
+                The first step was to initialize the project on a git repository. For this project, I opted to use GitHub as the primary hosting platform, even though I was heavily using Azure Devops. I will write an article comparing both platforms in the near future.
+
+                To keep this article concise, I'll omit some specific GitHub configurations for now, but those details will be covered in upcoming articles - stay tuned!
+
+                ### Step 1: Creating the remote repository
+
+                I began by creating an empty repository on GitHub named nzr.acme, which will serve as the remote repository for tracking and storing all project changes.
+
+                ### Step 2: Initializing the Project Locally
+
+                I created a new folder on my local machine and initialized a Git repository within it using the following commands:
+
+                ```bash
+                mkdir nzr.acme
+                cd nzr.acme
+                git init
+                ```
+
+                If you're using Windows, I recommend running the following command [1]:
+
+                ```bash
+                git config --global core.autocrlf true
+                ```
+
+                This initialized an empty Git repository on my local machine.
+
+                ### Step 3: Setting the Main Branch
+
+                TTo align with GitHub conventions [2], I renamed the default branch to `main`::
+
+                ```bash
+                git branch -M main
+                ```
+
+                ### Step 4: Adding the Remote Origin
+
+                I linked my local repository to the remote repository created earlier on GitHub by adding the remote origin:
+
+                ```bash
+                git remote add origin https://github.com/marionzr/nzr.acme.git
+                ```
+
+                To verify the connection, I checked the remote:
+
+                ```bash
+                git remote -v
+                ```
+
+                Instead of steps 1–4, I could have simply cloned the repository using `git clone`, but I wanted to demonstrate the manual approach.
+
+                ### Step 5: Adding Initialization Scripts
+
+                Over the years, I've written various scripts and utilities to streamline project initialization. For Nzr.Acme, I added the following artifacts to the repository:
+
+                - `commit-msg`: A hook script to validate commit messages against conventional commit standards. [3]
+                - `pre-commit`: A hook script that prompts with questions to ensure the code is thoroughly checked before committing. [4]
+                - `init.sh`: This script configures the local git repository, adding the pre-commit and commit-msg hooks to enforce consistent commit messages.
+                - `rename.sh`: This script allows a quick rebranding of the project by replacing the term "Acme" in file names, directories, and contents.
+
+                These scripts are written in shell to ensure cross-platform compatibility.
+
+                ### Step 6: Running the Initialization Script
+
+                ```bash
+                #!/bin/bash
+
+                # Define the state file path inside the .git directory
+                STATE_FILE=".git/.init.state"
+
+                # Check if the state file exists
+                if [[ -f "$STATE_FILE" ]]; then
+                    echo -n "The script has been executed before. Do you want to run it again? (y/n):"
+                    while true; do
+                        # Read a single character immediately without needing to press Enter
+                        read -n 1 response
+                        echo  # Move to the next line after input
+
+                        # Convert response to lowercase and check if it is 'y'
+                        case "${response,,}" in
+                            [Yy] ) break;;  # Proceed if 'y' or 'Y'
+                            [Nn] )
+                                echo "Exiting the script."
+                                exit 0;;  # Exit if 'n' or 'N'
+                            * ) echo -n "Please answer with 'y' or 'n': " ;;
+                        esac
+                    done
+                fi
+
+                # Copy the commit-msg to the git/hooks directory, overwriting if it exists
+                cp -f commit-msg .git/hooks/
+                echo "commit-msg file copied to .git/hooks/"
+
+                # Copy the pre-commit to the git/hooks directory, overwriting if it exists
+                cp -f pre-commit .git/hooks/
+                echo "pre-commit file copied to .git/hooks/"
+
+                # Update the state file with the date, time, and reset message
+                {
+                    echo "Script executed on: $(date)"
+                    echo "Remove this file to reset."
+                } > "$STATE_FILE"
+
+                ```
+
+                I ran the init script `init.sh` to configure the commit-msg and pre-commit hooks and ensure the repository was ready for development:
+
+                ```bash
+                ./init.sh
+                ```
+
+                ### Step 7: Committing and Pushing to GitHub
+
+                Finally, I added the `.gitignore`, `README.md` and `LICENSE` files and committed the changes with a descriptive commit message and pushed the code to the GitHub repository:
+
+                ```bash
+                git add .
+                git commit
+                git push -u origin main
+                ```
+
+                That's it! The project setup is complete and ready for development.
+
+                ---
+
+                ## Final Thoughts 💡
+
+                This initial setup lays the groundwork for Nzr.Acme, a project that I hope will be a useful starting point for developers.
+                The next article will describe how I initialized the .NET solution and the projects.
+
+                ## Resources 💾
+
+                The changes mentioned in this article can be found in the repository marionzr/nzr.acme, specifically in this commit: [8f2afc2](https://github.com/marionzr/nzr.acme/tree/8f2afc2541599ed10f862e6defcbc07e43f2cc83).
+
+                If you find this project useful, consider giving it a ⭐️ on marionzr/nzr.acme and following along as I share more updates. Feedback and contributions are always welcome - let's build something great together!
+
+                [1] [Global settings for line endings](https://docs.github.com/en/get-started/getting-started-with-git/configuring-git-to-handle-line-endings#global-settings-for-line-endings)
+                [2] [GitHub - About the default branch](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/about-branches#about-the-default-branch)
+                [3] [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/)
+                [4] [An automatic interactive pre-commit checklist, in the style of infomercials](http://web.archive.org/web/20240915111530/https://victoria.dev/archive/an-automatic-interactive-pre-commit-checklist-in-the-style-of-infomercials/)
+            </md-block>
+            <related-content></related-content>
+            <lets-connect></lets-connect>
+            <discussions></discussions>
+        </article>
+    </main>
+
+    <banner id="banner-bottom"></banner>
+    <footer id="footer">
+        <div id="footer-left"></div>
+        <div id="footer-middle"></div>
+        <div id="footer-right"></div>
+    </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-csharp.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-bash.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-yaml.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-docker.min.js"></script>
+
+    <script src="https://md-block.verou.me/md-block.js" type="module"></script>
+    <script src="../js/markdown-reading-time.js"></script>
+
+    <script src="../js/app.js"></script>
+    <script src="../js/header.js"></script>
+    <script src="../js/footer.js"></script>
+    <script src="../js/sources.js"></script>
+    <script src="../js/sources.local.js" onerror="console.info('☝️ You can ignore this error – no test data was found, so real data will be used instead.')"></script>
+    <script src="../js/article.js"></script>
+    <script src="../js/article-tag-container.js"></script>
+    <script src="../js/article-markdown.js"></script>
+    <script src="../js/article-related-content.js"></script>
+
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "Person",
+        "name": "Mario (marionzr)",
+        "url": "https://marionzr.github.io",
+        "sameAs": [
+        "https://github.com/marionzr",
+        "https://linkedin.com/in/marionzr"
+        ],
+        "jobTitle": "Software Developer & Tech Leader",
+        "knowsAbout": ["C#", ".NET", "Azure DevOps", "Docker", "Kubernetes", "ASP.NET", "Team Leadership", "Hiring Process"]
+    }
+    </script>
+
+    <content style="display: none;">
+.NET Features:
+ASP.NET Core, Blazor, Entity Framework Core, .NET MAUI, Minimal APIs, Native AOT, gRPC, SignalR, System.Text.Json, C# Interop, ML.NET, .NET CLI, Roslyn Compiler, .NET GC, .NET Runtime, .NET SDK, Hot Reload, Source Generators, Nullable Reference Types, Span<T>, Records, Dependency Injection, Task Parallel Library, System.Threading.Channels, System.IO.Pipelines, .NET Aspire, Orleans, .NET Performance Improvements, WebAssembly (WASM), OpenTelemetry in .NETC# Features:
+LINQ, async/await, Records, Pattern Matching, Nullable Reference Types, Top-level Statements, Init-only Setters, Global Using Directives, Implicit Usings, File-scoped Namespaces, Target-typed New Expressions, Primary Constructors, Ref Structs, Default Interface Methods, Local Functions, Static Local Functions, Deconstruction, Tuples, Switch Expressions, Covariant Returns, String Interpolation, Span<T>, Unsafe Code, Function Pointers, Source Generators, Dynamic Types, Expression-bodied Members, Indexes and Ranges, Required Members, Collection ExpressionsAzure Features:
+Azure Functions, Azure App Service, Azure Kubernetes Service (AKS), Azure DevOps, Azure Blob Storage, Azure SQL Database, Azure Cosmos DB, Azure Event Grid, Azure Service Bus, Azure Logic Apps, Azure API Management, Azure Virtual Machines, Azure Load Balancer, Azure Front Door, Azure CDN, Azure Cognitive Services, Azure OpenAI Service, Azure AI Search, Azure Monitor, Azure Application Insights, Azure Sentinel, Azure Bastion, Azure Firewall, Azure AD B2C, Azure Key Vault, Azure Policy, Azure Private Link, Azure Data Factory, Azure Synapse Analytics, Azure PurviewDevOps Features:
+CI/CD Pipelines, GitHub Actions, Azure DevOps Pipelines, Terraform, Ansible, Kubernetes Helm, Docker Compose, GitOps, Infrastructure as Code (IaC), Secrets Management, Feature Flags, Canary Releases, Blue-Green Deployments, Rolling Updates, Chaos Engineering, Automated Testing, Load Testing, Shift-Left Security, Security as Code, Trunk-Based Development, Branch Policies, Code Reviews, Self-hosted Agents, Multi-stage Pipelines, YAML Pipelines, Artifact Management, Release Gates, Observability, Service Mesh, SRE PracticesDocker Features:
+Containerization, Multi-stage Builds, Docker Compose, Docker Swarm, Dockerfile, BuildKit, Docker Volumes, Docker Networks, Docker Secrets, Docker Configs, Overlay Networks, Container Orchestration, Health Checks, Namespaces and Cgroups, Image Layer Caching, Docker Logs, Docker Registry, Podman Compatibility, Containerd Integration, Docker Security Scanning, Rootless Mode, Buildx, Multi-platform Builds, GPU Support, Docker PluginsKubernetes Features:
+Pods, Deployments, ReplicaSets, StatefulSets, DaemonSets, ConfigMaps, Secrets, Persistent Volumes, Persistent Volume Claims, Horizontal Pod Autoscaler, Vertical Pod Autoscaler, Cluster Autoscaler, Node Affinity, Taints and Tolerations, Service Mesh, Ingress, Network Policies, Helm Charts, Operators, Custom Resource Definitions (CRDs), Role-based Access Control (RBAC), Namespaces, API Aggregation, Sidecar Containers, Pod Disruption Budgets, Init Containers, Multi-cluster Management, Service Discovery, Kubernetes Dashboard, CSI Drivers, Kubernetes Federation
+    </content>
+</body>
+
+</html>
+<!--
+.NET Features:
+ASP.NET Core, Blazor, Entity Framework Core, .NET MAUI, Minimal APIs, Native AOT, gRPC, SignalR, System.Text.Json, C# Interop, ML.NET, .NET CLI, Roslyn Compiler, .NET GC, .NET Runtime, .NET SDK, Hot Reload, Source Generators, Nullable Reference Types, Span<T>, Records, Dependency Injection, Task Parallel Library, System.Threading.Channels, System.IO.Pipelines, .NET Aspire, Orleans, .NET Performance Improvements, WebAssembly (WASM), OpenTelemetry in .NETC# Features:
+LINQ, async/await, Records, Pattern Matching, Nullable Reference Types, Top-level Statements, Init-only Setters, Global Using Directives, Implicit Usings, File-scoped Namespaces, Target-typed New Expressions, Primary Constructors, Ref Structs, Default Interface Methods, Local Functions, Static Local Functions, Deconstruction, Tuples, Switch Expressions, Covariant Returns, String Interpolation, Span<T>, Unsafe Code, Function Pointers, Source Generators, Dynamic Types, Expression-bodied Members, Indexes and Ranges, Required Members, Collection ExpressionsAzure Features:
+Azure Functions, Azure App Service, Azure Kubernetes Service (AKS), Azure DevOps, Azure Blob Storage, Azure SQL Database, Azure Cosmos DB, Azure Event Grid, Azure Service Bus, Azure Logic Apps, Azure API Management, Azure Virtual Machines, Azure Load Balancer, Azure Front Door, Azure CDN, Azure Cognitive Services, Azure OpenAI Service, Azure AI Search, Azure Monitor, Azure Application Insights, Azure Sentinel, Azure Bastion, Azure Firewall, Azure AD B2C, Azure Key Vault, Azure Policy, Azure Private Link, Azure Data Factory, Azure Synapse Analytics, Azure PurviewDevOps Features:
+CI/CD Pipelines, GitHub Actions, Azure DevOps Pipelines, Terraform, Ansible, Kubernetes Helm, Docker Compose, GitOps, Infrastructure as Code (IaC), Secrets Management, Feature Flags, Canary Releases, Blue-Green Deployments, Rolling Updates, Chaos Engineering, Automated Testing, Load Testing, Shift-Left Security, Security as Code, Trunk-Based Development, Branch Policies, Code Reviews, Self-hosted Agents, Multi-stage Pipelines, YAML Pipelines, Artifact Management, Release Gates, Observability, Service Mesh, SRE PracticesDocker Features:
+Containerization, Multi-stage Builds, Docker Compose, Docker Swarm, Dockerfile, BuildKit, Docker Volumes, Docker Networks, Docker Secrets, Docker Configs, Overlay Networks, Container Orchestration, Health Checks, Namespaces and Cgroups, Image Layer Caching, Docker Logs, Docker Registry, Podman Compatibility, Containerd Integration, Docker Security Scanning, Rootless Mode, Buildx, Multi-platform Builds, GPU Support, Docker PluginsKubernetes Features:
+Pods, Deployments, ReplicaSets, StatefulSets, DaemonSets, ConfigMaps, Secrets, Persistent Volumes, Persistent Volume Claims, Horizontal Pod Autoscaler, Vertical Pod Autoscaler, Cluster Autoscaler, Node Affinity, Taints and Tolerations, Service Mesh, Ingress, Network Policies, Helm Charts, Operators, Custom Resource Definitions (CRDs), Role-based Access Control (RBAC), Namespaces, API Aggregation, Sidecar Containers, Pod Disruption Budgets, Init Containers, Multi-cluster Management, Service Discovery, Kubernetes Dashboard, CSI Drivers, Kubernetes Federation
+-->
