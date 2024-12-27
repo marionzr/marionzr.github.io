@@ -11,11 +11,14 @@
     function checkMissingInformation() {
         try {
             const documentTitle = document.title;
-            const suffix = " | marionzr";
+            const suffix = "| marionzr";
 
-            if (!documentTitle?.trim()) {
+            const trimmedTitle = documentTitle?.trim();
+            if (!trimmedTitle) {
                 alert("Title is empty");
-            } else if (!documentTitle.endsWith(suffix)) {
+            } else if (trimmedTitle === suffix) {
+                alert("Title is just the suffix");
+            } else if (!trimmedTitle.endsWith(suffix)) {
                 alert("Title has no suffix");
             }
 

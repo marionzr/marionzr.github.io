@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Must-Have Visual Studio Extensions | marionzr</title>
+    <meta name="description" content="Thoughts on software development, including .NET, Azure, DevOps, and ASP.NET. Sharing lessons learned from building software, leading teams, and tackling everyday challenges.">
+    <meta name="author" content="marionzr">
+    <meta name="robots" content="index, follow">
+    <meta property="og:title" content="Mario - Coding, !Coffee, and Content: Not Another Average Dev Blog">
+    <meta property="og:description" content="Thoughts on software development, including .NET, Azure, DevOps, and ASP.NET. Sharing lessons learned from building software, leading teams, and tackling everyday challenges.">
+    <meta property="og:image" content="https://marionzr.github.io/assets/avatar.jpg">
+    <meta property="og:url" content="https://marionzr.github.io">
+    <link rel="icon" href="../assets/icons/favicon.ico" type="image/x-icon">
+    <link rel="canonical" href="https://marionzr.github.io">
+
+    <link id="prism-light" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" disabled />
+    <link id="prism-dark" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-okaidia.min.css" rel="stylesheet" enabled />
+
+    <link rel="stylesheet" href="../css/app.css">
+    <link rel="stylesheet" href="../css/header.css">
+    <link rel="stylesheet" href="../css/footer.css">
+    <link rel="stylesheet" href="../css/article.css">
+    <link rel="stylesheet" href="../css/article-tag-container.css">
+    <link rel="stylesheet" href="../css/article-markdown.css">
+    <link rel="stylesheet" href="../css/article-related-content.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+</head>
+
+<body>
+    <banner id="banner-top"></banner>
+    <header id="header">
+        <div id="header-left"></div>
+        <div id="header-middle"></div>
+        <div id="header-right"></div>
+    </header>
+
+    <main id="main">
+        <banner id="banner-main"></banner>
+        <article id="article">
+            <article-header>
+                <img id="article-header-img" src="../assets/articles/must-have-visual-studio-extensions/53694eba-0ec0-493e-abf3-fd251500ce6b.png" alt="Must-Have Visual Studio Extensions 🧩">
+                <h1 id="article-header-title">Must-Have Visual Studio Extensions</h1>
+                <h2 id="article-header-subtitle">Enhance Code Quality and Streamline Your Workflow in Visual Studio</h2>
+                <div id="article-header-info">
+                    <div id="article-header-info-row">
+                        <div id="article-header-info-left-column">
+                            <div id="article-header-info-matadata">
+                                <img id="article-header-info-matadata-avatar" class="avatar" src="https://avatars.githubusercontent.com/u/47438990?v=4" alt="marionzr's avatar"></a>
+                                <div class="info">
+                                    <p id="article-header-info-matadata-author"><a href="https://www.github.com/marionzr">by marionzr</a> | <date-time id="article-header-info-matadata-created-at"></date-time></p>
+                                    <p id="article-header-info-matadata-reading-time">
+                                        <i class="far fa-clock"></i> <span id="article-header-info-matadata-reading-time-eta"></span> read (<span id="article-header-info-matadata-reading-time-words"></span> words)
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="article-header-info-right-column">
+                            <article-tags>.NET VisualStudio Development Quality Productivity</article-tags>
+                        </div>
+                    </div>
+                </div>
+
+            </article-header>
+            <md-block>
+                As a developer, you know how much time we spend in our IDEs.
+                Optimizing your Visual Studio setup with the right extensions can drastically improve your productivity, code quality, and overall development experience.
+                Whether I'm working on personal projects with the Community edition or building enterprise applications using the Professional edition, these extensions have proven indispensable.
+                The best part? All of them are free and work seamlessly on both editions and some even support older versions of **Visual Studio**.
+
+                Let's dive into my curated list of [Visual Studio extensions](https://marketplace.visualstudio.com/) and how they can enhance your workflow.
+
+                ---
+
+                ## Mandatory Extensions
+
+                ### 1. SonarQube for IDE: Your First Line of Defense for Quality and Secure Code
+
+                [SonarQube](https://marketplace.visualstudio.com/items?itemName=SonarSource.SonarLintforVisualStudio2022) (formerly SonarLint) is an essential tool for developers who value clean and secure code. It's like having a personal code reviewer that continuously analyzes your code for bugs, security vulnerabilities, and code smells.
+
+                Key Benefits:
+
+                - Detects and highlights issues in real-time as you type.
+                - Integrates seamlessly with your existing codebase.
+
+                ![Sonar Detections](../assets/articles/must-have-visual-studio-extensions/9aff7124-9cd3-462b-93f5-70112abc99ef.png)
+
+                By using SonarLint, you ensure your code is of the highest quality before it even reaches your version control system. It's a perfect first layer of defense.
+
+                ### 2. Code Cleanup On Save: Automate Your Formatting
+
+                [Code Cleanup On Save](https://marketplace.visualstudio.com/items?itemName=MadsKristensen.CodeCleanupOnSave) is a game-changer. It automatically applies your Code Cleanup profile every time you save a file, ensuring your code is always clean, formatted, and consistent.
+
+                Key Benefits:
+
+                - Saves time by automating repetitive formatting tasks.
+                - Enforces code style rules defined in your .editorconfig file.
+                - Reduces merge conflicts caused by inconsistent formatting.
+
+                Setup Tip: You'll need to define your Code Cleanup Profile and specify the fixers to apply when saving. This is a one-time configuration but well worth the effort. My recommendation is that you include all available fixers and configure which one should be ignored in the `.editorconfig` file — check out the Resources section at the end of this post for a copy of my `.editorconfig` file.
+
+                ![Code Cleanup Profiles](../assets/articles/must-have-visual-studio-extensions/8da8c965-7cbc-478b-8bf2-b92abd152f88.png)
+
+                ---
+
+                ## Highly Recommended Extensions
+
+                ### 3. Trailing Whitespace Visualizer: Keep Your Files Clean
+
+                [Trailing Whitespace Visualizer](https://marketplace.visualstudio.com/items?itemName=MadsKristensen.TrailingWhitespace64) makes it easy to identify and remove unnecessary trailing whitespace in your files. It highlights trailing spaces in your code, helping you maintain clean files.
+
+                Key Benefits:
+
+                - Improves code readability.
+                - Prevents unnecessary diffs in version control.
+                - Simple but effective in keeping your files tidy.
+
+                ![Whitespace detection](../assets/articles/must-have-visual-studio-extensions/8279e05f-aeeb-4ab7-8fde-846885c78ede.png)
+
+                ### 4. Visual Studio Spell Checker (VS2022 and Later): Keep Your Text Error-Free
+
+                [Visual Studio Spell](https://marketplace.visualstudio.com/items?itemName=EWoodruff.VisualStudioSpellCheckerVS2022andLater) Checker checks the spelling of comments, strings, and plain text as you type or interactively through a tool window. This is a must-have for developers who care about professional and polished code documentation.
+
+                Key Benefits:
+
+                - Prevents spelling errors in comments and documentation.
+                - Provides interactive and real-time spell-checking.
+
+                ![Typos Detected](../assets/articles/must-have-visual-studio-extensions/66b7cf14-a165-4c98-b036-47ed0a95de58.png)
+
+                ### 5. File Differ: Compare Files With Ease
+
+                [File Differ](https://marketplace.visualstudio.com/items?itemName=MadsKristensen.FileDiffer) simplifies comparing files directly from Solution Explorer. This is particularly useful for reviewing changes or debugging issues.
+
+                Key Benefits:
+
+                - No need to switch to external diff tools.
+                - Integrated directly into the Visual Studio interface.
+
+                ![File Differ Compare Panel](../assets/articles/must-have-visual-studio-extensions/3b56b970-1bcf-4da6-a966-c38d3dfbb6bd.png)
+
+                ### 6. File Explorer: Extend Your Solution Explorer
+
+                [File Explorer](https://marketplace.visualstudio.com/items?itemName=MadsKristensen.WorkflowBrowser) enhances your Solution Explorer by allowing you to access all files and folders from your file system - not just those included in your solution.
+
+                Key Benefits:
+
+                - Quickly access project-related files without leaving Visual Studio.
+                - Navigate through your file system effortlessly.
+                - Makes managing non-code assets a breeze.
+
+                ![System Folder Inside Solution Explorer](../assets/articles/must-have-visual-studio-extensions/a1b1eacf-d71d-410f-ae37-8184f4d8a347.png)
+
+                ---
+
+                ## Nice-to-Have Extensions
+
+                ### 7. Markdown Editor v2: Write Better Documentation
+
+                [Markdown Editor v2](https://marketplace.visualstudio.com/items?itemName=MadsKristensen.MarkdownEditor2) is a full featured Markdown editor with live preview and syntax highlighting. If you're writing README files or technical documentation, this extension is for you.
+
+                Key Benefits:
+
+                - Supports GitHub-flavored Markdown.
+                - Live preview of your Markdown files.
+
+                ---
+
+                ## Optional Extensions
+
+                ### 8. File Info (x64): View File Properties Easily
+
+                [File Info](https://marketplace.visualstudio.com/items?itemName=ShemeerNS.FileInfoOrProperties) is a simple extension that lets you view file properties directly from Solution Explorer.
+
+                Key Benefits:
+
+                - Quick access to file metadata.
+                - No need to leave Visual Studio.
+
+                ![System File Properties Options](../assets/articles/must-have-visual-studio-extensions/c31d08d7-3347-4d29-bd57-cede24392187.png)
+
+                ---
+
+                ## Final Thoughts 💡
+
+                With these extensions, I've optimized my Visual Studio experience to be more productive, clean, and enjoyable. These tools promote clarity, maintainability, and seamless collaboration.
+
+                ## Resources 💾
+
+                You can find a copy of the .editorconfig I use it in my projects [here](https://github.com/marionzr/nzr.nano/blob/main/.editorconfig).
+
+            </md-block>
+            <related-content></related-content>
+            <lets-connect></lets-connect>
+            <discussions></discussions>
+        </article>
+    </main>
+
+    <banner id="banner-bottom"></banner>
+    <footer id="footer">
+        <div id="footer-left"></div>
+        <div id="footer-middle"></div>
+        <div id="footer-right"></div>
+    </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-csharp.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-bash.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-yaml.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-docker.min.js"></script>
+
+    <script src="https://md-block.verou.me/md-block.js" type="module"></script>
+    <script src="../js/markdown-reading-time.js"></script>
+
+    <script src="../js/app.js"></script>
+    <script src="../js/header.js"></script>
+    <script src="../js/footer.js"></script>
+    <script src="../js/sources.js"></script>
+    <script src="../js/sources.local.js" onerror="console.info('☝️ You can ignore this error – no test data was found, so real data will be used instead.')"></script>
+    <script src="../js/article.js"></script>
+    <script src="../js/article-tag-container.js"></script>
+    <script src="../js/article-markdown.js"></script>
+    <script src="../js/article-related-content.js"></script>
+
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "Person",
+        "name": "Mario (marionzr)",
+        "url": "https://marionzr.github.io",
+        "sameAs": [
+        "https://github.com/marionzr",
+        "https://linkedin.com/in/marionzr"
+        ],
+        "jobTitle": "Software Developer & Tech Leader",
+        "knowsAbout": ["C#", ".NET", "Azure DevOps", "Docker", "Kubernetes", "ASP.NET", "Team Leadership", "Hiring Process"]
+    }
+    </script>
+
+    <content style="display: none;">
+.NET Features:
+ASP.NET Core, Blazor, Entity Framework Core, .NET MAUI, Minimal APIs, Native AOT, gRPC, SignalR, System.Text.Json, C# Interop, ML.NET, .NET CLI, Roslyn Compiler, .NET GC, .NET Runtime, .NET SDK, Hot Reload, Source Generators, Nullable Reference Types, Span<T>, Records, Dependency Injection, Task Parallel Library, System.Threading.Channels, System.IO.Pipelines, .NET Aspire, Orleans, .NET Performance Improvements, WebAssembly (WASM), OpenTelemetry in .NETC# Features:
+LINQ, async/await, Records, Pattern Matching, Nullable Reference Types, Top-level Statements, Init-only Setters, Global Using Directives, Implicit Usings, File-scoped Namespaces, Target-typed New Expressions, Primary Constructors, Ref Structs, Default Interface Methods, Local Functions, Static Local Functions, Deconstruction, Tuples, Switch Expressions, Covariant Returns, String Interpolation, Span<T>, Unsafe Code, Function Pointers, Source Generators, Dynamic Types, Expression-bodied Members, Indexes and Ranges, Required Members, Collection ExpressionsAzure Features:
+Azure Functions, Azure App Service, Azure Kubernetes Service (AKS), Azure DevOps, Azure Blob Storage, Azure SQL Database, Azure Cosmos DB, Azure Event Grid, Azure Service Bus, Azure Logic Apps, Azure API Management, Azure Virtual Machines, Azure Load Balancer, Azure Front Door, Azure CDN, Azure Cognitive Services, Azure OpenAI Service, Azure AI Search, Azure Monitor, Azure Application Insights, Azure Sentinel, Azure Bastion, Azure Firewall, Azure AD B2C, Azure Key Vault, Azure Policy, Azure Private Link, Azure Data Factory, Azure Synapse Analytics, Azure PurviewDevOps Features:
+CI/CD Pipelines, GitHub Actions, Azure DevOps Pipelines, Terraform, Ansible, Kubernetes Helm, Docker Compose, GitOps, Infrastructure as Code (IaC), Secrets Management, Feature Flags, Canary Releases, Blue-Green Deployments, Rolling Updates, Chaos Engineering, Automated Testing, Load Testing, Shift-Left Security, Security as Code, Trunk-Based Development, Branch Policies, Code Reviews, Self-hosted Agents, Multi-stage Pipelines, YAML Pipelines, Artifact Management, Release Gates, Observability, Service Mesh, SRE PracticesDocker Features:
+Containerization, Multi-stage Builds, Docker Compose, Docker Swarm, Dockerfile, BuildKit, Docker Volumes, Docker Networks, Docker Secrets, Docker Configs, Overlay Networks, Container Orchestration, Health Checks, Namespaces and Cgroups, Image Layer Caching, Docker Logs, Docker Registry, Podman Compatibility, Containerd Integration, Docker Security Scanning, Rootless Mode, Buildx, Multi-platform Builds, GPU Support, Docker PluginsKubernetes Features:
+Pods, Deployments, ReplicaSets, StatefulSets, DaemonSets, ConfigMaps, Secrets, Persistent Volumes, Persistent Volume Claims, Horizontal Pod Autoscaler, Vertical Pod Autoscaler, Cluster Autoscaler, Node Affinity, Taints and Tolerations, Service Mesh, Ingress, Network Policies, Helm Charts, Operators, Custom Resource Definitions (CRDs), Role-based Access Control (RBAC), Namespaces, API Aggregation, Sidecar Containers, Pod Disruption Budgets, Init Containers, Multi-cluster Management, Service Discovery, Kubernetes Dashboard, CSI Drivers, Kubernetes Federation
+    </content>
+</body>
+
+</html>
+<!--
+.NET Features:
+ASP.NET Core, Blazor, Entity Framework Core, .NET MAUI, Minimal APIs, Native AOT, gRPC, SignalR, System.Text.Json, C# Interop, ML.NET, .NET CLI, Roslyn Compiler, .NET GC, .NET Runtime, .NET SDK, Hot Reload, Source Generators, Nullable Reference Types, Span<T>, Records, Dependency Injection, Task Parallel Library, System.Threading.Channels, System.IO.Pipelines, .NET Aspire, Orleans, .NET Performance Improvements, WebAssembly (WASM), OpenTelemetry in .NETC# Features:
+LINQ, async/await, Records, Pattern Matching, Nullable Reference Types, Top-level Statements, Init-only Setters, Global Using Directives, Implicit Usings, File-scoped Namespaces, Target-typed New Expressions, Primary Constructors, Ref Structs, Default Interface Methods, Local Functions, Static Local Functions, Deconstruction, Tuples, Switch Expressions, Covariant Returns, String Interpolation, Span<T>, Unsafe Code, Function Pointers, Source Generators, Dynamic Types, Expression-bodied Members, Indexes and Ranges, Required Members, Collection ExpressionsAzure Features:
+Azure Functions, Azure App Service, Azure Kubernetes Service (AKS), Azure DevOps, Azure Blob Storage, Azure SQL Database, Azure Cosmos DB, Azure Event Grid, Azure Service Bus, Azure Logic Apps, Azure API Management, Azure Virtual Machines, Azure Load Balancer, Azure Front Door, Azure CDN, Azure Cognitive Services, Azure OpenAI Service, Azure AI Search, Azure Monitor, Azure Application Insights, Azure Sentinel, Azure Bastion, Azure Firewall, Azure AD B2C, Azure Key Vault, Azure Policy, Azure Private Link, Azure Data Factory, Azure Synapse Analytics, Azure PurviewDevOps Features:
+CI/CD Pipelines, GitHub Actions, Azure DevOps Pipelines, Terraform, Ansible, Kubernetes Helm, Docker Compose, GitOps, Infrastructure as Code (IaC), Secrets Management, Feature Flags, Canary Releases, Blue-Green Deployments, Rolling Updates, Chaos Engineering, Automated Testing, Load Testing, Shift-Left Security, Security as Code, Trunk-Based Development, Branch Policies, Code Reviews, Self-hosted Agents, Multi-stage Pipelines, YAML Pipelines, Artifact Management, Release Gates, Observability, Service Mesh, SRE PracticesDocker Features:
+Containerization, Multi-stage Builds, Docker Compose, Docker Swarm, Dockerfile, BuildKit, Docker Volumes, Docker Networks, Docker Secrets, Docker Configs, Overlay Networks, Container Orchestration, Health Checks, Namespaces and Cgroups, Image Layer Caching, Docker Logs, Docker Registry, Podman Compatibility, Containerd Integration, Docker Security Scanning, Rootless Mode, Buildx, Multi-platform Builds, GPU Support, Docker PluginsKubernetes Features:
+Pods, Deployments, ReplicaSets, StatefulSets, DaemonSets, ConfigMaps, Secrets, Persistent Volumes, Persistent Volume Claims, Horizontal Pod Autoscaler, Vertical Pod Autoscaler, Cluster Autoscaler, Node Affinity, Taints and Tolerations, Service Mesh, Ingress, Network Policies, Helm Charts, Operators, Custom Resource Definitions (CRDs), Role-based Access Control (RBAC), Namespaces, API Aggregation, Sidecar Containers, Pod Disruption Budgets, Init Containers, Multi-cluster Management, Service Discovery, Kubernetes Dashboard, CSI Drivers, Kubernetes Federation
+-->
