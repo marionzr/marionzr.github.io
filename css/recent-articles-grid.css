@@ -23,10 +23,9 @@
     border-radius: 8px;
     overflow: hidden;
     transition: transform 0.2s ease;
-    height: 100%;
     position: relative;
-
-    max-height: 160px;
+    min-height: 8.5rem;
+    max-height: 8.5rem;
 }
 
 .recent-articles-grid-previous-articles-card {

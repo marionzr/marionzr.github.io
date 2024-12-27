@@ -15,7 +15,7 @@
             const content = document.createElement('div');
             content.className = 'recent-articles-grid-article-content';
 
-            const dateTime = article.date ?
+            const dateTime = article.created_at ?
                 `<date-time class="recent-articles-grid-article-date">${app.formatDate(new Date(article.created_at))}</date-time>` : '';
             content.innerHTML = `
                 <a href="${article.filename}">
@@ -57,8 +57,9 @@
             gridContainer.innerHTML = '';
 
             const articles = await sources.getArticlesMetaDataAsync();
+            const sortedArticles = [...articles].sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
 
-            articles
+            sortedArticles
                 .slice(0, ARTICLES_TO_SHOW)
                 .forEach(article => {
                     const card = createArticleCard(article);
@@ -70,8 +71,8 @@
 
             const previousArticlesCard = createArticleCard({
                 title: " Previous articles " + '<i class="far fa-newspaper fa-lg"></i>',
-                subtitle: "I'm turning my ideas into bite-sized articles – stay tuned for more!<p>In the meantime, check out my previous posts.</p>",
-                date: null,
+                subtitle: "I'm turning my ideas into bite-sized articles – stay tuned for more!<p><small>In the meantime, check out my previous articles.<small></p>",
+                date: articles.created_at,
                 filename: "./articles.html"
             });
 
