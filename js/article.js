@@ -178,5 +178,5 @@ function getHomeLink() {
 }
 
 function getArticlesLink() {
-    return './articles.html';
+    return '../articles.html';
 }

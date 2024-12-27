@@ -39,7 +39,7 @@
                 image.alt = article.title;
                 image.loading = 'lazy';
 
-                image.addEventListener('click', () => window.location.href = article.href);
+                image.addEventListener('click', () => window.location.href = article.filename);
                 card.appendChild(image);
             }
 
