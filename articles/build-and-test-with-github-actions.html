@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Build and Test with GitHub Actions | marionzr</title>
+    <meta name="description" content="Thoughts on software development, including .NET, Azure, DevOps, and ASP.NET. Sharing lessons learned from building software, leading teams, and tackling everyday challenges.">
+    <meta name="author" content="marionzr">
+    <meta name="robots" content="index, follow">
+    <meta property="og:title" content="Mario - Coding, !Coffee, and Content: Not Another Average Dev Blog">
+    <meta property="og:description" content="Thoughts on software development, including .NET, Azure, DevOps, and ASP.NET. Sharing lessons learned from building software, leading teams, and tackling everyday challenges.">
+    <meta property="og:image" content="https://marionzr.github.io/assets/img/avatar.jpg">
+    <meta property="og:url" content="https://marionzr.github.io">
+    <link rel="icon" href="../assets/icons/favicon.ico" type="image/x-icon">
+    <link rel="canonical" href="https://marionzr.github.io">
+
+    <link id="prism-light" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" disabled />
+    <link id="prism-dark" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-okaidia.min.css" rel="stylesheet" enabled />
+
+    <link rel="stylesheet" href="../css/app.css">
+    <link rel="stylesheet" href="../css/header.css">
+    <link rel="stylesheet" href="../css/footer.css">
+    <link rel="stylesheet" href="../css/article.css">
+    <link rel="stylesheet" href="../css/article-tag-container.css">
+    <link rel="stylesheet" href="../css/article-markdown.css">
+    <link rel="stylesheet" href="../css/article-related-content.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+</head>
+
+<body>
+    <banner id="banner-top"></banner>
+    <header id="header">
+        <div id="header-left"></div>
+        <div id="header-middle"></div>
+        <div id="header-right"></div>
+    </header>
+
+    <main id="main">
+        <banner id="banner-main"></banner>
+        <article id="article">
+            <article-header>
+                <img id="article-header-img" src="../assets/articles/build-and-test-with-github-actions/63513a04-6ba6-498e-856e-e7ec0eb5e3b9.png" alt="ACME DevOps - Build and Test">
+                <h1 id="article-header-title">Build and Test with GitHub Actions</h1>
+                <h2 id="article-header-subtitle">Automating Your Build and Test Process Using GitHub Actions</h2>
+                <div id="article-header-info">
+                    <div id="article-header-info-row">
+                        <div id="article-header-info-left-column">
+                            <div id="article-header-info-matadata">
+                                <img id="article-header-info-matadata-avatar" class="avatar" src="../assets/img/avatar.jpg" alt="marionzr's avatar"></a>
+                                <div class="info">
+                                    <p id="article-header-info-matadata-author"><a href="https://www.github.com/marionzr">by marionzr</a> | <date-time id="article-header-info-matadata-created-at"></date-time></p>
+                                    <p id="article-header-info-matadata-reading-time">
+                                        <i class="far fa-clock"></i> <span id="article-header-info-matadata-reading-time-eta"></span> read (<span id="article-header-info-matadata-reading-time-words"></span> words)
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="article-header-info-right-column">
+                            <article-tags>.NET GitHub CI/CD DevOps Quality Testing ACME</article-tags>
+                        </div>
+                    </div>
+                </div>
+
+            </article-header>
+            <md-block>
+                Modern software development thrives on automation. To keep up with the fast pace of delivery while ensuring quality, a robust Continuous Integration (CI) process is essential.
+
+                In this article, I'll walk you through how I set up a GitHub Actions workflow to automate the process of building and testing the Nzr.Acme solution. This not only streamlines development but also enforces stricter code quality standards.
+
+                This is the third article in the "DevOps Days" series for the Acme project. If you missed the previous one, check the **Related contents** at the end of this page.
+
+                ---
+
+                ## Understanding GitHub Actions
+
+                Before I dive into the details, let's briefly explore what GitHub Actions are. GitHub Actions enable developers to automate workflows directly in their GitHub repositories. They provide a powerful way to define events (like pushes or pull requests) that trigger specific workflows, ensuring reliable CI/CD processes.
+
+                ---
+
+                ## Building the Workflow
+
+                The GitHub Actions workflow I created for Nzr.Acme is designed to build and test the solution automatically whenever changes are made to the `main` branch or a pull request targets it. Let's take a closer look at the structure of this workflow:
+
+                ### Head: Name and Triggers
+
+                ```yaml
+                name: Build & Test the Solution
+
+                # This GitHub Actions workflow automates the process of building and testing the solution.
+                # It ensures that every push or pull request targeting the 'main' branch meets build and test quality standards.
+                # The workflow reduces manual effort, increases reliability, and provides faster feedback to developers during the CI process.
+
+                on: # Triggers
+                push:
+                    branches:
+                    - main
+                pull_request:
+                    branches:
+                    - main
+                ```
+
+                The head of the workflow defines its purpose and specifies the events that trigger it:
+
+                - **Name**: The workflow is named `Build & Test the Solution` to clearly indicate its purpose.
+                - **Triggers**: The workflow listens for two events: pushes to the `main` branch and pull requests targeting the `main` branch. This ensures that any changes to critical branches are verified before merging.
+
+                ### Jobs: Build and Test
+
+                ```yaml
+                jobs:
+                build-and-analyze:
+                    runs-on: ubuntu-latest
+                ```
+
+                The workflow contains a single job, `build-and-test`, which runs on an ubuntu-latest virtual machine. This job is divided into six steps, each with a specific purpose:
+
+                #### Step 1: Checkout Code
+
+                ```yaml
+                steps:
+                    # Step 1: Checkout the code with full history
+                    - name: Checkout code
+                    uses: actions/checkout@v3
+                ```
+
+                This step uses the `actions/checkout` action to clone the repository onto the runner.
+
+                #### Step 2: Set Up .NET
+
+                ```yaml
+                # Step 2: Set up .NET
+                    - name: Set up .NET
+                    uses: actions/setup-dotnet@v3
+                    with:
+                        dotnet-version: '9.0'
+                ```
+
+                The `actions/setup-dotnet` action sets up the required .NET runtime and SDK on the runner. Here, I've specified .NET version 9.0 to align with the project requirements.
+
+                #### Step 3: Cache NuGet Packages
+
+                ```yaml
+                # Step 3: Cache NuGet packages
+                    - name: Cache NuGet packages
+                    uses: actions/cache@v3
+                    with:
+                        path: ~/.nuget/packages
+                        key: ${{ runner.os }}-nuget-${{ hashFiles('**/*.csproj', '**/*.fsproj', '**/global.json') }}
+                        restore-keys: |
+                        ${{ runner.os }}-nuget-
+                ```
+
+                Caching NuGet packages speeds up future builds by preventing redundant downloads. This step uses a hash of relevant files (like `.csproj` and `global.json`) to determine whether to restore the cache or fetch fresh packages.
+
+                #### Step 4: Restore Dependencies
+
+                ```yaml
+                # Step 4: Restore dependencies with fail-fast
+                    - name: Restore dependencies
+                    run: dotnet restore || exit 1
+                ```
+
+                #### Step 5: Build Solution
+
+                ```yaml
+                # Step 5: Build the solution
+                    - name: Build solution
+                    run: dotnet build --no-restore --configuration Release
+                ```
+
+                The `dotnet build` command compiles the solution using the `Release` configuration. The `--no-restore` flag ensures that previously restored dependencies are not restored again, improving efficiency.
+
+                #### Step 6: Run Tests
+
+                ```yaml
+                # Step 6: Run tests
+                    - name: Run tests
+                    run: dotnet test --no-build --configuration Release
+                ```
+
+                Finally, the `dotnet test` command executes all tests in the solution. The `--no-build` flag skips the build step since the solution has already been built.
+
+                Below is the full file, but for the [most up-to-date version](https://github.com/marionzr/nzr.acme/blob/main/.github/workflows/build-and-test.yml), check it directly on the Nzr.Acme GitHub repository.
+
+                ```yaml
+                name: Build & Test the Solution
+
+                # This GitHub Actions workflow automates the process of building and testing the solution.
+                # It ensures that every push or pull request targeting the 'main' branch meets build and test quality standards.
+                # The workflow reduces manual effort, increases reliability, and provides faster feedback to developers during the CI process.
+
+                on: # Triggers
+                push:
+                    branches:
+                    - main
+                pull_request:
+                    branches:
+                    - main
+
+                jobs:
+                build-and-test:
+                    runs-on: ubuntu-latest
+
+                    steps:
+                    # Step 1: Checkout the code with full history
+                    - name: Checkout code
+                    uses: actions/checkout@v3
+                    with:
+                        fetch-depth: 1
+
+                    # Step 2: Set up .NET
+                    - name: Set up .NET
+                    uses: actions/setup-dotnet@v3
+                    with:
+                        dotnet-version: '9.0'
+
+                    # Step 3: Cache NuGet packages
+                    - name: Cache NuGet packages
+                    uses: actions/cache@v3
+                    with:
+                        path: ~/.nuget/packages
+                        key: ${{ runner.os }}-nuget-${{ hashFiles('**/*.csproj', '**/*.fsproj', '**/global.json') }}
+                        restore-keys: |
+                        ${{ runner.os }}-nuget-
+
+                    # Step 4: Restore dependencies with fail-fast
+                    - name: Restore dependencies
+                    run: dotnet restore || exit 1
+
+                    # Step 5: Build the solution
+                    - name: Build solution
+                    run: dotnet build --no-restore --configuration Release
+
+                    # Step 6: Run tests
+                    - name: Run tests
+                    run: dotnet test --no-build --configuration Release
+                ```
+
+                ---
+
+                ## Automation in Action
+
+                The same commit will trigger the workflow, along with any subsequent commits pushed to the main branch or any new pull request targeting it.
+                A yellow icon appears next to the pull request title, indicating the workflow is in progress.
+                Clicking on it directs you to the Actions page for details.
+
+                <div class="img-small">
+
+                ![Actions in Progress](../assets/articles/build-and-test-with-github-actions/6d4e18fa-0441-409a-a33b-98a1882ac3b9.png)
+
+                </div>
+
+                ![Actions in Progress - Details](../assets/articles/build-and-test-with-github-actions/c7e4bcbd-654d-4c2c-8808-024fd4c08e08.png)
+
+                Upon success, a ✅ green checkmark appears next to the commit title, signifying a completed workflow.
+
+                <div class="img-x-small">
+
+                ![Action Execution Completed](../assets/articles/build-and-test-with-github-actions/3768bb6f-02b5-4f31-a15c-3d30fd9c2cfb.png)
+
+                </div>
+
+                In case of an issue, a ❌ appears next to the commit message, indicating a failed build.
+
+                <div class="img-x-small">
+
+                ![Action Execution Failed](../assets/articles/build-and-test-with-github-actions/c430ec2f-4f93-4f5c-b40c-90be218311cc.png)
+
+                </div>
+                ---
+
+                ## Enforcing Workflow Rules for Consistency
+
+                ![Branch Ruleset](../assets/articles/build-and-test-with-github-actions/ff7f7b83-50e6-4f76-9ce8-26ca5559c971.png)
+
+                To ensure that all changes are validated by this workflow, I updated the repository settings to block direct pushes to the main branch. This enforces the use of pull requests, providing a controlled environment for code review and automated checks. Here are the key settings I configured:
+
+                ### Ruleset: build-and-test-must-pass
+
+                - **Enforcement Status**: Active
+                - **Target Branches**: Default (main)
+
+                ### Branch Rules
+
+                - **Require a Pull Request Before Merging**: I've enabled this to ensure all changes go through a pull request. Since I'm coding solo, I left those two options, highlighted in red, unchecked, but I'd recommend enabling them for team projects.
+
+                ![Pull Request Completion Rules](../assets/articles/build-and-test-with-github-actions/6ad90352-16a9-42a2-873e-2569d68e1b92.png)
+
+                - **Require Status Checks to Pass**: I checked all options here and added the build-and-test workflow to ensure all changes pass tests and build before merging.
+
+                ![Status Check Rules](../assets/articles/build-and-test-with-github-actions/becc0eb6-7e3d-4de3-8f44-6ba293e782be.png)
+
+                ---
+
+                ## Final Thoughts 💡
+
+                By implementing this GitHub Actions workflow and enforcing branch protection rules, we can built a strong CI foundation for the .NET solutions.
+                This automation minimizes manual intervention, reduces errors, and guarantees that every change adheres to high-quality standards.
+
+                In the next article, I will tell you how I introduced another workflow to perform SonarCloud Code Analysis. Stay tuned.
+
+                ## Resources 💾
+
+                The changes mentioned in this article can be found in the repository marionzr/nzr.acme, more specifically in this commit: [b13fb4c](https://github.com/marionzr/nzr.acme/commit/b13fb4ca5a51128e02a6c8c9e22d14aa03c085af)
+
+                If you're new to GitHub Actions, explore their official documentation for a comprehensive introduction.
+                If you find this project useful, consider giving it a ⭐️ on marionzr/nzr.acme and following along as I share more updates. Feedback and contributions are always welcome - let's build something great together!
+            </md-block>
+            <related-content></related-content>
+            <lets-connect></lets-connect>
+            <discussions></discussions>
+        </article>
+    </main>
+
+    <banner id="banner-bottom"></banner>
+    <footer id="footer">
+        <div id="footer-left"></div>
+        <div id="footer-middle"></div>
+        <div id="footer-right"></div>
+    </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-csharp.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-bash.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-yaml.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-docker.min.js"></script>
+
+    <script src="https://md-block.verou.me/md-block.js" type="module"></script>
+    <script src="../js/markdown-reading-time.js"></script>
+
+    <script src="../js/app.js"></script>
+    <script src="../js/header.js"></script>
+    <script src="../js/footer.js"></script>
+    <script src="../js/sources.js"></script>
+    <script src="../js/sources.local.js" onerror="console.info('☝️ You can ignore this error – no test data was found, so real data will be used instead.')"></script>
+    <script src="../js/article.js"></script>
+    <script src="../js/article-tag-container.js"></script>
+    <script src="../js/article-markdown.js"></script>
+    <script src="../js/article-related-content.js"></script>
+
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "Person",
+        "name": "Mario (marionzr)",
+        "url": "https://marionzr.github.io",
+        "sameAs": [
+        "https://github.com/marionzr",
+        "https://linkedin.com/in/marionzr"
+        ],
+        "jobTitle": "Software Developer & Tech Leader",
+        "knowsAbout": ["C#", ".NET", "Azure DevOps", "Docker", "Kubernetes", "ASP.NET", "Team Leadership", "Hiring Process"]
+    }
+    </script>
+
+    <content style="display: none;">
+.NET Features:
+ASP.NET Core, Blazor, Entity Framework Core, .NET MAUI, Minimal APIs, Native AOT, gRPC, SignalR, System.Text.Json, C# Interop, ML.NET, .NET CLI, Roslyn Compiler, .NET GC, .NET Runtime, .NET SDK, Hot Reload, Source Generators, Nullable Reference Types, Span<T>, Records, Dependency Injection, Task Parallel Library, System.Threading.Channels, System.IO.Pipelines, .NET Aspire, Orleans, .NET Performance Improvements, WebAssembly (WASM), OpenTelemetry in .NETC# Features:
+LINQ, async/await, Records, Pattern Matching, Nullable Reference Types, Top-level Statements, Init-only Setters, Global Using Directives, Implicit Usings, File-scoped Namespaces, Target-typed New Expressions, Primary Constructors, Ref Structs, Default Interface Methods, Local Functions, Static Local Functions, Deconstruction, Tuples, Switch Expressions, Covariant Returns, String Interpolation, Span<T>, Unsafe Code, Function Pointers, Source Generators, Dynamic Types, Expression-bodied Members, Indexes and Ranges, Required Members, Collection ExpressionsAzure Features:
+Azure Functions, Azure App Service, Azure Kubernetes Service (AKS), Azure DevOps, Azure Blob Storage, Azure SQL Database, Azure Cosmos DB, Azure Event Grid, Azure Service Bus, Azure Logic Apps, Azure API Management, Azure Virtual Machines, Azure Load Balancer, Azure Front Door, Azure CDN, Azure Cognitive Services, Azure OpenAI Service, Azure AI Search, Azure Monitor, Azure Application Insights, Azure Sentinel, Azure Bastion, Azure Firewall, Azure AD B2C, Azure Key Vault, Azure Policy, Azure Private Link, Azure Data Factory, Azure Synapse Analytics, Azure PurviewDevOps Features:
+CI/CD Pipelines, GitHub Actions, Azure DevOps Pipelines, Terraform, Ansible, Kubernetes Helm, Docker Compose, GitOps, Infrastructure as Code (IaC), Secrets Management, Feature Flags, Canary Releases, Blue-Green Deployments, Rolling Updates, Chaos Engineering, Automated Testing, Load Testing, Shift-Left Security, Security as Code, Trunk-Based Development, Branch Policies, Code Reviews, Self-hosted Agents, Multi-stage Pipelines, YAML Pipelines, Artifact Management, Release Gates, Observability, Service Mesh, SRE PracticesDocker Features:
+Containerization, Multi-stage Builds, Docker Compose, Docker Swarm, Dockerfile, BuildKit, Docker Volumes, Docker Networks, Docker Secrets, Docker Configs, Overlay Networks, Container Orchestration, Health Checks, Namespaces and Cgroups, Image Layer Caching, Docker Logs, Docker Registry, Podman Compatibility, Containerd Integration, Docker Security Scanning, Rootless Mode, Buildx, Multi-platform Builds, GPU Support, Docker PluginsKubernetes Features:
+Pods, Deployments, ReplicaSets, StatefulSets, DaemonSets, ConfigMaps, Secrets, Persistent Volumes, Persistent Volume Claims, Horizontal Pod Autoscaler, Vertical Pod Autoscaler, Cluster Autoscaler, Node Affinity, Taints and Tolerations, Service Mesh, Ingress, Network Policies, Helm Charts, Operators, Custom Resource Definitions (CRDs), Role-based Access Control (RBAC), Namespaces, API Aggregation, Sidecar Containers, Pod Disruption Budgets, Init Containers, Multi-cluster Management, Service Discovery, Kubernetes Dashboard, CSI Drivers, Kubernetes Federation
+    </content>
+</body>
+
+</html>
+<!--
+.NET Features:
+ASP.NET Core, Blazor, Entity Framework Core, .NET MAUI, Minimal APIs, Native AOT, gRPC, SignalR, System.Text.Json, C# Interop, ML.NET, .NET CLI, Roslyn Compiler, .NET GC, .NET Runtime, .NET SDK, Hot Reload, Source Generators, Nullable Reference Types, Span<T>, Records, Dependency Injection, Task Parallel Library, System.Threading.Channels, System.IO.Pipelines, .NET Aspire, Orleans, .NET Performance Improvements, WebAssembly (WASM), OpenTelemetry in .NETC# Features:
+LINQ, async/await, Records, Pattern Matching, Nullable Reference Types, Top-level Statements, Init-only Setters, Global Using Directives, Implicit Usings, File-scoped Namespaces, Target-typed New Expressions, Primary Constructors, Ref Structs, Default Interface Methods, Local Functions, Static Local Functions, Deconstruction, Tuples, Switch Expressions, Covariant Returns, String Interpolation, Span<T>, Unsafe Code, Function Pointers, Source Generators, Dynamic Types, Expression-bodied Members, Indexes and Ranges, Required Members, Collection ExpressionsAzure Features:
+Azure Functions, Azure App Service, Azure Kubernetes Service (AKS), Azure DevOps, Azure Blob Storage, Azure SQL Database, Azure Cosmos DB, Azure Event Grid, Azure Service Bus, Azure Logic Apps, Azure API Management, Azure Virtual Machines, Azure Load Balancer, Azure Front Door, Azure CDN, Azure Cognitive Services, Azure OpenAI Service, Azure AI Search, Azure Monitor, Azure Application Insights, Azure Sentinel, Azure Bastion, Azure Firewall, Azure AD B2C, Azure Key Vault, Azure Policy, Azure Private Link, Azure Data Factory, Azure Synapse Analytics, Azure PurviewDevOps Features:
+CI/CD Pipelines, GitHub Actions, Azure DevOps Pipelines, Terraform, Ansible, Kubernetes Helm, Docker Compose, GitOps, Infrastructure as Code (IaC), Secrets Management, Feature Flags, Canary Releases, Blue-Green Deployments, Rolling Updates, Chaos Engineering, Automated Testing, Load Testing, Shift-Left Security, Security as Code, Trunk-Based Development, Branch Policies, Code Reviews, Self-hosted Agents, Multi-stage Pipelines, YAML Pipelines, Artifact Management, Release Gates, Observability, Service Mesh, SRE PracticesDocker Features:
+Containerization, Multi-stage Builds, Docker Compose, Docker Swarm, Dockerfile, BuildKit, Docker Volumes, Docker Networks, Docker Secrets, Docker Configs, Overlay Networks, Container Orchestration, Health Checks, Namespaces and Cgroups, Image Layer Caching, Docker Logs, Docker Registry, Podman Compatibility, Containerd Integration, Docker Security Scanning, Rootless Mode, Buildx, Multi-platform Builds, GPU Support, Docker PluginsKubernetes Features:
+Pods, Deployments, ReplicaSets, StatefulSets, DaemonSets, ConfigMaps, Secrets, Persistent Volumes, Persistent Volume Claims, Horizontal Pod Autoscaler, Vertical Pod Autoscaler, Cluster Autoscaler, Node Affinity, Taints and Tolerations, Service Mesh, Ingress, Network Policies, Helm Charts, Operators, Custom Resource Definitions (CRDs), Role-based Access Control (RBAC), Namespaces, API Aggregation, Sidecar Containers, Pod Disruption Budgets, Init Containers, Multi-cluster Management, Service Discovery, Kubernetes Dashboard, CSI Drivers, Kubernetes Federation
+-->

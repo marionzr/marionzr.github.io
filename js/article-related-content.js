@@ -28,6 +28,21 @@
                         icon: "previous",
                         title: "Bootstrapping .NET projects",
                         href: "bootstrapping-dotnet-projects.html",
+                    },
+                    {
+                        icon: "previous",
+                        title: "Build and Test with GitHub Actions",
+                        href: "build-and-test-with-github-actions.html",
+                    }
+                ]
+            },
+            {
+                href: "build-and-test-with-github-actions.html",
+                links: [
+                    {
+                        icon: "previous",
+                        title: "Scaffolding: Create a .NET solution like a pro",
+                        href: "scaffolding-initializing-a-dotnet-solution-like-a-pro.html",
                     }
                 ]
             }
