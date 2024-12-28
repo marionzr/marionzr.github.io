@@ -24,8 +24,8 @@
     overflow: hidden;
     transition: transform 0.2s ease;
     position: relative;
-    min-height: 8.5rem;
-    max-height: 8.5rem;
+    min-height: 9rem;
+    max-height: 9rem;
 }
 
 .recent-articles-grid-previous-articles-card {
@@ -38,7 +38,7 @@
 
 .recent-articles-grid-article-content {
     flex: 1;
-    padding: 0.5rem;
+    padding: 0.2rem;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
@@ -54,14 +54,14 @@
 .recent-articles-grid-article-subtitle {
     font-size: small;
     color: var(--text-color);
-    margin: 0 0 0.5rem 0;
+    margin: 0 0 0.25rem 0;
 }
 
 .recent-articles-grid-article-date {
     font-size: x-small;
     color: var(--text-color);
     margin: 0;
-    margin-top: 0.5rem;
+    margin-top: 0.25rem;
 }
 
 .recent-articles-grid-article-image {

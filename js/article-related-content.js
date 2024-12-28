@@ -30,7 +30,7 @@
                         href: "bootstrapping-dotnet-projects.html",
                     },
                     {
-                        icon: "previous",
+                        icon: "next",
                         title: "Build and Test with GitHub Actions",
                         href: "build-and-test-with-github-actions.html",
                     }
@@ -43,6 +43,21 @@
                         icon: "previous",
                         title: "Scaffolding: Create a .NET solution like a pro",
                         href: "scaffolding-initializing-a-dotnet-solution-like-a-pro.html",
+                    },
+                    {
+                        icon: "next",
+                        title: "Analyze: Integrating SonarQube for better code quality",
+                        href: "analyze-integrating-sonarqube-for-better-code-quality.html",
+                    }
+                ]
+            },
+            {
+                href: "analyze-integrating-sonarqube-for-better-code-quality.html",
+                links: [
+                    {
+                        icon: "previous",
+                        title: "Build and Test with GitHub Actions",
+                        href: "build-and-test-with-github-actions.html",
                     }
                 ]
             }

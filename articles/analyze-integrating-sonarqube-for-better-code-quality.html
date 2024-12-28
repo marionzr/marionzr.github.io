@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Analyze: Integrating SonarQube for better code quality | marionzr</title>
+    <meta name="description" content="Thoughts on software development, including .NET, Azure, DevOps, and ASP.NET. Sharing lessons learned from building software, leading teams, and tackling everyday challenges.">
+    <meta name="author" content="marionzr">
+    <meta name="robots" content="index, follow">
+    <meta property="og:title" content="Mario - Coding, !Coffee, and Content: Not Another Average Dev Blog">
+    <meta property="og:description" content="Thoughts on software development, including .NET, Azure, DevOps, and ASP.NET. Sharing lessons learned from building software, leading teams, and tackling everyday challenges.">
+    <meta property="og:image" content="https://marionzr.github.io/assets/img/avatar.jpg">
+    <meta property="og:url" content="https://marionzr.github.io">
+    <link rel="icon" href="../assets/icons/favicon.ico" type="image/x-icon">
+    <link rel="canonical" href="https://marionzr.github.io">
+
+    <link id="prism-light" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" disabled />
+    <link id="prism-dark" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-okaidia.min.css" rel="stylesheet" enabled />
+
+    <link rel="stylesheet" href="../css/app.css">
+    <link rel="stylesheet" href="../css/header.css">
+    <link rel="stylesheet" href="../css/footer.css">
+    <link rel="stylesheet" href="../css/article.css">
+    <link rel="stylesheet" href="../css/article-tag-container.css">
+    <link rel="stylesheet" href="../css/article-markdown.css">
+    <link rel="stylesheet" href="../css/article-related-content.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+</head>
+
+<body>
+    <banner id="banner-top"></banner>
+    <header id="header">
+        <div id="header-left"></div>
+        <div id="header-middle"></div>
+        <div id="header-right"></div>
+    </header>
+
+    <main id="main">
+        <banner id="banner-main"></banner>
+        <article id="article">
+            <article-header>
+                <img id="article-header-img" src="../assets/articles/analyze-integrating-sonarqube-for-better-code-quality/3d1fbc88-db80-4063-a440-ad18bb73912b.png" alt="ACME DevOps - Analyze">
+                <h1 id="article-header-title">Analyze: Integrating SonarQube for better code quality</h1>
+                <h2 id="article-header-subtitle">A step-by-step guide to integrating SonarCloud with your GitHub CI/CD workflow</h2>
+                <div id="article-header-info">
+                    <div id="article-header-info-row">
+                        <div id="article-header-info-left-column">
+                            <div id="article-header-info-matadata">
+                                <img id="article-header-info-matadata-avatar" class="avatar" src="../assets/img/avatar.jpg" alt="marionzr's avatar"></a>
+                                <div class="info">
+                                    <p id="article-header-info-matadata-author"><a href="https://www.github.com/marionzr">by marionzr</a> | <date-time id="article-header-info-matadata-created-at"></date-time></p>
+                                    <p id="article-header-info-matadata-reading-time">
+                                        <i class="far fa-clock"></i> <span id="article-header-info-matadata-reading-time-eta"></span> read (<span id="article-header-info-matadata-reading-time-words"></span> words)
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="article-header-info-right-column">
+                            <article-tags>.NET GitHub CI/CD DevOps SonarQube Quality ACME</article-tags>
+                        </div>
+                    </div>
+                </div>
+
+            </article-header>
+        </article-header>
+        <md-block>
+            Lacking a proper code analysis tool, teams may struggle with hidden bugs, security risks, and inconsistent code quality, leading to longer review times,
+            increased maintenance costs, and potential issues in production.
+
+            In this article, I'll walk you through how I enhanced the Nzr.Acme solution by integrating GitHub Actions with SonarQube for automated static code analysis.
+
+            This is the fourth article in the "DevOps Days" series for the Acme project. If you missed the previous one check the related content at the end of this page.
+
+            ---
+
+            ## Why SonarQube?
+
+            SonarQube is a powerful platform for continuous code quality and security analysis. It scans your source code, identifies issues, and provides actionable feedback. Integrating SonarQube with your CI pipeline ensures that every commit and pull request is analyzed, keeping your codebase clean and secure.
+
+            ---
+
+            ## Setting Up SonarQube for Your GitHub Repository
+
+            This task is divided into 5 main steps:
+
+            1. Create a SonarQube account and organization.
+            2. Create a SonarQube project for the GitHub repository.
+            3. Testing the Integration with SonarQube
+            4. Fine-tune the analysis scope.
+            5. Prepare the GitHub project to run the workflow.
+
+            I've also added a troubleshooting section for common issues you might encounter. Let's dive in.
+
+            ## Create a SonarQube Account and Organization
+
+            - Head over to [SonarQube](https://www.sonarsource.com/products/sonarcloud/signup/) and sign up using your GitHub account for easy integration.
+            - Once logged in, click **Import an organization**.
+            - You'll be redirected to GitHub to confirm the installation of SonarQube. Choose the **Only select repositories** option, then select your repository. You can update this later if needed.
+
+            ![Repository Selection](../assets/articles/analyze-integrating-sonarqube-for-better-code-quality/9ef2462f-4056-47bb-b0a8-881a4fe42f5c.png)
+
+            - Click **Install** to complete the setup. You'll then be redirected back to SonarCloud.
+            - On the **Create an organization** page, confirm the **Name** and **Key**. The key is a unique identifier needed for your analysis configuration.
+            - Choose a plan. I selected the **Free plan**, which supports up to 50k lines of code for private repositories or unlimited for public ones.
+            - Finally, click **Create Organization**.
+
+            ![Create Organization](../assets/articles/analyze-integrating-sonarqube-for-better-code-quality/ca773518-7679-40e0-9934-ec9e51792a53.png)
+
+            ## Create the SonarQube project for your GitHub repository
+
+            - After creating the organization, go to **My Projects** and click [Analyze new project](https://sonarcloud.io/projects/create).
+
+            - Select your repository from the list:
+
+            ![Analyze Projects](../assets/articles/analyze-integrating-sonarqube-for-better-code-quality/b28890b6-cdb7-4b79-a169-2d6d0a698af2.png)
+
+            - Next, in the **Set up project for Clean as You Code** section:
+            - Choose **Previous version** to compare changes against the previous codebase.
+
+            <div class="img-small">
+
+            ![Set up project for Clean as You Code](../assets/articles/analyze-integrating-sonarqube-for-better-code-quality/7d03875c-6bed-446e-86c3-0a73f772d597.png)
+
+            </div>
+
+            ## Testing the Integration with SonarQube
+
+            BBefore using GitHub Actions, it’s crucial to test the integration manually. This serves as a functional step to verify that everything is working correctly and helps you understand the process better. It also prepares you to troubleshoot any potential issues more effectively.
+
+            Here’s a script to simplify the process. Customize it with your project details, then run it in your terminal. If you prefer to follow SonarQube's instructions, keep the troubleshooting section of this guide handy in case you run into issues.
+
+            ```bash
+            #!/bin/bash
+            dotnet tool install --global dotnet-sonarscanner
+            dotnet sonarscanner begin \
+            -o:"<YOUR_ORGANIZATION>" \
+            -k:"<YOUR_PROJECT_KEY>" \
+            -d:sonar.host.url="https://sonarcloud.io" \
+            -d:sonar.token="&lt;YOUR_SONAR_TOKEN&gt;"
+            dotnet build
+            dotnet sonarscanner end -d:sonar.token="&lt;YOUR_SONAR_TOKEN&gt;"
+            ```
+
+            If everything works correctly, you should see the following output at the end of the process:
+
+            ```bash
+            INFO: More about the report processing at https://sonarcloud.io/api/ce/task?id=XYZ
+            INFO: Sensor cache published successfully
+            INFO: Analysis total time: 13.313 s
+            INFO: ------------------------------------------------------------------------
+            INFO: EXECUTION SUCCESS
+            INFO: ------------------------------------------------------------------------
+            INFO: Total time: 16.653s
+            INFO: Final Memory: 19M/68M
+            INFO: ------------------------------------------------------------------------
+            The SonarScanner CLI has finished
+            14:03:37.725  Post-processing succeeded.
+            ```
+
+            ## Fine-tune the Analysis Scope
+
+            To optimize SonarQube's analysis and prevent it from spending resources on unnecessary files, you can fine-tune the Analysis Scope settings.
+
+            - Navigate to **Administration > General Settings**.
+            - Under the **Analysis Scope section**, look for the option to configure **Source File Exclusions**.
+            - Add any file patterns you want to exclude.
+
+            For my project, I excluded files generated during testing, such as .snap files. This ensures that SonarQube focuses only on relevant source files. If I need to exclude or include additional file types in the future, I can modify these settings without altering the workflow configuration.
+
+            ![Source File Exclusions](../assets/articles/analyze-integrating-sonarqube-for-better-code-quality/daf97c65-8541-45e5-b9fe-30e65d96f4c5.png)
+
+            ## Prepare GitHub to run the workflow
+
+            - Go back to the **Analysis Method** page (you can access this via the **⚙️ Administration** menu) and select **With GitHub Actions**.
+
+            - Navigate to your GitHub repository settings using the link provided in SonarQube (or access https://github.com/&lt;your-user&gt;/&lt;user-repository&gt;/settings/secrets/actions)
+
+            - Click **New repository secret**.
+            - In the Name field, enter SONAR_TOKEN.
+            - In the Value field, enter your SonarQube token.
+
+            - Repeat the process to store the following additional secrets. They will be used later in the workflow:</br>
+            `SONAR_ORGANIZATION_NAME`</br>
+            `SONAR_ORGANIZATION_KEY`
+
+            ![Repository Secrets](../assets/articles/analyze-integrating-sonarqube-for-better-code-quality/1e4fe5f8-76d0-4aa9-9a38-d84aaabf32cc.png)
+
+            - Done. Back to SonarQube - ignore the **Create or update a build file** part, as I will cover that next in this article.
+
+            ## Troubleshooting
+
+            If you see the message at the bottom **User is not member of the organization**, access the [My Organizations](https://sonarcloud.io/account/organizations) page, click on your organization, and then access the permission in the menu Administration. There, locate your user and give all the permissions.
+
+            ![Permissions](../assets/articles/analyze-integrating-sonarqube-for-better-code-quality/b643b963-b7b1-43ed-8774-e7b368b94394.png)
+
+            - If you used the command snippets from SonarQube on bash (I'm using GitBash on Windows 11), it seems their command snippets are broken.
+
+            ![Execute the Scanner](../assets/articles/analyze-integrating-sonarqube-for-better-code-quality/644777e4-ad27-477c-84e3-7785397f1383.png)
+
+            ```bash
+            #!/bin/bash
+            $ dotnet sonarscanner begin \
+            /o:"your_org_name" \
+            /k:"your_key" \
+            /d:sonar.host.url="https://sonarcloud.io" \
+            /d:sonar.token="your_token"
+            SonarScanner for MSBuild 9.0.2
+            Using the .NET Core version of the Scanner for MSBuild
+            Pre-processing started.
+            Preparing working directories...
+            14:30:05.92  Unrecognized command line argument: o:your_org_name
+            14:30:05.925  Unrecognized command line argument: k:your_key
+            14:30:05.925  Unrecognized command line argument: d:sonar.host.url=https://sonarcloud.io
+            14:30:05.925  Unrecognized command line argument: d:sonar.token=your_token
+            14:30:05.925  A required argument is missing: /key:[SonarQube/SonarCloud project key]
+            14:30:05.926  Expecting at least the following command line argument:
+            - SonarQube/SonarCloud project key
+            The full path to a settings file can also be supplied. If it is not supplied, the exe will attempt to locate a default settings file in the same directory as the SonarQube Scanner for MSBuild.
+            Use '/?' or '/h' to see the help message.
+            14:30:05.926  Pre-processing failed. Exit code: 1
+
+            # Even the help suggests using /
+            $ dotnet sonarscanner begin /?
+            SonarScanner for MSBuild 9.0.2
+            Using the .NET Core version of the Scanner for MSBuild
+
+            Usage on SonarQube:
+
+            SonarScanner.MSBuild [begin|end] /key:project_key [/name:project_name] [/version:project_version] [/s:settings_file] [/d:sonar.token=token] [/d:sonar.{property_name}=value]
+
+            Usage on SonarCloud:
+
+            SonarScanner.MSBuild [begin|end] /key:project_key [/name:project_name] [/version:project_version] [/s:settings_file] [/d:sonar.login=token] [/d:sonar.{property_name}=value]
+            ```
+
+            If you encounter this issue, use my script. Note that I replaced **'/'** with '-' when defining parameters.
+
+            ---
+
+            ## Building the Workflow
+
+            The GitHub Actions workflow for building and analyzing the solution integrates SonarCloud to run static code analysis. This workflow ensures that every change is evaluated for code quality and security vulnerabilities. Here's how it works:
+
+            ### Head: Name and Triggers
+
+            At the top of the script, we define the workflow's name and triggers:
+
+            ```yaml
+            name: Build & Analyze the Solution
+
+            # This GitHub Actions workflow automates building and analyzing the solution with SonarCloud.
+            # It integrates static code analysis into the CI pipeline, ensuring code quality and identifying potential issues.
+            # The workflow runs on every push or pull request targeting the 'main' branch, providing actionable insights.
+
+            on: # Triggers
+            push:
+                branches:
+                - main
+            pull_request:
+                branches:
+                - main
+
+            jobs:
+            build-and-analyze:
+                runs-on: ubuntu-latest
+
+                steps:
+            ```
+
+            The head of the workflow defines its purpose and specifies the events that trigger it:
+
+            - **Name**: The workflow is named Build & Analyze the Solution to clearly indicate its purpose.
+            - **Triggers**: The workflow listens for two events: pushes to the main branch and pull requests targeting the main branch. This ensures that any changes to critical branches are verified before merging.
+
+            ### Jobs: Build and Test
+
+            ```yaml
+            jobs:
+            build-and-analyze:
+                runs-on: ubuntu-latest
+            ```
+
+            The workflow contains a single job, `build-and-test`, which runs on an `ubuntu-latest` virtual machine. This job is divided into six steps, each with a specific purpose.
+
+            ### Step 1: Checkout Code
+
+            ```yaml
+            steps:
+                # Step 1: Checkout the code with full history
+                - name: Checkout code
+                uses: actions/checkout@v3
+                with:
+                    fetch-depth: 1
+            ```
+
+            The `actions/checkout` action fetches the repository's code onto the runner. This step is crucial for making the codebase available for subsequent steps.
+
+            ### Step 2: Set Up .NET
+
+            ```yaml
+                # Step 2: Set up .NET
+                - name: Set up .NET
+                    uses: actions/setup-dotnet@v3
+                    with:
+                    dotnet-version: '9.0'
+            ```
+
+            The `actions/setup-dotnet` action sets up the required .NET runtime and SDK on the runner. Here, I've specified .NET version 9.0 to align with the project requirements.
+
+            ### Step 3: Cache NuGet Packages
+
+            ```yaml
+                # Step 3: Cache NuGet packages
+                - name: Cache NuGet packages
+                    uses: actions/cache@v3
+                    with:
+                    path: ~/.nuget/packages
+                    key: ${{ runner.os }}-nuget-${{ hashFiles('**/*.csproj', '**/*.fsproj', '**/global.json') }}
+                    restore-keys: |
+                        ${{ runner.os }}-nuget-
+            ```
+
+            Caching NuGet packages speeds up builds by storing dependencies. The cache key is generated based on the operating system and the project's configuration files.
+
+            ### Step 4: Restore Dependencies
+
+            ```yaml
+                # Step 4: Restore dependencies
+                - name: Restore dependencies
+                    run: dotnet restore
+            ```
+
+            This step restores the dependencies required for the solution using the dotnet restore command. The `|| exit 1` is for fail fast approach: If any errors occur, the step fails immediately to avoid unnecessary builds.
+
+            ### Step 5: Build Solution
+
+            ```yaml
+                # Step 5: Build the solution
+                - name: Build solution
+                    run: dotnet build --no-restore --configuration Release
+            ```
+
+            This first `dotnet build --no-restore --configuration Release` step before starting SonarCloud analysis is there to ensure that if the build fails, you don't waste any units on SonarCloud analysis. If the build is broken, the SonarCloud analysis wouldn't even be triggered, so it's a good safety measure to check the build first before committing resources to the analysis.
+
+            ### Step 6: Install SonarScanner for .NET
+
+            ```yaml
+                # Step 6: Install SonarScanner for .NET
+                - name: Install SonarScanner for .NET
+                    run: dotnet tool install --global dotnet-sonarscanner
+            ```
+
+            The SonarScanner tool is installed globally on the runner. This tool is essential for performing the SonarCloud analysis.
+
+            ```yaml
+                # Step 7: Run SonarCloud analysis
+                - name: Start SonarCloud analysis
+                    env:
+                    SONAR_ORGANIZATION_NAME: ${{ secrets.SONAR_ORGANIZATION_NAME }}
+                    SONAR_ORGANIZATION_KEY: ${{ secrets.SONAR_ORGANIZATION_KEY }}
+                    SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+                    run: |
+                    dotnet sonarscanner begin \
+                    -o:"${SONAR_ORGANIZATION_NAME}" \
+                    -k:"${SONAR_ORGANIZATION_KEY}" \
+                    -d:sonar.host.url="https://sonarcloud.io" \
+                    -d:sonar.login="${SONAR_TOKEN}"
+
+                - name: Build project for SonarCloud
+                    run: dotnet build --no-restore --configuration Release
+
+                - name: Finalize SonarCloud analysis
+                    env:
+                    SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+                    run: dotnet sonarscanner end -d:sonar.login="${SONAR_TOKEN}"
+            ```
+
+            The SonarCloud analysis is divided into three steps:
+
+            1. **Start Analysis**: The dotnet sonarscanner begin command initializes the SonarCloud analysis, using the SONAR_TOKEN secret for authentication.
+            2. **Build Project**: The project is built again to collect data for analysis.
+            3. **Finalize Analysis**: The dotnet sonarscanner end command completes the analysis and sends the results to SonarCloud.
+
+            Here's a copy of the full file, but I recommend checking the [latest version](https://github.com/marionzr/nzr.acme/blob/main/.github/workflows/build-and-analyze.yml) directly on the Nzr.Acme GitHub repository for any updates.
+
+            ```yaml
+            name: Build & Analyze the Solution
+
+            # This GitHub Actions workflow automates building and analyzing the solution with SonarCloud.
+            # It integrates static code analysis into the CI pipeline, ensuring code quality and identifying potential issues.
+            # The workflow runs on every push or pull request targeting the 'main' branch, providing actionable insights.
+
+            on: # Triggers
+            push:
+                branches:
+                - main
+            pull_request:
+                branches:
+                - main
+
+            jobs:
+            build-and-analyze:
+                runs-on: ubuntu-latest
+
+                steps:
+                # Step 1: Checkout the code with full history
+                - name: Checkout code
+                    uses: actions/checkout@v3
+
+                # Step 2: Set up .NET
+                - name: Set up .NET
+                    uses: actions/setup-dotnet@v3
+                    with:
+                    dotnet-version: '9.0'
+
+                # Step 3: Cache NuGet packages
+                - name: Cache NuGet packages
+                    uses: actions/cache@v3
+                    with:
+                    path: ~/.nuget/packages
+                    key: ${{ runner.os }}-nuget-${{ hashFiles('**/*.csproj', '**/*.fsproj', '**/global.json') }}
+                    restore-keys: |
+                        ${{ runner.os }}-nuget-
+
+                # Step 4: Restore dependencies
+                - name: Restore dependencies
+                    run: dotnet restore
+
+                # Step 5: Build the solution
+                - name: Build solution
+                    run: dotnet build --no-restore --configuration Release
+
+                # Step 6: Install SonarScanner for .NET
+                - name: Install SonarScanner for .NET
+                    run: dotnet tool install --global dotnet-sonarscanner
+
+                # Step 7: Run SonarCloud analysis
+                - name: Start SonarCloud analysis
+                    env:
+                    SONAR_ORGANIZATION_NAME: ${{ secrets.SONAR_ORGANIZATION_NAME }}
+                    SONAR_ORGANIZATION_KEY: ${{ secrets.SONAR_ORGANIZATION_KEY }}
+                    SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+                    run: |
+                    dotnet sonarscanner begin \
+                    -o:"${SONAR_ORGANIZATION_NAME}" \
+                    -k:"${SONAR_ORGANIZATION_KEY}" \
+                    -d:sonar.host.url="https://sonarcloud.io" \
+                    -d:sonar.login="${SONAR_TOKEN}"
+
+                - name: Build project for SonarCloud
+                    run: dotnet build --no-restore --configuration Release
+
+                - name: Finalize SonarCloud analysis
+                    env:
+                    SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+                    run: dotnet sonarscanner end -d:sonar.login="${SONAR_TOKEN}"
+            ```
+
+            ---
+
+            ## Final Thoughts 💡
+
+            Integrating SonarCloud into the CI pipeline has been a significant step forward for Nzr.Acme. With automated static code analysis, I can confidently identify and address code quality issues early in the development cycle. Combined with the Build & Test workflow, this setup provides a solid foundation for delivering high-quality software. After implementing these changes, I felt more comfortable increasing the pace of development, knowing that both build and code quality checks were in place.
+
+            ## Resources 💾
+
+            The changes mentioned in this article can be found in the repository marionzr/nzr.acme, more specifically in this commit: [3c497979](https://github.com/marionzr/nzr.acme/commit/3c49797ae270eb37612326199a631cf967bdd0e0)
+
+            If you find this project useful, consider giving it a ⭐️ on marionzr/nzr.acme and following along as I share more updates. Feedback and contributions are always welcome - let's build something great together!
+        </md-block>
+            <related-content></related-content>
+            <lets-connect></lets-connect>
+            <discussions></discussions>
+        </article>
+    </main>
+
+    <banner id="banner-bottom"></banner>
+    <footer id="footer">
+        <div id="footer-left"></div>
+        <div id="footer-middle"></div>
+        <div id="footer-right"></div>
+    </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-csharp.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-bash.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-yaml.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-docker.min.js"></script>
+
+    <script src="https://md-block.verou.me/md-block.js" type="module"></script>
+    <script src="../js/markdown-reading-time.js"></script>
+
+    <script src="../js/app.js"></script>
+    <script src="../js/header.js"></script>
+    <script src="../js/footer.js"></script>
+    <script src="../js/sources.js"></script>
+    <script src="../js/sources.local.js" onerror="console.info('☝️ You can ignore this error – no test data was found, so real data will be used instead.')"></script>
+    <script src="../js/article.js"></script>
+    <script src="../js/article-tag-container.js"></script>
+    <script src="../js/article-markdown.js"></script>
+    <script src="../js/article-related-content.js"></script>
+
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "Person",
+        "name": "Mario (marionzr)",
+        "url": "https://marionzr.github.io",
+        "sameAs": [
+        "https://github.com/marionzr",
+        "https://linkedin.com/in/marionzr"
+        ],
+        "jobTitle": "Software Developer & Tech Leader",
+        "knowsAbout": ["C#", ".NET", "Azure DevOps", "Docker", "Kubernetes", "ASP.NET", "Team Leadership", "Hiring Process"]
+    }
+    </script>
+
+    <content style="display: none;">
+.NET Features:
+ASP.NET Core, Blazor, Entity Framework Core, .NET MAUI, Minimal APIs, Native AOT, gRPC, SignalR, System.Text.Json, C# Interop, ML.NET, .NET CLI, Roslyn Compiler, .NET GC, .NET Runtime, .NET SDK, Hot Reload, Source Generators, Nullable Reference Types, Span<T>, Records, Dependency Injection, Task Parallel Library, System.Threading.Channels, System.IO.Pipelines, .NET Aspire, Orleans, .NET Performance Improvements, WebAssembly (WASM), OpenTelemetry in .NETC# Features:
+LINQ, async/await, Records, Pattern Matching, Nullable Reference Types, Top-level Statements, Init-only Setters, Global Using Directives, Implicit Usings, File-scoped Namespaces, Target-typed New Expressions, Primary Constructors, Ref Structs, Default Interface Methods, Local Functions, Static Local Functions, Deconstruction, Tuples, Switch Expressions, Covariant Returns, String Interpolation, Span<T>, Unsafe Code, Function Pointers, Source Generators, Dynamic Types, Expression-bodied Members, Indexes and Ranges, Required Members, Collection ExpressionsAzure Features:
+Azure Functions, Azure App Service, Azure Kubernetes Service (AKS), Azure DevOps, Azure Blob Storage, Azure SQL Database, Azure Cosmos DB, Azure Event Grid, Azure Service Bus, Azure Logic Apps, Azure API Management, Azure Virtual Machines, Azure Load Balancer, Azure Front Door, Azure CDN, Azure Cognitive Services, Azure OpenAI Service, Azure AI Search, Azure Monitor, Azure Application Insights, Azure Sentinel, Azure Bastion, Azure Firewall, Azure AD B2C, Azure Key Vault, Azure Policy, Azure Private Link, Azure Data Factory, Azure Synapse Analytics, Azure PurviewDevOps Features:
+CI/CD Pipelines, GitHub Actions, Azure DevOps Pipelines, Terraform, Ansible, Kubernetes Helm, Docker Compose, GitOps, Infrastructure as Code (IaC), Secrets Management, Feature Flags, Canary Releases, Blue-Green Deployments, Rolling Updates, Chaos Engineering, Automated Testing, Load Testing, Shift-Left Security, Security as Code, Trunk-Based Development, Branch Policies, Code Reviews, Self-hosted Agents, Multi-stage Pipelines, YAML Pipelines, Artifact Management, Release Gates, Observability, Service Mesh, SRE PracticesDocker Features:
+Containerization, Multi-stage Builds, Docker Compose, Docker Swarm, Dockerfile, BuildKit, Docker Volumes, Docker Networks, Docker Secrets, Docker Configs, Overlay Networks, Container Orchestration, Health Checks, Namespaces and Cgroups, Image Layer Caching, Docker Logs, Docker Registry, Podman Compatibility, Containerd Integration, Docker Security Scanning, Rootless Mode, Buildx, Multi-platform Builds, GPU Support, Docker PluginsKubernetes Features:
+Pods, Deployments, ReplicaSets, StatefulSets, DaemonSets, ConfigMaps, Secrets, Persistent Volumes, Persistent Volume Claims, Horizontal Pod Autoscaler, Vertical Pod Autoscaler, Cluster Autoscaler, Node Affinity, Taints and Tolerations, Service Mesh, Ingress, Network Policies, Helm Charts, Operators, Custom Resource Definitions (CRDs), Role-based Access Control (RBAC), Namespaces, API Aggregation, Sidecar Containers, Pod Disruption Budgets, Init Containers, Multi-cluster Management, Service Discovery, Kubernetes Dashboard, CSI Drivers, Kubernetes Federation
+    </content>
+</body>
+
+</html>
+<!--
+.NET Features:
+ASP.NET Core, Blazor, Entity Framework Core, .NET MAUI, Minimal APIs, Native AOT, gRPC, SignalR, System.Text.Json, C# Interop, ML.NET, .NET CLI, Roslyn Compiler, .NET GC, .NET Runtime, .NET SDK, Hot Reload, Source Generators, Nullable Reference Types, Span<T>, Records, Dependency Injection, Task Parallel Library, System.Threading.Channels, System.IO.Pipelines, .NET Aspire, Orleans, .NET Performance Improvements, WebAssembly (WASM), OpenTelemetry in .NETC# Features:
+LINQ, async/await, Records, Pattern Matching, Nullable Reference Types, Top-level Statements, Init-only Setters, Global Using Directives, Implicit Usings, File-scoped Namespaces, Target-typed New Expressions, Primary Constructors, Ref Structs, Default Interface Methods, Local Functions, Static Local Functions, Deconstruction, Tuples, Switch Expressions, Covariant Returns, String Interpolation, Span<T>, Unsafe Code, Function Pointers, Source Generators, Dynamic Types, Expression-bodied Members, Indexes and Ranges, Required Members, Collection ExpressionsAzure Features:
+Azure Functions, Azure App Service, Azure Kubernetes Service (AKS), Azure DevOps, Azure Blob Storage, Azure SQL Database, Azure Cosmos DB, Azure Event Grid, Azure Service Bus, Azure Logic Apps, Azure API Management, Azure Virtual Machines, Azure Load Balancer, Azure Front Door, Azure CDN, Azure Cognitive Services, Azure OpenAI Service, Azure AI Search, Azure Monitor, Azure Application Insights, Azure Sentinel, Azure Bastion, Azure Firewall, Azure AD B2C, Azure Key Vault, Azure Policy, Azure Private Link, Azure Data Factory, Azure Synapse Analytics, Azure PurviewDevOps Features:
+CI/CD Pipelines, GitHub Actions, Azure DevOps Pipelines, Terraform, Ansible, Kubernetes Helm, Docker Compose, GitOps, Infrastructure as Code (IaC), Secrets Management, Feature Flags, Canary Releases, Blue-Green Deployments, Rolling Updates, Chaos Engineering, Automated Testing, Load Testing, Shift-Left Security, Security as Code, Trunk-Based Development, Branch Policies, Code Reviews, Self-hosted Agents, Multi-stage Pipelines, YAML Pipelines, Artifact Management, Release Gates, Observability, Service Mesh, SRE PracticesDocker Features:
+Containerization, Multi-stage Builds, Docker Compose, Docker Swarm, Dockerfile, BuildKit, Docker Volumes, Docker Networks, Docker Secrets, Docker Configs, Overlay Networks, Container Orchestration, Health Checks, Namespaces and Cgroups, Image Layer Caching, Docker Logs, Docker Registry, Podman Compatibility, Containerd Integration, Docker Security Scanning, Rootless Mode, Buildx, Multi-platform Builds, GPU Support, Docker PluginsKubernetes Features:
+Pods, Deployments, ReplicaSets, StatefulSets, DaemonSets, ConfigMaps, Secrets, Persistent Volumes, Persistent Volume Claims, Horizontal Pod Autoscaler, Vertical Pod Autoscaler, Cluster Autoscaler, Node Affinity, Taints and Tolerations, Service Mesh, Ingress, Network Policies, Helm Charts, Operators, Custom Resource Definitions (CRDs), Role-based Access Control (RBAC), Namespaces, API Aggregation, Sidecar Containers, Pod Disruption Budgets, Init Containers, Multi-cluster Management, Service Discovery, Kubernetes Dashboard, CSI Drivers, Kubernetes Federation
+-->
