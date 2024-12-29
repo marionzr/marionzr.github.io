@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Automating Dependency Management with Dependabot | marionzr</title>
+    <meta name="description" content="Thoughts on software development, including .NET, Azure, DevOps, and ASP.NET. Sharing lessons learned from building software, leading teams, and tackling everyday challenges.">
+    <meta name="author" content="marionzr">
+    <meta name="robots" content="index, follow">
+    <meta property="og:title" content="Mario - Coding, !Coffee, and Content: Not Another Average Dev Blog">
+    <meta property="og:description" content="Thoughts on software development, including .NET, Azure, DevOps, and ASP.NET. Sharing lessons learned from building software, leading teams, and tackling everyday challenges.">
+    <meta property="og:image" content="https://marionzr.github.io/assets/img/avatar.jpg">
+    <meta property="og:url" content="https://marionzr.github.io">
+    <link rel="icon" href="../assets/icons/favicon.ico" type="image/x-icon">
+    <link rel="canonical" href="https://marionzr.github.io">
+
+    <link id="prism-light" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" disabled />
+    <link id="prism-dark" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-okaidia.min.css" rel="stylesheet" enabled />
+
+    <link rel="stylesheet" href="../css/app.css">
+    <link rel="stylesheet" href="../css/header.css">
+    <link rel="stylesheet" href="../css/footer.css">
+    <link rel="stylesheet" href="../css/article.css">
+    <link rel="stylesheet" href="../css/article-tag-container.css">
+    <link rel="stylesheet" href="../css/article-markdown.css">
+    <link rel="stylesheet" href="../css/article-related-content.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+</head>
+
+<body>
+    <banner id="banner-top"></banner>
+    <header id="header">
+        <div id="header-left"></div>
+        <div id="header-middle"></div>
+        <div id="header-right"></div>
+    </header>
+
+    <main id="main">
+        <banner id="banner-main"></banner>
+        <article id="article">
+            <article-header>
+                <img id="article-header-img" src="../assets/articles/automating-dependency-management-with-dependabot/200d8d6a-29f1-417c-9f2a-4dc7463326bb.png" alt="ACME DevOps - Automate">
+                <h1 id="article-header-title">Automating Dependency Management with Dependabot</h1>
+                <h2 id="article-header-subtitle">How Dependabot Keeps Your .NET Project Up to Date with Minimal Effort</h2>
+                <div id="article-header-info">
+                    <div id="article-header-info-row">
+                        <div id="article-header-info-left-column">
+                            <div id="article-header-info-matadata">
+                                <img id="article-header-info-matadata-avatar" class="avatar" src="../assets/img/avatar.jpg" alt="marionzr's avatar"></a>
+                                <div class="info">
+                                    <p id="article-header-info-matadata-author"><a href="https://www.github.com/marionzr">by marionzr</a> | <date-time id="article-header-info-matadata-created-at"></date-time></p>
+                                    <p id="article-header-info-matadata-reading-time">
+                                        <i class="far fa-clock"></i> <span id="article-header-info-matadata-reading-time-eta"></span> read (<span id="article-header-info-matadata-reading-time-words"></span> words)
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="article-header-info-right-column">
+                            <article-tags>.NET GitHub CI/CD DevOps Dependabot ACME</article-tags>
+                        </div>
+                    </div>
+                </div>
+
+            </article-header>
+            <md-block>
+                Outdated libraries can lead to security vulnerabilities, compatibility issues, and performance degradation, potentially exposing software to cyber threats,
+                increasing maintenance costs, and causing unexpected failures in production environments.
+
+                In this article I'll show how I automated the dependency management with Dependabot.
+
+                This is the fifth article in the "DevOps Days" series for the Acme project. If you missed the previous one check the related content at the end of this page.
+
+                ---
+
+                ## Why Use Dependabot?
+
+                Dependabot monitors your project's dependencies and raises pull requests to update them when newer versions become available. This ensures you stay ahead of potential vulnerabilities and enjoy the benefits of new features or bug fixes. Dependabot also allows you to customize update schedules and control which dependencies to ignore.
+
+                ---
+
+                ## Setting Up the Dependabot Configuration
+
+                To set up Dependabot in Nzr.Acme, I began by defining its configuration in a `.github/dependabot.yml` file. Unlike other GitHub Action workflows, this file cannot be placed inside the workflows folder. Below, I'll break down the script and explain each block.
+
+                ### Defining the Version
+
+                ```yaml
+                version: 2
+                ```
+
+                Dependabot requires a configuration version. I used version 2, the latest format at the time of writing.
+
+                ### Specifying Update Configurations
+
+                ```yaml
+                updates:
+                - package-ecosystem: "nuget"
+                    directory: "/"
+                    schedule:
+                    interval: "daily"
+                    time: "18:15"
+                    target-branch: "main"
+                    open-pull-requests-limit: 3
+                ```
+
+                Let's break this down:
+
+                - **package-ecosystem**: Specifies the package manager to monitor. For Nzr.Acme, I used nuget since it's a .NET project.
+                - **directory**: Defines where Dependabot will look for dependency files. Here, / means the root directory of the repository.
+                - **schedule**: Sets the update schedule. We've configured it to check for updates daily at 18:15 UTC.
+                - **target-branch**: Pull requests created by Dependabot will target the main branch.
+                open-pull-requests-limit: Limits the number of active pull requests Dependabot can create at a time. Here, it's set to 3 to prevent overwhelming the workflow.
+
+                ### Ignoring Certain Updates
+
+                ```yaml
+                ignore:
+                - dependency-name: "*"
+                    update-types: ["version-update:semver-major"]
+                ```
+
+                In this section, we define dependencies or update types to ignore.
+
+                - **dependency-name**: Using * applies this rule to all dependencies.
+                - **update-types**: Dependabot will ignore updates involving.
+                - **semver-major** version changes. This avoids potential breaking changes being merged into the main branch automatically.
+
+                ### Grouping Dependencies
+
+                ```yaml
+                groups:
+                xunit:
+                    patterns:
+                    - "xunit*"
+                ```
+
+                Here, we group dependencies that match specific patterns.
+
+                - **xunit**: Any dependency starting with xunit will be grouped together into a single pull request. This reduces clutter and helps organize dependency updates more efficiently.
+
+                Below is the full configuration file, but I recommend checking the latest version in the Nzr.Acme GitHub repository for updates.
+
+                ```yaml
+                version: 2
+
+                updates:
+                - package-ecosystem: "nuget"
+
+                    # Directory where the package manager looks for dependencies.
+                    directory: "/"
+
+                    # Schedule for dependabot updates.
+                    schedule:
+                    interval: "daily" # Run updates daily.
+                    time: "18:15" # UTC time.
+
+                    # Target branch for pull requests created by dependabot.
+                    target-branch: "main"
+
+                    # Limit of open pull requests created by dependabot.
+                    open-pull-requests-limit: 3
+
+                    # Dependencies to ignore, such as major version updates.
+                    ignore:
+                    - dependency-name: "*" # Apply to all dependencies.
+                        update-types:
+                        - "version-update:semver-major" # Ignore major version updates (breaking changes).
+
+                    # Define custom groups for specific dependencies.
+                    groups:
+                    xunit:
+                        patterns:
+                ```
+
+                ## Testing the Workflow
+
+                After setting up the configuration, commit the `.github/dependabot.yml` file to your repository and let Dependabot handle the rest. Dependabot will start running according to the schedule you defined, creating pull requests for eligible dependency updates.
+
+                ![dependabot action running](../assets/articles/automating-dependency-management-with-dependabot/0cab4a45-6d5e-48cd-a305-607c6a851957.png)
+
+                ![Pull Requests Created by dependabot](../assets/articles/automating-dependency-management-with-dependabot/2d630b92-2187-4a6f-a6e2-7768172cad93.png)
+
+                ---
+
+                ## Final Thoughts 💡
+
+                This concludes our Nzr.Acme DevOps series. Over the three articles, we've explored:
+
+                - Building and testing your project with **GitHub Actions**
+                - Automating dependency management with Dependabot.
+
+                These workflows equip Nzr.Acme with a robust DevOps pipeline, ensuring high-quality, secure, and maintainable software.
+
+                Stay tuned for more DevOps tips and best practices in upcoming articles. If you found this series helpful, let me know in the comments!
+
+                ## Resources 💾
+
+                The changes described in this article can be found in the repository marionzr/nzr.acme, more specifically in this commit: [eaaf05b](https://github.com/marionzr/nzr.acme/commit/eaaf05b3d6ca5afe3417642d1fb029abcb2e8a69).
+
+                If you find this project useful, consider giving it a ⭐️ on marionzr/nzr.acme and following along as I share more updates. Feedback and contributions are always welcome - let's build something great together!
+            </md-block>
+            <related-content></related-content>
+            <lets-connect></lets-connect>
+            <discussions></discussions>
+        </article>
+    </main>
+
+    <banner id="banner-bottom"></banner>
+    <footer id="footer">
+        <div id="footer-left"></div>
+        <div id="footer-middle"></div>
+        <div id="footer-right"></div>
+    </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-csharp.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-bash.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-yaml.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-docker.min.js"></script>
+
+    <script src="https://md-block.verou.me/md-block.js" type="module"></script>
+    <script src="../js/markdown-reading-time.js"></script>
+
+    <script src="../js/app.js"></script>
+    <script src="../js/header.js"></script>
+    <script src="../js/footer.js"></script>
+    <script src="../js/sources.js"></script>
+    <script src="../js/sources.local.js" onerror="console.info('☝️ You can ignore this error – no test data was found, so real data will be used instead.')"></script>
+    <script src="../js/article.js"></script>
+    <script src="../js/article-tag-container.js"></script>
+    <script src="../js/article-markdown.js"></script>
+    <script src="../js/article-related-content.js"></script>
+
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "Person",
+        "name": "Mario (marionzr)",
+        "url": "https://marionzr.github.io",
+        "sameAs": [
+        "https://github.com/marionzr",
+        "https://linkedin.com/in/marionzr"
+        ],
+        "jobTitle": "Software Developer & Tech Leader",
+        "knowsAbout": ["C#", ".NET", "Azure DevOps", "Docker", "Kubernetes", "ASP.NET", "Team Leadership", "Hiring Process"]
+    }
+    </script>
+
+    <content style="display: none;">
+.NET Features:
+ASP.NET Core, Blazor, Entity Framework Core, .NET MAUI, Minimal APIs, Native AOT, gRPC, SignalR, System.Text.Json, C# Interop, ML.NET, .NET CLI, Roslyn Compiler, .NET GC, .NET Runtime, .NET SDK, Hot Reload, Source Generators, Nullable Reference Types, Span<T>, Records, Dependency Injection, Task Parallel Library, System.Threading.Channels, System.IO.Pipelines, .NET Aspire, Orleans, .NET Performance Improvements, WebAssembly (WASM), OpenTelemetry in .NETC# Features:
+LINQ, async/await, Records, Pattern Matching, Nullable Reference Types, Top-level Statements, Init-only Setters, Global Using Directives, Implicit Usings, File-scoped Namespaces, Target-typed New Expressions, Primary Constructors, Ref Structs, Default Interface Methods, Local Functions, Static Local Functions, Deconstruction, Tuples, Switch Expressions, Covariant Returns, String Interpolation, Span<T>, Unsafe Code, Function Pointers, Source Generators, Dynamic Types, Expression-bodied Members, Indexes and Ranges, Required Members, Collection ExpressionsAzure Features:
+Azure Functions, Azure App Service, Azure Kubernetes Service (AKS), Azure DevOps, Azure Blob Storage, Azure SQL Database, Azure Cosmos DB, Azure Event Grid, Azure Service Bus, Azure Logic Apps, Azure API Management, Azure Virtual Machines, Azure Load Balancer, Azure Front Door, Azure CDN, Azure Cognitive Services, Azure OpenAI Service, Azure AI Search, Azure Monitor, Azure Application Insights, Azure Sentinel, Azure Bastion, Azure Firewall, Azure AD B2C, Azure Key Vault, Azure Policy, Azure Private Link, Azure Data Factory, Azure Synapse Analytics, Azure PurviewDevOps Features:
+CI/CD Pipelines, GitHub Actions, Azure DevOps Pipelines, Terraform, Ansible, Kubernetes Helm, Docker Compose, GitOps, Infrastructure as Code (IaC), Secrets Management, Feature Flags, Canary Releases, Blue-Green Deployments, Rolling Updates, Chaos Engineering, Automated Testing, Load Testing, Shift-Left Security, Security as Code, Trunk-Based Development, Branch Policies, Code Reviews, Self-hosted Agents, Multi-stage Pipelines, YAML Pipelines, Artifact Management, Release Gates, Observability, Service Mesh, SRE PracticesDocker Features:
+Containerization, Multi-stage Builds, Docker Compose, Docker Swarm, Dockerfile, BuildKit, Docker Volumes, Docker Networks, Docker Secrets, Docker Configs, Overlay Networks, Container Orchestration, Health Checks, Namespaces and Cgroups, Image Layer Caching, Docker Logs, Docker Registry, Podman Compatibility, Containerd Integration, Docker Security Scanning, Rootless Mode, Buildx, Multi-platform Builds, GPU Support, Docker PluginsKubernetes Features:
+Pods, Deployments, ReplicaSets, StatefulSets, DaemonSets, ConfigMaps, Secrets, Persistent Volumes, Persistent Volume Claims, Horizontal Pod Autoscaler, Vertical Pod Autoscaler, Cluster Autoscaler, Node Affinity, Taints and Tolerations, Service Mesh, Ingress, Network Policies, Helm Charts, Operators, Custom Resource Definitions (CRDs), Role-based Access Control (RBAC), Namespaces, API Aggregation, Sidecar Containers, Pod Disruption Budgets, Init Containers, Multi-cluster Management, Service Discovery, Kubernetes Dashboard, CSI Drivers, Kubernetes Federation
+    </content>
+</body>
+
+</html>
+<!--
+.NET Features:
+ASP.NET Core, Blazor, Entity Framework Core, .NET MAUI, Minimal APIs, Native AOT, gRPC, SignalR, System.Text.Json, C# Interop, ML.NET, .NET CLI, Roslyn Compiler, .NET GC, .NET Runtime, .NET SDK, Hot Reload, Source Generators, Nullable Reference Types, Span<T>, Records, Dependency Injection, Task Parallel Library, System.Threading.Channels, System.IO.Pipelines, .NET Aspire, Orleans, .NET Performance Improvements, WebAssembly (WASM), OpenTelemetry in .NETC# Features:
+LINQ, async/await, Records, Pattern Matching, Nullable Reference Types, Top-level Statements, Init-only Setters, Global Using Directives, Implicit Usings, File-scoped Namespaces, Target-typed New Expressions, Primary Constructors, Ref Structs, Default Interface Methods, Local Functions, Static Local Functions, Deconstruction, Tuples, Switch Expressions, Covariant Returns, String Interpolation, Span<T>, Unsafe Code, Function Pointers, Source Generators, Dynamic Types, Expression-bodied Members, Indexes and Ranges, Required Members, Collection ExpressionsAzure Features:
+Azure Functions, Azure App Service, Azure Kubernetes Service (AKS), Azure DevOps, Azure Blob Storage, Azure SQL Database, Azure Cosmos DB, Azure Event Grid, Azure Service Bus, Azure Logic Apps, Azure API Management, Azure Virtual Machines, Azure Load Balancer, Azure Front Door, Azure CDN, Azure Cognitive Services, Azure OpenAI Service, Azure AI Search, Azure Monitor, Azure Application Insights, Azure Sentinel, Azure Bastion, Azure Firewall, Azure AD B2C, Azure Key Vault, Azure Policy, Azure Private Link, Azure Data Factory, Azure Synapse Analytics, Azure PurviewDevOps Features:
+CI/CD Pipelines, GitHub Actions, Azure DevOps Pipelines, Terraform, Ansible, Kubernetes Helm, Docker Compose, GitOps, Infrastructure as Code (IaC), Secrets Management, Feature Flags, Canary Releases, Blue-Green Deployments, Rolling Updates, Chaos Engineering, Automated Testing, Load Testing, Shift-Left Security, Security as Code, Trunk-Based Development, Branch Policies, Code Reviews, Self-hosted Agents, Multi-stage Pipelines, YAML Pipelines, Artifact Management, Release Gates, Observability, Service Mesh, SRE PracticesDocker Features:
+Containerization, Multi-stage Builds, Docker Compose, Docker Swarm, Dockerfile, BuildKit, Docker Volumes, Docker Networks, Docker Secrets, Docker Configs, Overlay Networks, Container Orchestration, Health Checks, Namespaces and Cgroups, Image Layer Caching, Docker Logs, Docker Registry, Podman Compatibility, Containerd Integration, Docker Security Scanning, Rootless Mode, Buildx, Multi-platform Builds, GPU Support, Docker PluginsKubernetes Features:
+Pods, Deployments, ReplicaSets, StatefulSets, DaemonSets, ConfigMaps, Secrets, Persistent Volumes, Persistent Volume Claims, Horizontal Pod Autoscaler, Vertical Pod Autoscaler, Cluster Autoscaler, Node Affinity, Taints and Tolerations, Service Mesh, Ingress, Network Policies, Helm Charts, Operators, Custom Resource Definitions (CRDs), Role-based Access Control (RBAC), Namespaces, API Aggregation, Sidecar Containers, Pod Disruption Budgets, Init Containers, Multi-cluster Management, Service Discovery, Kubernetes Dashboard, CSI Drivers, Kubernetes Federation
+-->

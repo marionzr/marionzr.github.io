@@ -58,6 +58,21 @@
                         icon: "previous",
                         title: "Build and Test with GitHub Actions",
                         href: "build-and-test-with-github-actions.html",
+                    },
+                    {
+                        icon: "next",
+                        title: "Automating Dependency Management with Dependabot",
+                        href: "automating-dependency-management-with-dependabot.html",
+                    }
+                ]
+            },
+            {
+                href: "automating-dependency-management-with-dependabot.html",
+                links: [
+                    {
+                        icon: "previous",
+                        title: "Analyze: Integrating SonarQube for better code quality",
+                        href: "analyze-integrating-sonarqube-for-better-code-quality.html",
                     }
                 ]
             }
