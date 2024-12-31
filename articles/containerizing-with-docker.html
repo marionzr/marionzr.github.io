@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Containerizing with Docker | marionzr</title>
+    <meta name="description" content="Thoughts on software development, including .NET, Azure, DevOps, and ASP.NET. Sharing lessons learned from building software, leading teams, and tackling everyday challenges.">
+    <meta name="author" content="marionzr">
+    <meta name="robots" content="index, follow">
+    <meta property="og:title" content="Mario - Coding, !Coffee, and Content: Not Another Average Dev Blog">
+    <meta property="og:description" content="Thoughts on software development, including .NET, Azure, DevOps, and ASP.NET. Sharing lessons learned from building software, leading teams, and tackling everyday challenges.">
+    <meta property="og:image" content="https://marionzr.github.io/assets/img/avatar.jpg">
+    <meta property="og:url" content="https://marionzr.github.io">
+    <link rel="icon" href="../assets/icons/favicon.ico" type="image/x-icon">
+    <link rel="canonical" href="https://marionzr.github.io">
+
+    <link id="prism-light" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" disabled />
+    <link id="prism-dark" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-okaidia.min.css" rel="stylesheet" enabled />
+
+    <link rel="stylesheet" href="../css/app.css">
+    <link rel="stylesheet" href="../css/header.css">
+    <link rel="stylesheet" href="../css/footer.css">
+    <link rel="stylesheet" href="../css/article.css">
+    <link rel="stylesheet" href="../css/article-tag-container.css">
+    <link rel="stylesheet" href="../css/article-markdown.css">
+    <link rel="stylesheet" href="../css/article-related-content.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+</head>
+
+<body>
+    <banner id="banner-top"></banner>
+    <header id="header">
+        <div id="header-left"></div>
+        <div id="header-middle"></div>
+        <div id="header-right"></div>
+    </header>
+
+    <main id="main">
+        <banner id="banner-main"></banner>
+        <article id="article">
+            <article-header>
+                <img id="article-header-img" src="../assets/articles/containerizing-with-docker/efcd219c-0be9-46c4-9a6d-016a06ce7ee0.png" alt="ACME DevOps - Containerize">
+                <h1 id="article-header-title">Containerizing with Docker</h1>
+                <h2 id="article-header-subtitle">Building a Production-Ready Environment for .NET Microservices: A Step-by-Step Implementation Guide</h2>
+                <div id="article-header-info">
+                    <div id="article-header-info-row">
+                        <div id="article-header-info-left-column">
+                            <div id="article-header-info-matadata">
+                                <img id="article-header-info-matadata-avatar" class="avatar" src="../assets/img/avatar.jpg" alt="marionzr's avatar"></a>
+                                <div class="info">
+                                    <p id="article-header-info-matadata-author"><a href="https://www.github.com/marionzr">by marionzr</a> | <date-time id="article-header-info-matadata-created-at"></date-time></p>
+                                    <p id="article-header-info-matadata-reading-time">
+                                        <i class="far fa-clock"></i> <span id="article-header-info-matadata-reading-time-eta"></span> read (<span id="article-header-info-matadata-reading-time-words"></span> words)
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="article-header-info-right-column">
+                            <article-tags>.NET Containerization Docker DevOps ACME</article-tags>
+                        </div>
+                    </div>
+                </div>
+
+            </article-header>
+            <md-block>
+                In this article, I'm taking a big step forward—containerizing my application with Docker. This will streamline deployments, improve consistency, and simplify orchestration.
+
+                I'll explore the new Dockerfiles, introduce a docker-compose.yml file for easier orchestration, and extend my build pipeline to validate Docker image builds.
+
+                This is the sixth article in the "DevOps Days" series for the Acme project. If you missed the previous one, check the related content at the end of this page. I highly recommend going through them to understand the foundation I've built so far.
+
+                ## Introducing Docker to Nzr.Acme
+
+                To enable containerization, I created separate Dockerfiles for the GraphQL, REST, and AUTH Web API projects. Let's dive into the GraphQL API Dockerfile, as the other Dockerfiles are nearly identical.
+
+                ## The GraphQL API Dockerfile
+
+                The Dockerfile follows a multi-stage build pattern. I structured my Dockerfile in two stages:
+
+                1. **Build Stage**: Compiles and publishes the application.
+                2. **Final Stage**: Creates the runtime environment.
+
+                ### Build Stage: Compiles and publishes the application
+
+                The first stage uses the SDK image to build and publish the application:
+
+                ```dockerfile
+                # Stage 1: Build Stage
+                # ===================
+                # This stage compiles the application and creates the published artifact
+
+                FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build
+                WORKDIR /src
+
+                ARG PROJECT_NAME=Acme.Api.GraphQL
+
+                # Copy the project file
+                # FIXME: docker:S6470
+                COPY . .
+
+                RUN dotnet restore "${PROJECT_NAME}/${PROJECT_NAME}.csproj"
+                RUN dotnet build "${PROJECT_NAME}/${PROJECT_NAME}.csproj" --no-restore -c Release
+                RUN dotnet publish "${PROJECT_NAME}/${PROJECT_NAME}.csproj" --no-build -c Release -o /artifacts
+                ```
+
+                #### Understanding the Build Stage
+
+                Let me break down each component of the build stage:
+
+                1. Base Image Selection
+
+                - I use `mcr.microsoft.com/dotnet/sdk:9.0` as the base image
+                - This image includes the full .NET SDK, necessary for building and publishing
+                - The `AS build` label allows me to reference this stage later
+
+                2. ##### Working Directory
+
+                - `WORKDIR /src` creates and sets the working directory
+                - This keeps my build context organized and provides a consistent path reference
+
+                3. Project Configuration
+
+                - `ARG PROJECT_NAME` allows me to parameterize the project name
+                - This makes the Dockerfile more reusable across different projects
+
+                4. Build Process
+
+                - I separated the restore, build, and publish commands for better layer caching
+                - The `--no-restore` and `--no-build` flags prevent redundant operations
+                - Output is directed to `/artifacts` for easy access in the next stage
+
+                I decided to copy the entire solution directory (using `COPY . .`) instead of individual project files. While this isn't always considered best practice, it offers a pragmatic advantage in complex solutions:
+
+                - Ensures all necessary dependencies are available.
+                - Simplifies multi-project builds.
+                - Reduces potential issues caused by missing files.
+
+                While this approach might result in temporarily larger image layers during build time, the final image remains optimized since it only contains the published artifacts. The simplicity and reliability of this approach often outweigh the minor inefficiencies in the build process, especially in projects where build reliability is more critical than build time optimization.
+
+                ### Final Stage: Creates the runtime environment
+
+                The second stage uses the lighter ASP.NET runtime image to run the application.
+
+                All unnecessary build artifacts and intermediate files are left behind in the build stage
+
+                ```dockerfile
+                # Stage 2: Final Stage
+                # ===================
+                # This stage creates the actual image that will run in containers
+
+                FROM mcr.microsoft.com/dotnet/aspnet:9.0 AS final
+                WORKDIR /app
+
+                # Add a non-privileged user
+                ARG APP_UID=1000
+                USER $APP_UID
+
+                ENV ASPNETCORE_URLS="http://+:80;https://+:443"
+                EXPOSE 80
+                EXPOSE 443
+
+                COPY --from=build /artifacts .
+
+                # Specify the command to run when the container starts
+                # Using the explicit DLL name because environment variables aren't expanded in ENTRYPOINT
+                # The ENTRYPOINT instruction makes this container behave like an executable
+                ENTRYPOINT ["dotnet", "Acme.Api.GraphQL.dll"]
+                ```
+
+                #### Understanding the Final Stage
+
+                My final stage is optimized for runtime performance:
+
+                1. Runtime Image
+
+                - I use `mcr.microsoft.com/dotnet/aspnet:9.0`, which is significantly smaller than the SDK image
+                - It contains only the runtime components needed to execute the application
+                - This results in a more secure and efficient production image
+
+                2. Network Configuration
+
+                - The `EXPOSE` instructions document the ports my application uses
+                - I configured the environment variable `ASPNETCORE_URLS` for Kestrel to listen on both HTTP and HTTPS
+                - This dual-protocol support is crucial for development and production environments
+
+                3. Application Setup
+
+                - `COPY --from=build` only brings over the published artifacts
+                - The `ENTRYPOINT` ensures my application starts correctly
+                - I used array syntax `["dotnet", "Acme.Api.GraphQL.dll"]` for better signal handling
+
+                4. Security Considerations
+
+                - Run containers as non-root to implement least privilege principle
+
+                The REST and Auth Dockerfiles follow the same pattern, with only the PROJECT_NAME and application name differing.  For now, I've kept the duplicate Dockerfiles for simplicity.
+
+                ## Docker Compose and Environment Configuration
+
+                My docker-compose.yml file serves multiple purposes:
+
+                1. Simplifies local development
+                2. Provides consistent environment setup
+                3. Manages service dependencies
+                4. Handles SSL certificate generation
+
+                ```yaml
+                # Dear developer, please create a .env file in the same directory as this docker-compose.yml
+                # and define the following variables there:
+                # ACME_GRAPHQL_HTTP_PORT, ACME_GRAPHQL_HTTPS_PORT,
+                # ACME_REST_HTTP_PORT, ACME_REST_HTTPS_PORT and
+                # CERT_PASSWORD
+                #
+                # Example .env file:
+                # CERT_PASSWORD=mypass@123
+                # APP_UID=1920
+                # ACME_GRAPHQL_HTTP_PORT=4000
+                # ACME_GRAPHQL_HTTPS_PORT=4001
+                # ACME_REST_HTTP_PORT=5000
+                # ACME_REST_HTTPS_PORT=5001
+                # ACME_AUTH_HTTP_PORT=8080
+                # ACME_AUTH_HTTPS_PORT=8081
+
+                services:
+                # Certificate Generator Service
+                cert-generator:
+                    image: mcr.microsoft.com/dotnet/sdk:9.0
+                    container_name: cert-generator
+                    volumes:
+                    - acme-volume:/shared/certs
+                    working_dir: /app
+                    command: >
+                    bash -c "
+                        dotnet dev-certs https -ep /shared/certs/aspnetapp.pfx -p ${CERT_PASSWORD} &&
+                        dotnet dev-certs https --trust &&
+                        chmod 644 /shared/certs/aspnetapp.pfx &&
+                        ls -l /shared/certs"
+
+                # GraphQL API Service
+                acme-api-graphql:
+                    image: acme-api-graphql:latest
+                    container_name: acme-api-graphql
+                    build:
+                    context: ./src
+                    dockerfile: Acme.Api.GraphQL/Dockerfile
+                    ports:
+                    - "${ACME_GRAPHQL_HTTP_PORT}:80"
+                    - "${ACME_GRAPHQL_HTTPS_PORT}:443"
+                    networks:
+                    - acme-network
+                    volumes:
+                    - acme-volume:/shared/certs
+                    environment:
+                    - ASPNETCORE_ENVIRONMENT=Development
+                    - ASPNETCORE_Kestrel__Certificates__Default__Path=/shared/certs/aspnetapp.pfx
+                    - ASPNETCORE_Kestrel__Certificates__Default__Password=${CERT_PASSWORD}
+                    depends_on:
+                    cert-generator:
+                        condition: service_completed_successfully
+
+                # REST and Auth services follow similar configuration...
+
+                networks:
+                acme-network:
+                    driver: bridge
+
+                volumes:
+                acme-volume:
+                    driver: local
+                ```
+
+                ### Key Features of My Docker Compose Setup
+
+                1. Service Dependencies: I use `depends_on` with condition checking to ensure proper startup order. This ensures, for example, the certificate generation process completes before starting the services.
+
+                2. Volume Management: My volume configuration supports:
+
+                - Certificate sharing between services
+                - Persistence across container restarts
+
+                3. Environment Configuration: allows us to configure some settings of the services without need to changing the `docker-compose.yaml` file.
+
+                - Example of an extended .env file with additional configurations:
+
+                ```env
+                # API Ports
+                ACME_GRAPHQL_HTTP_PORT=4000
+                ACME_GRAPHQL_HTTPS_PORT=4001
+                ACME_REST_HTTP_PORT=5000
+                ACME_REST_HTTPS_PORT=5001
+                ACME_AUTH_HTTP_PORT=8080
+                ACME_AUTH_HTTPS_PORT=8081
+
+                # Security
+                CERT_PASSWORD=mypass@123
+                ```
+
+                ## Extending the CI Workflow to Validate Docker Builds
+
+                I've extended the build & test CI workflow to include Docker build validation:
+
+                ```yaml
+                # Step 7: Set up Docker Buildx
+                - name: Set up Docker Buildx
+                uses: docker/setup-buildx-action@v3
+
+                # Step 8: Verify Docker builds
+                - name: Verify Docker builds
+                run: |
+                    echo "$DOCKER_PROJECTS" | while read -r project; do
+                    if [ -n "$project" ]; then
+                        echo "Building Docker image for $project..."
+                        tag=$(echo "$project" | tr '[:upper:]' '[:lower:]')
+                        docker build \
+                        --file "./src/$project/Dockerfile" \
+                        --build-arg ASPNETCORE_ENVIRONMENT=Development \
+                        --tag "$tag:test" \
+                        ./src || exit 1
+
+                        # Additional validation steps
+                        echo "Running security scan on $tag:test..."
+                        docker scan "$tag:test" || true
+
+                        # Verify image size
+                        echo "Checking image size..."
+                        docker image inspect "$tag:test" --format='{{.Size}}' || exit 1
+                    fi
+                    done
+
+                # Step 9: Validate docker-compose
+                - name: Validate docker-compose configuration
+                run: docker-compose config
+                ```
+
+                Here you can see some of the docker images running on Docker Deskop.
+
+                ![HTTPS developer certificate container](../assets/articles/containerizing-with-docker/9cdfb6f9-1c17-440d-a78d-1a103156cc0f.png)
+
+                ![GraphQL API container](../assets/articles/containerizing-with-docker/c61748d4-e867-4696-90dd-30bc4629fd06.png)
+
+                If you'd like to understand the CI pipeline that I'm extending here, check out my previous article in the series where I detail the original build and test workflow.
+
+                ## Final Thoughts 💡
+
+                Containerizing is a game-changer. It improves portability, enhances development consistency, and streamlines deployments. With Docker Compose simplifying local setups and a CI pipeline ensuring reliability, this marks a major milestone for the project.
+
+                The addition of docker-compose.yml simplifies local development, and the extended CI workflow ensures stability.
+
+                The containerization of ACME apps brings several benefits:
+
+                - Consistent development environments
+                - Simplified deployment process
+                - Better resource isolation
+                - Improved scalability potential
+
+                In the next and final article in this series, I'll demonstrate how to "upload" the Docker image to a container registry.
+
+                ## Resources 💾
+
+                The changes described in this article can be found in the repository marionzr/nzr.acme, more specifically in this commit: [e4cc319](https://github.com/marionzr/nzr.acme/commit/e4cc3199c044fa9adc83cf7dcb72ce5214377b91).
+
+                If you find this project useful, consider giving it a ⭐️ on marionzr/nzr.acme and following along as I share more updates. Feedback and contributions are always welcome - let's build something great together!
+            </md-block>
+            <related-content></related-content>
+            <lets-connect></lets-connect>
+            <discussions></discussions>
+        </article>
+    </main>
+
+    <banner id="banner-bottom"></banner>
+    <footer id="footer">
+        <div id="footer-left"></div>
+        <div id="footer-middle"></div>
+        <div id="footer-right"></div>
+    </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-csharp.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-bash.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-yaml.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-docker.min.js"></script>
+
+    <script src="https://md-block.verou.me/md-block.js" type="module"></script>
+    <script src="../js/markdown-reading-time.js"></script>
+
+    <script src="../js/app.js"></script>
+    <script src="../js/header.js"></script>
+    <script src="../js/footer.js"></script>
+    <script src="../js/sources.js"></script>
+    <script src="../js/sources.local.js" onerror="console.info('☝️ You can ignore this error – no test data was found, so real data will be used instead.')"></script>
+    <script src="../js/article.js"></script>
+    <script src="../js/article-tag-container.js"></script>
+    <script src="../js/article-markdown.js"></script>
+    <script src="../js/article-related-content.js"></script>
+
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "Person",
+        "name": "Mario (marionzr)",
+        "url": "https://marionzr.github.io",
+        "sameAs": [
+        "https://github.com/marionzr",
+        "https://linkedin.com/in/marionzr"
+        ],
+        "jobTitle": "Software Developer & Tech Leader",
+        "knowsAbout": ["C#", ".NET", "Azure DevOps", "Docker", "Kubernetes", "ASP.NET", "Team Leadership", "Hiring Process"]
+    }
+    </script>
+
+    <content style="display: none;">
+.NET Features:
+ASP.NET Core, Blazor, Entity Framework Core, .NET MAUI, Minimal APIs, Native AOT, gRPC, SignalR, System.Text.Json, C# Interop, ML.NET, .NET CLI, Roslyn Compiler, .NET GC, .NET Runtime, .NET SDK, Hot Reload, Source Generators, Nullable Reference Types, Span<T>, Records, Dependency Injection, Task Parallel Library, System.Threading.Channels, System.IO.Pipelines, .NET Aspire, Orleans, .NET Performance Improvements, WebAssembly (WASM), OpenTelemetry in .NETC# Features:
+LINQ, async/await, Records, Pattern Matching, Nullable Reference Types, Top-level Statements, Init-only Setters, Global Using Directives, Implicit Usings, File-scoped Namespaces, Target-typed New Expressions, Primary Constructors, Ref Structs, Default Interface Methods, Local Functions, Static Local Functions, Deconstruction, Tuples, Switch Expressions, Covariant Returns, String Interpolation, Span<T>, Unsafe Code, Function Pointers, Source Generators, Dynamic Types, Expression-bodied Members, Indexes and Ranges, Required Members, Collection ExpressionsAzure Features:
+Azure Functions, Azure App Service, Azure Kubernetes Service (AKS), Azure DevOps, Azure Blob Storage, Azure SQL Database, Azure Cosmos DB, Azure Event Grid, Azure Service Bus, Azure Logic Apps, Azure API Management, Azure Virtual Machines, Azure Load Balancer, Azure Front Door, Azure CDN, Azure Cognitive Services, Azure OpenAI Service, Azure AI Search, Azure Monitor, Azure Application Insights, Azure Sentinel, Azure Bastion, Azure Firewall, Azure AD B2C, Azure Key Vault, Azure Policy, Azure Private Link, Azure Data Factory, Azure Synapse Analytics, Azure PurviewDevOps Features:
+CI/CD Pipelines, GitHub Actions, Azure DevOps Pipelines, Terraform, Ansible, Kubernetes Helm, Docker Compose, GitOps, Infrastructure as Code (IaC), Secrets Management, Feature Flags, Canary Releases, Blue-Green Deployments, Rolling Updates, Chaos Engineering, Automated Testing, Load Testing, Shift-Left Security, Security as Code, Trunk-Based Development, Branch Policies, Code Reviews, Self-hosted Agents, Multi-stage Pipelines, YAML Pipelines, Artifact Management, Release Gates, Observability, Service Mesh, SRE PracticesDocker Features:
+Containerization, Multi-stage Builds, Docker Compose, Docker Swarm, Dockerfile, BuildKit, Docker Volumes, Docker Networks, Docker Secrets, Docker Configs, Overlay Networks, Container Orchestration, Health Checks, Namespaces and Cgroups, Image Layer Caching, Docker Logs, Docker Registry, Podman Compatibility, Containerd Integration, Docker Security Scanning, Rootless Mode, Buildx, Multi-platform Builds, GPU Support, Docker PluginsKubernetes Features:
+Pods, Deployments, ReplicaSets, StatefulSets, DaemonSets, ConfigMaps, Secrets, Persistent Volumes, Persistent Volume Claims, Horizontal Pod Autoscaler, Vertical Pod Autoscaler, Cluster Autoscaler, Node Affinity, Taints and Tolerations, Service Mesh, Ingress, Network Policies, Helm Charts, Operators, Custom Resource Definitions (CRDs), Role-based Access Control (RBAC), Namespaces, API Aggregation, Sidecar Containers, Pod Disruption Budgets, Init Containers, Multi-cluster Management, Service Discovery, Kubernetes Dashboard, CSI Drivers, Kubernetes Federation
+    </content>
+</body>
+
+</html>
+<!--
+.NET Features:
+ASP.NET Core, Blazor, Entity Framework Core, .NET MAUI, Minimal APIs, Native AOT, gRPC, SignalR, System.Text.Json, C# Interop, ML.NET, .NET CLI, Roslyn Compiler, .NET GC, .NET Runtime, .NET SDK, Hot Reload, Source Generators, Nullable Reference Types, Span<T>, Records, Dependency Injection, Task Parallel Library, System.Threading.Channels, System.IO.Pipelines, .NET Aspire, Orleans, .NET Performance Improvements, WebAssembly (WASM), OpenTelemetry in .NETC# Features:
+LINQ, async/await, Records, Pattern Matching, Nullable Reference Types, Top-level Statements, Init-only Setters, Global Using Directives, Implicit Usings, File-scoped Namespaces, Target-typed New Expressions, Primary Constructors, Ref Structs, Default Interface Methods, Local Functions, Static Local Functions, Deconstruction, Tuples, Switch Expressions, Covariant Returns, String Interpolation, Span<T>, Unsafe Code, Function Pointers, Source Generators, Dynamic Types, Expression-bodied Members, Indexes and Ranges, Required Members, Collection ExpressionsAzure Features:
+Azure Functions, Azure App Service, Azure Kubernetes Service (AKS), Azure DevOps, Azure Blob Storage, Azure SQL Database, Azure Cosmos DB, Azure Event Grid, Azure Service Bus, Azure Logic Apps, Azure API Management, Azure Virtual Machines, Azure Load Balancer, Azure Front Door, Azure CDN, Azure Cognitive Services, Azure OpenAI Service, Azure AI Search, Azure Monitor, Azure Application Insights, Azure Sentinel, Azure Bastion, Azure Firewall, Azure AD B2C, Azure Key Vault, Azure Policy, Azure Private Link, Azure Data Factory, Azure Synapse Analytics, Azure PurviewDevOps Features:
+CI/CD Pipelines, GitHub Actions, Azure DevOps Pipelines, Terraform, Ansible, Kubernetes Helm, Docker Compose, GitOps, Infrastructure as Code (IaC), Secrets Management, Feature Flags, Canary Releases, Blue-Green Deployments, Rolling Updates, Chaos Engineering, Automated Testing, Load Testing, Shift-Left Security, Security as Code, Trunk-Based Development, Branch Policies, Code Reviews, Self-hosted Agents, Multi-stage Pipelines, YAML Pipelines, Artifact Management, Release Gates, Observability, Service Mesh, SRE PracticesDocker Features:
+Containerization, Multi-stage Builds, Docker Compose, Docker Swarm, Dockerfile, BuildKit, Docker Volumes, Docker Networks, Docker Secrets, Docker Configs, Overlay Networks, Container Orchestration, Health Checks, Namespaces and Cgroups, Image Layer Caching, Docker Logs, Docker Registry, Podman Compatibility, Containerd Integration, Docker Security Scanning, Rootless Mode, Buildx, Multi-platform Builds, GPU Support, Docker PluginsKubernetes Features:
+Pods, Deployments, ReplicaSets, StatefulSets, DaemonSets, ConfigMaps, Secrets, Persistent Volumes, Persistent Volume Claims, Horizontal Pod Autoscaler, Vertical Pod Autoscaler, Cluster Autoscaler, Node Affinity, Taints and Tolerations, Service Mesh, Ingress, Network Policies, Helm Charts, Operators, Custom Resource Definitions (CRDs), Role-based Access Control (RBAC), Namespaces, API Aggregation, Sidecar Containers, Pod Disruption Budgets, Init Containers, Multi-cluster Management, Service Discovery, Kubernetes Dashboard, CSI Drivers, Kubernetes Federation
+-->

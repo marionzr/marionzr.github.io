@@ -73,6 +73,21 @@
                         icon: "previous",
                         title: "Analyze: Integrating SonarQube for better code quality",
                         href: "analyze-integrating-sonarqube-for-better-code-quality.html",
+                    },
+                    {
+                        icon: "previous",
+                        title: "Containerizing with Docker",
+                        href: "containerizing-with-docker.html",
+                    }
+                ]
+            },
+            {
+                href: "containerizing-with-docker.html",
+                links: [
+                    {
+                        icon: "previous",
+                        title: "Automating Dependency Management with Dependabot",
+                        href: "automating-dependency-management-with-dependabot.html",
                     }
                 ]
             }
