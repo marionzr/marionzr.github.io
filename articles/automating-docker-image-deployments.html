@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Automating Docker Image Deployments | marionzr</title>
+    <meta name="description" content="Thoughts on software development, including .NET, Azure, DevOps, and ASP.NET. Sharing lessons learned from building software, leading teams, and tackling everyday challenges.">
+    <meta name="author" content="marionzr">
+    <meta name="robots" content="index, follow">
+    <meta property="og:title" content="Mario - Coding, !Coffee, and Content: Not Another Average Dev Blog">
+    <meta property="og:description" content="Thoughts on software development, including .NET, Azure, DevOps, and ASP.NET. Sharing lessons learned from building software, leading teams, and tackling everyday challenges.">
+    <meta property="og:image" content="https://marionzr.github.io/assets/img/avatar.jpg">
+    <meta property="og:url" content="https://marionzr.github.io">
+    <link rel="icon" href="../assets/icons/favicon.ico" type="image/x-icon">
+    <link rel="canonical" href="https://marionzr.github.io">
+
+    <link id="prism-light" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" disabled />
+    <link id="prism-dark" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-okaidia.min.css" rel="stylesheet" enabled />
+
+    <link rel="stylesheet" href="../css/app.css">
+    <link rel="stylesheet" href="../css/header.css">
+    <link rel="stylesheet" href="../css/footer.css">
+    <link rel="stylesheet" href="../css/article.css">
+    <link rel="stylesheet" href="../css/article-tag-container.css">
+    <link rel="stylesheet" href="../css/article-markdown.css">
+    <link rel="stylesheet" href="../css/article-related-content.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+</head>
+
+<body>
+    <banner id="banner-top"></banner>
+    <header id="header">
+        <div id="header-left"></div>
+        <div id="header-middle"></div>
+        <div id="header-right"></div>
+    </header>
+
+    <main id="main">
+        <banner id="banner-main"></banner>
+        <article id="article">
+            <article-header>
+                <img id="article-header-img" src="../assets/articles/automating-docker-image-deployments/c492c58e-1f49-48ac-970c-c20590fabc4b.png" alt="ACME DevOps - Publish">
+                <h1 id="article-header-title">Automating Docker Image Deployments</h1>
+                <h2 id="article-header-subtitle">A Hands-On Guide to Docker Image Deployment Using GitHub Actions</h2>
+                <div id="article-header-info">
+                    <div id="article-header-info-row">
+                        <div id="article-header-info-left-column">
+                            <div id="article-header-info-matadata">
+                                <img id="article-header-info-matadata-avatar" class="avatar" src="../assets/img/avatar.jpg" alt="marionzr's avatar"></a>
+                                <div class="info">
+                                    <p id="article-header-info-matadata-author"><a href="https://www.github.com/marionzr">by marionzr</a> | <date-time id="article-header-info-matadata-created-at"></date-time></p>
+                                    <p id="article-header-info-matadata-reading-time">
+                                        <i class="far fa-clock"></i> <span id="article-header-info-matadata-reading-time-eta"></span> read (<span id="article-header-info-matadata-reading-time-words"></span> words)
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="article-header-info-right-column">
+                            <article-tags>.NET DockerHub GitHub Containerization Docker DevOps ACME</article-tags>
+                        </div>
+                    </div>
+                </div>
+
+            </article-header>
+            <md-block>
+                Modern software development demands reliable and repeatable deployment processes. By automating Docker image builds and pushing them to container registries, I establish a foundation for consistent deployments across different environments.
+
+                Automating the process of building images for multiple projects and pushing them to both DockerHub and GitHub Container Registry is one of the final steps in how I distribute containerized applications.
+
+                This is the last article in a seven-part series covering the "DevOps Days" for the Acme project. Now, I'll demonstrate how to automate Docker image building and deployment using GitHub Actions. This automation ensures consistency, reduces manual effort, and streamlines the deployment pipeline.
+
+                ## Understanding the Building Blocks
+
+                Before diving into the workflow details, let's explore the key components that enable this automation.
+
+                - A Dockerfile serves as a blueprint for creating Docker images, defining the environment, dependencies, configurations, and commands required to build and run an application. It provides a structured and repeatable way to package applications, ensuring consistency across different environments. In my microservices architecture, each service maintains its own dedicated Dockerfile, allowing independent versioning, customization, and deployment. This modular approach ensures that changes to one service do not affect others, enabling greater flexibility, scalability, and maintainability in the overall system.
+
+                - Docker images are immutable packages created from Dockerfiles that contain everything necessary to run an application. They encapsulate the application code, runtime environment, system tools, libraries, and dependencies, ensuring that the application operates consistently across different environments. This isolation prevents discrepancies between development, testing, and production systems, reducing the risk of environment-related issues. By packaging an application and all its dependencies into a single portable unit, Docker images enable seamless deployment, scalability, and version control, making them a fundamental building block of modern containerized applications.
+
+                - Container registries are centralized repositories that store, manage, and distribute Docker images, enabling seamless deployment across different environments. They serve as a crucial component in DevOps workflows, allowing teams to version, secure, and share containerized applications efficiently. The top five most widely used container registries are:
+                  - Docker Hub - The default and most popular registry for Docker images, offering public and private repositories.
+                  - GitHub Container Registry (GHCR) - Integrated with GitHub, providing fine-grained access control and seamless authentication for GitHub users.
+                  - Amazon Elastic Container Registry (ECR) - A managed registry by AWS, optimized for deploying containers within the AWS ecosystem.
+                  - Google Artifact Registry (GAR) - Google's next-generation container registry, supporting multi-cloud and hybrid deployments.
+                  - Azure Container Registry (ACR) - A Microsoft Azure service designed for seamless integration with Azure Kubernetes Service (AKS) and other Azure cloud services.
+
+                These registries play a key role in modern cloud-native development, ensuring secure storage, version control, and efficient container distribution.
+
+                I'm utilizing two popular registries: DockerHub, the default public registry for Docker images, and GitHub Container Registry, which integrates seamlessly with GitHub.
+
+                ## Setting Up DockerHub Integration
+
+                To enable pushing images to DockerHub, I needed to configure several components. First, create a DockerHub account by visiting [hub.docker.com](hub.docker.com) and following the registration process. After creating an account, you'll need to create a repository to store your images. For my microservices architecture, I've chosen to use a single repository for all services, which simplifies management and provides a centralized location for images.
+
+                Security is paramount when automating deployments. To allow GitHub Actions to push images to DockerHub, I needed to configure authentication credentials. Generate a DockerHub access token by navigating to your DockerHub account settings and selecting [Personal access tokens](https://app.docker.com/settings/personal-access-tokens). Then, click on **Generate new token**. You need to give permission to **Read & Write**
+
+                ![Docker Hub PAT](../assets/articles/automating-docker-image-deployments/063e30e4-aa84-465e-be20-34927deb7cd0.png)
+
+                Store this token securely in your GitHub repository's secrets with the name `DOCKERHUB_TOKEN`. Additionally, store your DockerHub username as `DOCKERHUB_USERNAME`.
+
+                ![Docker Hub PAT](../assets/articles/automating-docker-image-deployments/26b5f1b8-8aa8-40a0-9c33-5634127894a2.png)
+
+                ## Leveraging GitHub Container Registry
+
+                GitHub Container Registry (GHCR) provides several advantages for teams already using GitHub. It integrates seamlessly with GitHub's authentication system and provides fine-grained access control through repository permissions. Unlike DockerHub, GHCR doesn't require a separate account setup - it uses your GitHub credentials and personal access tokens.
+
+                To enable GHCR integration, create a personal access token with the appropriate permissions (read/write access to packages) and store it in your GitHub repository's secrets as `GH_PAT_BUILD_AND_PUSH_DOCKER_IMAGES`. This token allows the workflow to authenticate and push images to GHCR.
+
+                ## Automating Image Builds with GitHub Actions
+
+                The GitHub Actions workflow, triggered on pushes to the main branch, orchestrates the entire process of building and publishing Docker images.
+
+                The workflow uses environment variables to define crucial settings:
+                The workflow processes each project iteratively, building and pushing images for each one.
+                This approach provides flexibility - adding a new service requires only adding its name to this list.
+
+                Here is the complete file:
+
+                ```yaml
+                # This workflow automates the process of building and pushing Docker images for multiple projects.
+                # It runs on every push to the main branch, builds Docker images for the specified projects,
+                # and pushes the images to both Docker Hub and GitHub Container Registry.
+
+                name: Build and Push Docker Images
+
+                on:
+                push:
+                    branches: [main]
+
+                env:
+                # Docker Hub Registry URL
+                DOCKERHUB_REGISTRY: docker.io
+                # GitHub Container Registry URL
+                GITHUB_REGISTRY: ghcr.io
+                # List of projects to build Docker images for
+                DOCKER_PROJECTS: |
+                    Acme.Api.REST
+                    Acme.Api.GraphQL
+                    Acme.Auth
+                APP_UID: ${{ vars.APP_UID }}
+                DOCKERHUB_REPOSITORY: ${{ vars.DOCKERHUB_REPOSITORY }}
+
+                jobs:
+                build-and-publish:
+                    runs-on: ubuntu-latest
+
+                    steps:
+                    - name: Checkout code
+                        uses: actions/checkout@v3
+
+                    - name: Set up Docker Buildx
+                        uses: docker/setup-buildx-action@v3
+
+                    - name: Login to Docker Hub
+                        uses: docker/login-action@v3
+                        with:
+                        registry: ${{ env.DOCKERHUB_REGISTRY }}
+                        username: ${{ secrets.DOCKERHUB_USERNAME }}
+                        password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+                    - name: Login to GitHub Container Registry
+                        uses: docker/login-action@v3
+                        with:
+                        registry: ${{ env.GITHUB_REGISTRY }}
+                        username: ${{ github.actor }}
+                        password: ${{ secrets.GH_PAT_BUILD_AND_PUSH_DOCKER_IMAGES }}
+
+                    - name: Build and push Docker images
+                        run: |
+                        # Get short SHA for the current commit
+                        SHORT_SHA=$(git rev-parse --short HEAD)
+
+                        # Iterate through each project in DOCKER_PROJECTS
+                        echo "$DOCKER_PROJECTS" | while read -r project; do
+                            if [ -n "$project" ]; then
+                            # Convert project name to lowercase for Docker tag
+                            IMAGE_NAME=$(echo "$project" | tr '[:upper:]' '[:lower:]')
+
+                            # Build Docker image for the project
+                            echo -e "\033[1;32mBuilding Docker image for $project...\033[0m"
+                            docker build \
+                                --file "./src/$project/Dockerfile" \
+                                --build-arg APP_UID=$APP_UID \
+                                --build-arg ASPNETCORE_ENVIRONMENT=Production \
+                                --tag "${IMAGE_NAME}:temp" \
+                                ./src
+
+                            # Push the image to Docker Hub
+                            echo -e "\033[1;32mPushing to Docker Hub...\033[0m"
+                            REPO="${{ secrets.DOCKERHUB_USERNAME }}/${{ env.DOCKERHUB_REPOSITORY }}"
+
+                            # Tag and push with commit SHA
+                            docker tag ${IMAGE_NAME}:temp "${REPO}:${IMAGE_NAME}-${SHORT_SHA}"
+                            docker push "${REPO}:${IMAGE_NAME}-${SHORT_SHA}"
+
+                            # Tag and push with run ID
+                            docker tag ${IMAGE_NAME}:temp "${REPO}:${IMAGE_NAME}-${{ github.run_id }}"
+                            docker push "${REPO}:${IMAGE_NAME}-${{ github.run_id }}"
+
+                            # Tag and push with 'latest' tag
+                            docker tag ${IMAGE_NAME}:temp "${REPO}:${IMAGE_NAME}-latest"
+                            docker push "${REPO}:${IMAGE_NAME}-latest"
+
+                            # Push the image to GitHub Container Registry
+                            echo -e "\033[1;32mPushing to GitHub Container Registry...\033[0m"
+                            REPO="${{ env.GITHUB_REGISTRY }}/${{ github.repository_owner }}"
+
+                            # Tag and push with commit SHA
+                            docker tag ${IMAGE_NAME}:temp "${REPO}/${IMAGE_NAME}:${SHORT_SHA}"
+                            docker push "${REPO}/${IMAGE_NAME}:${SHORT_SHA}"
+
+                            # Tag and push with run ID
+                            docker tag ${IMAGE_NAME}:temp "${REPO}/${IMAGE_NAME}:${{ github.run_id }}"
+                            docker push "${REPO}/${IMAGE_NAME}:${{ github.run_id }}"
+
+                            # Tag and push with 'latest' tag
+                            docker tag ${IMAGE_NAME}:temp "${REPO}/${IMAGE_NAME}:latest"
+                            docker push "${REPO}/${IMAGE_NAME}:latest"
+
+                            echo -e "\033[1;32mCleaning up temporary image...\033[0m"
+                            docker rmi ${IMAGE_NAME}:temp
+                            fi
+                        done
+                ```
+
+                Let's examine the key components of this automation:
+
+                ### Environment Variables
+
+                ```yaml
+                env:
+                DOCKERHUB_REGISTRY: docker.io
+                GITHUB_REGISTRY: ghcr.io
+                DOCKER_PROJECTS: |
+                    Acme.Api.REST
+                    Acme.Api.GraphQL
+                    Acme.Auth
+                APP_UID: ${{ vars.APP_UID }}
+                DOCKERHUB_REPOSITORY: ${{ vars.DOCKERHUB_REPOSITORY }}
+                ```
+
+                - DOCKER_PROJECTS: Lists the projects whose Docker images need to be built and pushed.
+                - DOCKERHUB_REGISTRY & GITHUB_REGISTRY: Define where images will be pushed.
+                - APP_UID: Used for containerized application security.
+                - DOCKERHUB_REPOSITORY: Specifies the repository name for storing images.
+
+                ###  Authentication to Registries
+
+                The workflow logs into both DockerHub and GHCR using stored secrets:
+
+                - name: Login to Docker Hub
+                uses: docker/login-action@v3
+                with:
+                    registry: ${{ env.DOCKERHUB_REGISTRY }}
+                    username: ${{ secrets.DOCKERHUB_USERNAME }}
+                    password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+                - name: Login to GitHub Container Registry
+                uses: docker/login-action@v3
+                with:
+                    registry: ${{ env.GITHUB_REGISTRY }}
+                    username: ${{ github.actor }}
+                    password: ${{ secrets.GH_PAT_BUILD_AND_PUSH_DOCKER_IMAGES }}
+
+                ### Building and Pushing Images
+
+                The workflow showcases different tagging strategies to maintain traceability and version control:
+
+                ```yaml
+                # Tag and push with commit SHA
+                docker tag ${IMAGE_NAME}:temp "${REPO}:${IMAGE_NAME}-${SHORT_SHA}"
+                # Tag and push with run ID
+                docker tag ${IMAGE_NAME}:temp "${REPO}:${IMAGE_NAME}-${{ github.run_id }}"
+                # Tag and push with 'latest' tag
+                docker tag ${IMAGE_NAME}:temp "${REPO}:${IMAGE_NAME}-latest"
+                ```
+
+                Each built image is tagged in three ways:
+
+                - Commit SHA (${SHORT_SHA}) ensures precise version tracking.
+                - GitHub Actions run ID (${{ github.run_id }}) identifies the exact build.
+                - `latest` tag simplifies deployments using the most recent image.
+
+                The images are built using docker build, and each project is iterated over in the script, ensuring all necessary services get containerized and pushed automatically.
+
+                This multi-tagging approach provides flexibility in deployment scenarios while maintaining traceability to specific code versions.
+
+                ## Final Thoughts 💡
+
+                Automating Docker image builds and deployments with GitHub Actions represents a significant step toward modern DevOps practices. This automation reduces manual intervention, ensures consistency, and provides a foundation for scaling deployment processes.
+
+                ## Resources 💾
+
+                The changes described in this article can be found in the repository marionzr/nzr.acme, more specifically in this commit: [d396e87](https://github.com/marionzr/nzr.acme/commit/d396e879699cde0aa0442f1b5ab0197ac24cc4cb).
+
+                If you find this project useful, consider giving it a ⭐️ on marionzr/nzr.acme and following along as I share more updates. Feedback and contributions are always welcome - let's build something great together!
+            </md-block>
+            <related-content></related-content>
+            <lets-connect></lets-connect>
+            <discussions></discussions>
+        </article>
+    </main>
+
+    <banner id="banner-bottom"></banner>
+    <footer id="footer">
+        <div id="footer-left"></div>
+        <div id="footer-middle"></div>
+        <div id="footer-right"></div>
+    </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-csharp.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-bash.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-yaml.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-docker.min.js"></script>
+
+    <script src="https://md-block.verou.me/md-block.js" type="module"></script>
+    <script src="../js/markdown-reading-time.js"></script>
+
+    <script src="../js/app.js"></script>
+    <script src="../js/header.js"></script>
+    <script src="../js/footer.js"></script>
+    <script src="../js/sources.js"></script>
+    <script src="../js/sources.local.js" onerror="console.info('☝️ You can ignore this error - no test data was found, so real data will be used instead.')"></script>
+    <script src="../js/article.js"></script>
+    <script src="../js/article-tag-container.js"></script>
+    <script src="../js/article-markdown.js"></script>
+    <script src="../js/article-related-content.js"></script>
+
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "Person",
+        "name": "Mario (marionzr)",
+        "url": "https://marionzr.github.io",
+        "sameAs": [
+        "https://github.com/marionzr",
+        "https://linkedin.com/in/marionzr"
+        ],
+        "jobTitle": "Software Developer & Tech Leader",
+        "knowsAbout": ["C#", ".NET", "Azure DevOps", "Docker", "Kubernetes", "ASP.NET", "Team Leadership", "Hiring Process"]
+    }
+    </script>
+
+    <content style="display: none;">
+.NET Features:
+ASP.NET Core, Blazor, Entity Framework Core, .NET MAUI, Minimal APIs, Native AOT, gRPC, SignalR, System.Text.Json, C# Interop, ML.NET, .NET CLI, Roslyn Compiler, .NET GC, .NET Runtime, .NET SDK, Hot Reload, Source Generators, Nullable Reference Types, Span<T>, Records, Dependency Injection, Task Parallel Library, System.Threading.Channels, System.IO.Pipelines, .NET Aspire, Orleans, .NET Performance Improvements, WebAssembly (WASM), OpenTelemetry in .NETC# Features:
+LINQ, async/await, Records, Pattern Matching, Nullable Reference Types, Top-level Statements, Init-only Setters, Global Using Directives, Implicit Usings, File-scoped Namespaces, Target-typed New Expressions, Primary Constructors, Ref Structs, Default Interface Methods, Local Functions, Static Local Functions, Deconstruction, Tuples, Switch Expressions, Covariant Returns, String Interpolation, Span<T>, Unsafe Code, Function Pointers, Source Generators, Dynamic Types, Expression-bodied Members, Indexes and Ranges, Required Members, Collection ExpressionsAzure Features:
+Azure Functions, Azure App Service, Azure Kubernetes Service (AKS), Azure DevOps, Azure Blob Storage, Azure SQL Database, Azure Cosmos DB, Azure Event Grid, Azure Service Bus, Azure Logic Apps, Azure API Management, Azure Virtual Machines, Azure Load Balancer, Azure Front Door, Azure CDN, Azure Cognitive Services, Azure OpenAI Service, Azure AI Search, Azure Monitor, Azure Application Insights, Azure Sentinel, Azure Bastion, Azure Firewall, Azure AD B2C, Azure Key Vault, Azure Policy, Azure Private Link, Azure Data Factory, Azure Synapse Analytics, Azure PurviewDevOps Features:
+CI/CD Pipelines, GitHub Actions, Azure DevOps Pipelines, Terraform, Ansible, Kubernetes Helm, Docker Compose, GitOps, Infrastructure as Code (IaC), Secrets Management, Feature Flags, Canary Releases, Blue-Green Deployments, Rolling Updates, Chaos Engineering, Automated Testing, Load Testing, Shift-Left Security, Security as Code, Trunk-Based Development, Branch Policies, Code Reviews, Self-hosted Agents, Multi-stage Pipelines, YAML Pipelines, Artifact Management, Release Gates, Observability, Service Mesh, SRE PracticesDocker Features:
+Containerization, Multi-stage Builds, Docker Compose, Docker Swarm, Dockerfile, BuildKit, Docker Volumes, Docker Networks, Docker Secrets, Docker Configs, Overlay Networks, Container Orchestration, Health Checks, Namespaces and Cgroups, Image Layer Caching, Docker Logs, Docker Registry, Podman Compatibility, Containerd Integration, Docker Security Scanning, Rootless Mode, Buildx, Multi-platform Builds, GPU Support, Docker PluginsKubernetes Features:
+Pods, Deployments, ReplicaSets, StatefulSets, DaemonSets, ConfigMaps, Secrets, Persistent Volumes, Persistent Volume Claims, Horizontal Pod Autoscaler, Vertical Pod Autoscaler, Cluster Autoscaler, Node Affinity, Taints and Tolerations, Service Mesh, Ingress, Network Policies, Helm Charts, Operators, Custom Resource Definitions (CRDs), Role-based Access Control (RBAC), Namespaces, API Aggregation, Sidecar Containers, Pod Disruption Budgets, Init Containers, Multi-cluster Management, Service Discovery, Kubernetes Dashboard, CSI Drivers, Kubernetes Federation
+    </content>
+</body>
+
+</html>
+<!--
+.NET Features:
+ASP.NET Core, Blazor, Entity Framework Core, .NET MAUI, Minimal APIs, Native AOT, gRPC, SignalR, System.Text.Json, C# Interop, ML.NET, .NET CLI, Roslyn Compiler, .NET GC, .NET Runtime, .NET SDK, Hot Reload, Source Generators, Nullable Reference Types, Span<T>, Records, Dependency Injection, Task Parallel Library, System.Threading.Channels, System.IO.Pipelines, .NET Aspire, Orleans, .NET Performance Improvements, WebAssembly (WASM), OpenTelemetry in .NETC# Features:
+LINQ, async/await, Records, Pattern Matching, Nullable Reference Types, Top-level Statements, Init-only Setters, Global Using Directives, Implicit Usings, File-scoped Namespaces, Target-typed New Expressions, Primary Constructors, Ref Structs, Default Interface Methods, Local Functions, Static Local Functions, Deconstruction, Tuples, Switch Expressions, Covariant Returns, String Interpolation, Span<T>, Unsafe Code, Function Pointers, Source Generators, Dynamic Types, Expression-bodied Members, Indexes and Ranges, Required Members, Collection ExpressionsAzure Features:
+Azure Functions, Azure App Service, Azure Kubernetes Service (AKS), Azure DevOps, Azure Blob Storage, Azure SQL Database, Azure Cosmos DB, Azure Event Grid, Azure Service Bus, Azure Logic Apps, Azure API Management, Azure Virtual Machines, Azure Load Balancer, Azure Front Door, Azure CDN, Azure Cognitive Services, Azure OpenAI Service, Azure AI Search, Azure Monitor, Azure Application Insights, Azure Sentinel, Azure Bastion, Azure Firewall, Azure AD B2C, Azure Key Vault, Azure Policy, Azure Private Link, Azure Data Factory, Azure Synapse Analytics, Azure PurviewDevOps Features:
+CI/CD Pipelines, GitHub Actions, Azure DevOps Pipelines, Terraform, Ansible, Kubernetes Helm, Docker Compose, GitOps, Infrastructure as Code (IaC), Secrets Management, Feature Flags, Canary Releases, Blue-Green Deployments, Rolling Updates, Chaos Engineering, Automated Testing, Load Testing, Shift-Left Security, Security as Code, Trunk-Based Development, Branch Policies, Code Reviews, Self-hosted Agents, Multi-stage Pipelines, YAML Pipelines, Artifact Management, Release Gates, Observability, Service Mesh, SRE PracticesDocker Features:
+Containerization, Multi-stage Builds, Docker Compose, Docker Swarm, Dockerfile, BuildKit, Docker Volumes, Docker Networks, Docker Secrets, Docker Configs, Overlay Networks, Container Orchestration, Health Checks, Namespaces and Cgroups, Image Layer Caching, Docker Logs, Docker Registry, Podman Compatibility, Containerd Integration, Docker Security Scanning, Rootless Mode, Buildx, Multi-platform Builds, GPU Support, Docker PluginsKubernetes Features:
+Pods, Deployments, ReplicaSets, StatefulSets, DaemonSets, ConfigMaps, Secrets, Persistent Volumes, Persistent Volume Claims, Horizontal Pod Autoscaler, Vertical Pod Autoscaler, Cluster Autoscaler, Node Affinity, Taints and Tolerations, Service Mesh, Ingress, Network Policies, Helm Charts, Operators, Custom Resource Definitions (CRDs), Role-based Access Control (RBAC), Namespaces, API Aggregation, Sidecar Containers, Pod Disruption Budgets, Init Containers, Multi-cluster Management, Service Discovery, Kubernetes Dashboard, CSI Drivers, Kubernetes Federation
+-->

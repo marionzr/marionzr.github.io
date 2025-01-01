@@ -88,6 +88,21 @@
                         icon: "previous",
                         title: "Automating Dependency Management with Dependabot",
                         href: "automating-dependency-management-with-dependabot.html",
+                    },
+                    {
+                        icon: "previous",
+                        title: "Automating Docker Image Deployments",
+                        href: "automating-docker-image-deployments.html",
+                    }
+                ]
+            },
+            {
+                href: "automating-docker-image-deployments.html",
+                links: [
+                    {
+                        icon: "previous",
+                        title: "Containerizing with Docker",
+                        href: "containerizing-with-docker.html",
                     }
                 ]
             }
