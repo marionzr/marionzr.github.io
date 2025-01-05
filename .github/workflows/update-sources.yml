@@ -1,0 +1,66 @@
+name: Update Data Sources
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+permissions:
+  contents: write
+
+jobs:
+  update-data:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Required to get full commit history
+
+      - name: Extract articles metadata
+        run: |
+          echo "filename;title;subtitle;image;tags;created_at;last_updated_at" > data.tmp
+          for file in articles/*.html; do
+            echo -e "Processing file '${file}'..."
+            title=$(grep -oP '(?<=<h1 id="article-header-title">).*?(?=</h1>)' "$file" || echo "")
+            subtitle=$(grep -oP '(?<=<h2 id="article-header-subtitle">).*?(?=</h2>)' "$file" || echo "")
+            image=$(grep -oP '(?<=<img id="article-header-img" src=")[^"]*' "$file" || echo "")
+            tags=$(grep -oP '(?<=<article-tags>).*?(?=</article-tags>)' "$file" || echo "")
+
+            if [[ -n "$title" && -n "$subtitle" ]]; then
+              created_at=$(git log --diff-filter=A --format="%ad" --date=format:'%Y-%m-%d %H:%M:%S %z' -- "$file" | tail -1)
+              last_updated_at=$(git log -n 1 --format="%ad" --date=format:'%Y-%m-%d %H:%M:%S %z' -- "$file")
+              [[ "$created_at" == "$last_updated_at" ]] && last_updated_at=""
+              echo "$file;$title;$subtitle;$image;$tags;$created_at;$last_updated_at"
+              echo "$file;$title;$subtitle;$image;$tags;$created_at;$last_updated_at" >> data.tmp
+            else
+              echo "File '$file' was ignored due to missing title or subtitle."
+            fi
+          done
+
+      - name: Checkout sources branch
+        run: |
+          git fetch origin sources:sources
+          git checkout sources
+
+      - name: Update articles-metadata.csv
+        run: |
+          rm -f articles-metadata.csv
+          mv data.tmp articles-metadata.csv
+
+      - name: Commit and push changes (if any)
+        run: |
+          git config --local user.name "github-actions"
+          git config --local user.email "github-actions@github.com"
+
+          if [[ -n "$(git status --porcelain)" ]]; then
+            git add articles-metadata.csv
+            git commit -m "chore(data): update articles-metadata.csv"
+            git push origin sources
+            echo "Changes committed and pushed successfully"
+          else
+            echo "No changes to commit"
+          fi
