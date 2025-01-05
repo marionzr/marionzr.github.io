@@ -92,7 +92,7 @@
                 subtitle.trim(),
                 image.trim(),
                 tags.trim(),
-                created_at.trim(),
+                app.parseDate(created_at.trim()),
                 last_updated_at?.trim() || ''  // last_updated_at can be empty
             );
 

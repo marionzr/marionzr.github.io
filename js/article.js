@@ -74,7 +74,7 @@
                 console.warn(`No metadata found for article '${filename}'`);
                 return
             }
-            const createdAt = app.formatDate(new Date(currentArticle.created_at));
+            const createdAt = app.formatDate(currentArticle.created_at);
             dateElement.textContent = createdAt;
         } catch (error) {
             app.onError(error, 'Error in setArticlePublishDate');

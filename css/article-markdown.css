@@ -99,6 +99,10 @@ md-block .md-block-code-block-container pre {
     margin: 0;
     padding: 1rem;
     background-color: var(--code-bg);
+
+    overflow-x: auto;
+    white-space: pre;
+    word-wrap: normal;
 }
 
 md-block .md-block-code-block-container {
@@ -156,5 +160,13 @@ md-block .md-block-code-block-container-copy-button:hover {
 
     md-block .img-xx-small:not(.mobile-img-xx-small) {
         max-width: 100%;
+    }
+
+    md-block code {
+        word-break: break-all;
+    }
+
+    md-block .md-block-code-block-container {
+        font-size: x-small;
     }
 }

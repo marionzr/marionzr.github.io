@@ -16,7 +16,6 @@
 
     function createTableRow(article) {
         try {
-            const publishedAt = new Date(article.created_at);
             const tagsList = article.tags.split(' ');
 
             const newRow = document.createElement('tr');
@@ -52,8 +51,8 @@
             // Date cell
             const dateCell = document.createElement('td');
             const datetime = document.createElement("date-time");
-            datetime.innerText = app.formatDate(publishedAt);
-            dateCell.setAttribute('data-date', publishedAt.toISOString());
+            datetime.innerText = app.formatDate(article.created_at);
+            dateCell.setAttribute('data-date-ms', article.created_at.getTime());
             dateCell.appendChild(datetime);
 
             newRow.append(articleCell, tagsCell, dateCell);
@@ -261,7 +260,7 @@
         const currentSortState = resetSorting(th);
         sortTable(
             th,
-            cell => new Date(cell.getAttribute('data-date')),
+            cell => cell.getAttribute('data-date-ms'),
             currentSortState,
             { ascIcon: sortElements.date.ascIcon, descIcon: sortElements.date.descIcon }
         );

@@ -57,7 +57,7 @@
             gridContainer.innerHTML = '';
 
             const articles = await sources.getArticlesMetaDataAsync();
-            const sortedArticles = [...articles].sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
+            const sortedArticles = [...articles].sort((a, b) => b.created_at.getTime() - a.created_at);
 
             sortedArticles
                 .slice(0, ARTICLES_TO_SHOW)

@@ -24,6 +24,24 @@
         }
     }
 
+    function parseDate(dateString) {
+        try {
+            // Handle date format like "2024-12-28 20:24:07 +0100"
+            const parts = dateString.split(' ');
+            const datePart = parts[0]; // "2024-12-28"
+            const timePart = parts[1]; // "20:24:07"
+
+            // Create date from parts
+            const [year, month, day] = datePart.split('-');
+            const [hour, minute, second] = timePart.split(':');
+
+            return new Date(year, month - 1, day, hour, minute, second);
+        } catch (error) {
+            onError(error, 'Error parsing date');
+            return null;
+        }
+    }
+
     function formatDate(date) {
         try {
             const options = { year: 'numeric', month: 'short', day: 'numeric' };
@@ -137,6 +155,7 @@
     app.getItem = getItem;
     app.safeParseInt = safeParseInt;
     app.formatDate = formatDate;
+    app.parseDate = parseDate;
     app.VERSION = VERSION;
     app.USERNAME = USERNAME;
 })();

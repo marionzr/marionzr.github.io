@@ -6,7 +6,7 @@
 #main-container {
     display: flex;
     height: auto;
-    background-color:  var(--bg-color);
+    background-color: var(--bg-color);
     gap: 1rem;
 }
 
@@ -61,7 +61,7 @@ right-column ul li {
     line-height: 1.5rem;
 }
 
-.tech-stack {
+#main-container-right-column-tech-stack {
     border-width: 1px !important;
     border-top: solid;
     border-color: var(--border-color);
@@ -73,7 +73,6 @@ right-column ul li {
     margin: 0;
     margin-right: 0.25rem;
 }
-
 
 @media (max-width: 768px) {
     .container {
@@ -88,14 +87,14 @@ right-column ul li {
         margin-left: 0;
     }
 
-    .right-column {
-        flex: 2;
-        text-align: justify;
-        border: none;
-        border-top: solid;
-        border-width: 1px;
-        border-color: var(--border-color);
+    #main-container-right-column {
+        margin: 0;
         padding: 0;
-        padding-top: 1.5rem;
+        border: none;
+    }
+
+    #main-container-right-column-tech-stack,
+    #main-container-right-column-tech-stack * {
+        font-size: 95%;
     }
 }
