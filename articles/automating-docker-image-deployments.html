@@ -249,6 +249,7 @@
 
                 The workflow logs into both DockerHub and GHCR using stored secrets:
 
+                ```yaml
                 - name: Login to Docker Hub
                 uses: docker/login-action@v3
                 with:
@@ -262,6 +263,7 @@
                     registry: ${{ env.GITHUB_REGISTRY }}
                     username: ${{ github.actor }}
                     password: ${{ secrets.GH_PAT_BUILD_AND_PUSH_DOCKER_IMAGES }}
+                ```
 
                 ### Building and Pushing Images
 
