@@ -105,6 +105,26 @@
                         href: "containerizing-with-docker.html",
                     }
                 ]
+            },
+            {
+                href: "building-high-performing-teams-lessons-from-a-tech-lead.html",
+                links: [
+                    {
+                        icon: "related",
+                        title: "Hiring Developers: You're Doing It Wrong!",
+                        href: "hiring-developers-you-are-doing-it-wrong.html",
+                    }
+                ]
+            },
+            {
+                href: "hiring-developers-you-are-doing-it-wrong.html",
+                links: [
+                    {
+                        icon: "related",
+                        title: "Building High-Performing Teams: Lessons from a Tech Lead",
+                        href: "building-high-performing-teams-lessons-from-a-tech-lead.html",
+                    }
+                ]
             }
         ]
     };
