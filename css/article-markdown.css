@@ -162,7 +162,7 @@ md-block .md-block-code-block-container-copy-button:hover {
         max-width: 100%;
     }
 
-    md-block code {
+    md-block {
         word-break: break-all;
     }
 

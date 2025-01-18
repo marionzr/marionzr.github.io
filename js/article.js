@@ -83,7 +83,9 @@
 
     function initPageWidthControl() {
         try {
+
             const headerRight = document.getElementById('header-right');
+
             const pageExpandToggle = document.createElement('button');
             pageExpandToggle.id = 'header-right-page-expand-toggle';
 
@@ -92,11 +94,9 @@
 
             headerRight.insertBefore(pageExpandToggle, headerRight.lastChild);
 
-            //headerRight.insertAdjacentElement('afterend', pageExpandToggle);
-
-
             pageExpandToggleIcon.addEventListener('click', togglePageWidth);
             const mql = window.matchMedia('(max-width: 768px)');
+            const main = document.querySelector('main');
 
             if (mql.matches) {
                 pageExpandToggleIcon.style.display = 'none';
@@ -109,7 +109,7 @@
                 pageExpandToggleIcon.className = mainExpanded ? 'fa fa-expand' : 'fa fa-compress';
             }
 
-            const mediaQuery = window.matchMedia('(max-width: 768px)'); // Mobile view
+            const mediaQuery = window.matchMedia('(max-width: 768px)');
             mediaQuery.addEventListener('change', handleMediaQueryChange.bind(null, pageExpandToggleIcon));
         } catch (error) {
             app.onError(error, 'Error in initializePageWidthControl');
@@ -153,8 +153,8 @@
             Together, we can tackle challenges, one line of code at a time.</p>
             <p>Thanks for stopping by - and happy coding! 😉</p>
             <p>
-            <a href="${URLS.LINKEDIN}"  target="_blank">${URLS.LINKEDIN}</a><br/>
-            <a href="${URLS.GITHUB}"  target="_blank">${URLS.GITHUB}</a></p>`;
+            <a class="lets-connect-social-medial-links" href="${URLS.LINKEDIN}"  target="_blank">${URLS.LINKEDIN}</a><br/>
+            <a class="lets-connect-social-medial-links" href="${URLS.GITHUB}"  target="_blank">${URLS.GITHUB}</a></p>`;
 
         const letsConnect = document.querySelector('lets-connect');
         letsConnect.innerHTML = html;

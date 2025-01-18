@@ -90,19 +90,57 @@
 }
 
 @media (max-width: 768px) {
-    #header-middle #header-social-links a {
+    #header {
+        display: flex;
+        align-items: center;
+        width: 100%;
+        padding: 0.25rem;
+    }
+
+    #header * {
+        transform: scale(0.90);
+    }
+
+    #header-left {
+        flex-shrink: 0;
+        max-width: fit-content;
+    }
+
+    #header-left #header-left-avatar,
+    #header-left #header-left-avatar img {
         margin: 0;
-        margin-left: 0.2rem;
-        margin-right: 0.2rem;
+    }
+
+    #header-middle {
+        display: inline;
+        justify-content: center;
+        padding: 0;
+        margin: 0;
+        width: max-content;
+    }
+
+    #header-right-page-expand-toggle {
+        display: none;
+    }
+
+    #header-social-links {
+        display: flex;
+        gap: 0;
+        width: max-content;
+    }
+
+    #header-social-links a {
+        margin-left: 0;
+        margin-right: 0.25rem;
     }
 
     #header-right {
-        gap: 0;
+        width: max-content;
+        flex-shrink: 0;
+        display: flex;
+        justify-content: flex-end;
     }
 
-    header * {
-        transform: scale(0.95);
-    }
 }
 
 @keyframes slideInFromLeft {
